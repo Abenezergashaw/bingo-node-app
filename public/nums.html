@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bingo Grid</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body
+    class="min-h-screen bg-gradient-to-br from-teal-600 via-gray-800 to-gray-900 flex items-center justify-center p-4 text-white"
+  >
+    <div class="space-y-2">
+      <!-- Grid with BINGO prefixes -->
+      <div id="gridContainer" class="space-y-2"></div>
+    </div>
+
+    <script>
+      const prefixes = ["B", "I", "N", "G", "O"];
+      const gridContainer = document.getElementById("gridContainer");
+      let num = 1;
+
+      for (let row = 0; row < 5; row++) {
+        // Row wrapper
+        const rowDiv = document.createElement("div");
+        rowDiv.className = "flex items-center gap-1";
+
+        // Prefix cell
+        const prefix = document.createElement("div");
+        prefix.textContent = prefixes[row];
+        prefix.className = "w-8 text-lg font-bold text-white text-center";
+        rowDiv.appendChild(prefix);
+
+        // Grid cells (15 columns per row)
+        const grid = document.createElement("div");
+        grid.className = "grid gap-[2px]";
+        grid.style.gridTemplateColumns = "repeat(15, minmax(0, 1fr))";
+
+        for (let col = 0; col < 15; col++) {
+          const box = document.createElement("div");
+          box.textContent = num++;
+          box.className = `
+            bg-gradient-to-br from-teal-600 via-gray-800 to-gray-900 
+            text-white text-center rounded-xl 
+            flex justify-center items-center
+            border border-white/20 shadow-sm 
+            text-sm font-medium h-10
+          `;
+          grid.appendChild(box);
+        }
+
+        rowDiv.appendChild(grid);
+        gridContainer.appendChild(rowDiv);
+      }
+    </script>
+  </body>
+</html>
