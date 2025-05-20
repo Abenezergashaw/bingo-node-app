@@ -455,16 +455,18 @@ bot.onText(/\/start/, (msg) => {
             reply_markup: {
               inline_keyboard: [
                 [
-                  { text: "🎮 Join Game", callback_data: "join_game" },
+                  {
+                    text: "🎮 Join Game",
+                    web_app: {
+                      url: `https://santimbingo.duckdns.org`,
+                    },
+                  },
                   { text: "🔍 View Balance", callback_data: "view_balance" },
                 ],
                 [
                   { text: "📜 Game Rules", callback_data: "game_rules" },
                   {
                     text: "👥 Invite Friends",
-                    web_app: {
-                      url: `https://santimbingo.duckdns.org`,
-                    },
                   },
                 ],
                 [
@@ -519,7 +521,12 @@ bot.on("contact", (msg) => {
           reply_markup: {
             inline_keyboard: [
               [
-                { text: "🔍 View Balance", callback_data: "view_balance" },
+                {
+                  text: "🎮 Join Game",
+                  web_app: {
+                    url: `https://santimbingo.duckdns.org`,
+                  },
+                },
                 { text: "🎮 Join Game", callback_data: "join_game" },
               ],
               [
