@@ -124,30 +124,30 @@
 
       <div class="w-100 flex flex-col items-center justify-center pt-5">
         <div
-          class="bg-gradient-to-br from-teal-100 via-green-400 to-teal-200 w-20 h-20 rounded-full shadow-2xl flex flex-col justify-center items-center text-2xl font-extrabold shadow-[0_0px_30px_orangered] current-number"
+          class="bg-gradient-to-br from-teal-100 via-green-400 to-teal-200 w-20 h-20 rounded-full shadow-2xl flex flex-col justify-center items-center text-2xl font-extrabold shadow-[0_0px_30px_orangered]"
         >
-          <span>45</span>
-          <span class="text-lg font-medium">B</span>
+          <span class="current-number"></span>
+          <span class="text-lg font-medium current-number-letter"></span>
         </div>
 
         <div class="my-4 flex gap-4">
           <div
-            class="bg-gradient-to-br from-teal-100 via-green-400 to-teal-200 w-8 h-8 rounded-full shadow-2xl flex flex-col justify-center items-center text-sm font-extrabold shadow-[0_0px_10px_orange] last-number-1"
+            class="bg-gradient-to-br from-teal-100 via-green-400 to-teal-200 w-8 h-8 rounded-full shadow-2xl flex flex-col justify-center items-center text-sm font-extrabold shadow-[0_0px_10px_orange]"
           >
-            <span class="text-[12px]">45</span>
-            <span class="text-[10px] font-medium">O</span>
+            <span class="text-[12px] last-number-1"></span>
+            <span class="text-[10px] font-medium last-number-1-letter"></span>
           </div>
           <div
-            class="bg-gradient-to-br from-teal-100 via-green-400 to-teal-200 w-8 h-8 rounded-full shadow-2xl flex flex-col justify-center items-center text-sm font-extrabold shadow-[0_0px_10px_orange] last-number-2"
+            class="bg-gradient-to-br from-teal-100 via-green-400 to-teal-200 w-8 h-8 rounded-full shadow-2xl flex flex-col justify-center items-center text-sm font-extrabold shadow-[0_0px_10px_orange]"
           >
-            <span class="text-[12px]">45</span>
-            <span class="text-[10px] font-medium">O</span>
+            <span class="text-[12px] last-number-2"></span>
+            <span class="text-[10px] font-medium last-number-2-letter"></span>
           </div>
           <div
-            class="bg-gradient-to-br from-teal-100 via-green-400 to-teal-200 w-8 h-8 rounded-full shadow-2xl flex flex-col justify-center items-center text-sm font-extrabold shadow-[0_0px_10px_orange] last-number-3"
+            class="bg-gradient-to-br from-teal-100 via-green-400 to-teal-200 w-8 h-8 rounded-full shadow-2xl flex flex-col justify-center items-center text-sm font-extrabold shadow-[0_0px_10px_orange]"
           >
-            <span class="text-[12px]">45</span>
-            <span class="text-[10px] font-medium">O</span>
+            <span class="text-[12px] last-number-3"></span>
+            <span class="text-[10px] font-medium last-number-3-letter"></span>
           </div>
         </div>
 
@@ -3136,12 +3136,26 @@
       // const socket = new WebSocket(
       //   "ws://" + window.location.hostname + ":3000"
       // );
+      function letterReturn(l) {
+        if (l > 0 && l < 16) {
+          return "B";
+        } else if (l >= 16 && l < 31) {
+          return "I";
+        } else if (l >= 31 && l < 46) {
+          return "N";
+        } else if (l >= 46 && l < 61) {
+          return "G";
+        } else if (l >= 61 && l < 76) {
+          return "O";
+        }
+      }
       socket.addEventListener("message", (event) => {
         const data = JSON.parse(event.data);
         let defaultBG =
           "from-gray-400 via-gray-600 to-gray-900 text-white opacity-70";
         let drawnNumberBG =
           "from-orange-400 via-orange-600 to-orange-900 text-white opacity-80";
+
         if (data.type === "numbersCalling") {
           let current = data.current;
           let count = data.count;
@@ -3154,15 +3168,24 @@
             .classList.remove(...defaultBG.split(" "));
 
           document.querySelector(".current-number").textContent = current;
+          document.querySelector(".current-number-letter").textContent =
+            letterReturn(current);
+
           document.querySelector(".counter").textContent = count + "/75";
           drawnNumbers.push(current);
           console.log(drawnNumbers);
           document.querySelector(".last-number-3").textContent =
             drawnNumbers[drawnNumbers.length - 2];
+          document.querySelector(".last-number-3-letter").textContent =
+            letterReturn(drawnNumbers[drawnNumbers.length - 2]);
           document.querySelector(".last-number-2").textContent =
             drawnNumbers[drawnNumbers.length - 3];
+          document.querySelector(".last-number-2-letter").textContent =
+            letterReturn(drawnNumbers[drawnNumbers.length - 3]);
           document.querySelector(".last-number-1").textContent =
             drawnNumbers[drawnNumbers.length - 4];
+          document.querySelector(".last-number-1-letter").textContent =
+            letterReturn(drawnNumbers[drawnNumbers.length - 4]);
         } else if (data.type === "bingo") {
           let winnerUsername = null;
           let balanceToSend = parseInt(players * 10 * 0.8);
