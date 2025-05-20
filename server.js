@@ -4,6 +4,15 @@ const express = require("express");
 const db = require("./db");
 const cors = require("cors");
 
+const TelegramBot = require("node-telegram-bot-api");
+const path = require("path"); // Replace with your bot token
+const token = "7639976260:AAHXlDq8ZF0C6jvr_YDAOk9-qBHDgiRDeo0";
+
+// Create bot instance
+const bot = new TelegramBot(token, { polling: true });
+
+let telegramId;
+
 const { json } = require("stream/consumers");
 // const TelegramBot = require("node-telegram-bot-api");
 
@@ -403,48 +412,216 @@ server.listen(3000, () => {
   console.log("Server running at http://localhost:3000");
 });
 
-// Replace this with your actual ngrok URL (no trailing space!)
-// const WEB_APP_URL = "https://71c5-196-190-144-134.ngrok-free.app";
+// /start command
+bot.onText(/\/start/, (msg) => {
+  telegramId = msg.from.id.toString();
+  console.log("Telegram ID: ", telegramId);
+  db.get(
+    "SELECT * FROM users WHERE telegram_id = ?",
+    [telegramId],
+    (err, row) => {
+      if (err) return console.error(err);
 
-// bot.onText(/\/start/, (msg) => {
-//   const chatId = msg.chat.id;
+      if (row) {
+        bot.sendMessage(msg.chat.id, "👋 Welcome back!").then(() => {
+          bot.sendMessage(msg.chat.id, "🤖 What do you want to do?", {
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  { text: "🎮 Join Game", callback_data: "join_game" },
+                  { text: "🔍 View Balance", callback_data: "view_balance" },
+                ],
+                [
+                  { text: "📜 Game Rules", callback_data: "game_rules" },
+                  {
+                    text: "👥 Invite Friends",
+                    web_app: {
+                      url: `https://santimbingo.duckdns.org`,
+                    },
+                  },
+                ],
+                [
+                  {
+                    text: "💳 Pay",
+                    callback_data: "chapa_pay",
+                    // web_app: {
+                    //   url: "https://checkout.chapa.co/checkout/payment/vsm0pB26dZh5Blb9AFl6lkQkMSByl2QDvy1VAbxE9FdLM",
+                    // },
+                  },
+                ],
+              ],
+            },
+          });
+        });
+      } else {
+        console.log("Not found");
+        bot.sendMessage(msg.chat.id, "📱 Please share your phone number:", {
+          reply_markup: {
+            keyboard: [[{ text: "Send Phone Number", request_contact: true }]],
+            one_time_keyboard: true,
+          },
+        });
+      }
+    }
+  );
+});
 
-//   bot.sendMessage(chatId, "Please share your phone number to continue:", {
-//     reply_markup: {
-//       keyboard: [
-//         [
-//           {
-//             text: "📱 Share Phone Number",
-//             request_contact: true,
-//           },
-//         ],
-//       ],
-//       resize_keyboard: true,
-//       one_time_keyboard: true,
-//     },
-//   });
-// });
+bot.on("contact", (msg) => {
+  const telegramId = msg.from.id.toString();
+  const username = msg.from.first_name || "no_username";
+  const phoneNumber = msg.contact.phone_number;
 
-// bot.on("contact", (msg) => {
-//   const phoneNumber = msg.contact.phone_number;
-//   const firstName = msg.contact.first_name;
+  const sql = `
+    INSERT OR IGNORE INTO users (telegram_id, username, phone_number, balance)
+    VALUES (?, ?, ?, 50)
+  `;
 
-//   bot.sendMessage(
-//     msg.chat.id,
-//     `Thanks, ${firstName}! Your phone: ${phoneNumber}`
-//   );
+  db.run(sql, [telegramId, username, phoneNumber], (err) => {
+    if (err) return console.error(err);
 
-//   // Now send the Web App button
-//   bot.sendMessage(msg.chat.id, "Open the mini app:", {
-//     reply_markup: {
-//       inline_keyboard: [
-//         [
-//           {
-//             text: "🚀 Launch App",
-//             web_app: { url: WEB_APP_URL },
-//           },
-//         ],
-//       ],
-//     },
-//   });
-// });
+    // First message: confirm saving and remove keyboard
+    bot
+      .sendMessage(msg.chat.id, "✅ Phone number saved. Thank you!", {
+        reply_markup: {
+          remove_keyboard: true,
+        },
+      })
+      .then(() => {
+        // Second message: show inline options
+        bot.sendMessage(msg.chat.id, "🤖 What do you want to do?", {
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: "🔍 View Balance", callback_data: "view_balance" },
+                { text: "🎮 Join Game", callback_data: "join_game" },
+              ],
+              [
+                { text: "📜 Game Rules", callback_data: "game_rules" },
+                { text: "👥 Invite Friends", callback_data: "invite_friends" },
+              ],
+              [{ text: "💳 Pay", callback_data: "chapa_pay" }],
+            ],
+          },
+        });
+      });
+  });
+});
+
+bot.on("callback_query", (query) => {
+  const chatId = query.message.chat.id;
+  const data = query.data;
+
+  let responseText = "";
+
+  switch (data) {
+    case "view_balance":
+      responseText = "💰 Your current balance is 50 coins.";
+      break;
+    case "join_game":
+      responseText = "🎮 You've joined the game!";
+      break;
+    case "game_rules":
+      responseText = "📜 Game Rules:\n1. Rule one\n2. Rule two\n3. Rule three";
+      break;
+    case "invite_friends":
+      responseText = "👥 Share this bot with your friends to invite them!";
+      break;
+    case "chapa_pay":
+      // 🔍 Fetch user from DB
+
+      db.get(
+        "SELECT * FROM users WHERE telegram_id = ?",
+        [telegramId],
+        async (err, row) => {
+          if (err || !row) {
+            console.error("DB error:", err);
+            bot.sendMessage(
+              chatId,
+              "❌ Could not retrieve your info. Try /start again."
+            );
+            return;
+          }
+
+          const tx_ref = "tx-" + Date.now();
+          const sql = `
+            INSERT INTO transactions (tx_ref,userID, amount, status)
+            VALUES (?,?, ?, ?)
+          `;
+
+          db.run(sql, [tx_ref, row.telegram_id, 50, "pending"], async (err) => {
+            if (err) return console.error(err);
+
+            // console.log("TElegram ifd", );
+            let id = row.telegram_id;
+            const payload = {
+              amount: "100",
+              currency: "ETB",
+              email: row.phone_number + "aben@gmail.com", // You can use a better format
+              first_name: row.username || "TelegramUser",
+              last_name: "User",
+              phone_number: "0900123456",
+              tx_ref,
+              callback_url: `http://192.168.1.10:3000/callback?tx_ref=${tx_ref}&asd=asd&mnn=asdsd`,
+              return_url: "http://192.168.1.10:3000/return.html",
+              customization: {
+                title: "Bot",
+                description: "Payment",
+              },
+            };
+
+            console.log(payload);
+            try {
+              const response = await fetch(
+                "https://api.chapa.co/v1/transaction/initialize",
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization:
+                      "Bearer CHASECK_TEST-HHFEZC6dt1ieICA8AAg5PZyMHWbVNxZ9",
+                  },
+                  body: JSON.stringify(payload),
+                }
+              );
+
+              const data = await response.json();
+
+              if (data.status === "success") {
+                bot.sendMessage(
+                  chatId,
+                  `✅ Click below to complete your payment:`,
+                  {
+                    reply_markup: {
+                      inline_keyboard: [
+                        [
+                          {
+                            text: "💳 Pay Now",
+                            web_app: { url: data.data.checkout_url },
+                          },
+                        ],
+                      ],
+                    },
+                  }
+                );
+              } else {
+                bot.sendMessage(chatId, "❌ Payment failed to initialize.");
+                console.error(data);
+              }
+            } catch (error) {
+              console.error("Chapa error:", error);
+              bot.sendMessage(
+                chatId,
+                "⚠️ An error occurred while contacting Chapa."
+              );
+            }
+          });
+        }
+      );
+      responseText = "Payment ongoing";
+      break;
+    default:
+      responseText = "❓ Unknown action.";
+  }
+
+  bot.sendMessage(chatId, responseText);
+});
