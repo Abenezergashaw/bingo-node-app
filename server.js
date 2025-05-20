@@ -78,6 +78,31 @@ app.get("/getuserdetails", (req, res) => {
   );
 });
 
+app.get("/decreasePlayerBalance", (req, res) => {
+  const { userID } = req.query;
+
+  console.log("USer ID:", userID);
+  db.all(
+    `UPDATE users SET balance = balance - ? WHERE telegram_id = ${userID}`,
+    [10],
+    (err, rows) => {
+      if (err) {
+        console.error("❌ Select error:", err.message);
+      } else {
+        // console.log("\n📦 Fetched Data:");
+        // usersFromDB = rows;
+        // console.log(usersFromDB);
+        // const userData = {
+        //   id: 123,
+        //   name: "John Doe",
+        //   email: "john@example.com",
+        // };
+        // res.json(usersFromDB);
+      }
+    }
+  );
+});
+
 app.get("/getWinneerDetails", (req, res) => {
   const { userID, balance } = req.query;
 

@@ -3033,9 +3033,20 @@
             let b = localStorage.getItem("balance");
 
             localStorage.setItem("balance", b - 10);
-
-            document.querySelector(".balance").textContent =
-              "Br. " + localStorage.getItem("balance");
+            async function updateBalance(params) {
+              try {
+                // const response = await fetch(
+                //   "http://localhost:3000/getuserdetails?userID=353008986"
+                // );
+                const response = await fetch(
+                  `https://santimbingo.duckdns.org/decreasePlayerBalance?userID=${userID.id}`
+                );
+                if (!response.ok)
+                  throw new Error("Network response was not ok");
+              } catch (error) {
+                console.error("Failed to fetch user details:", error);
+              }
+            }
 
             const query = `?username=${encodeURIComponent(
               username
