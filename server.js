@@ -467,6 +467,7 @@ bot.onText(/\/start/, (msg) => {
                   { text: "📜 Game Rules", callback_data: "game_rules" },
                   {
                     text: "👥 Invite Friends",
+                    callback_data: "invite_friends",
                   },
                 ],
                 [
