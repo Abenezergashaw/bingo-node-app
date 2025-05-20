@@ -125,7 +125,6 @@ function startTimer() {
       if (userToNumber.size >= 1) {
         numbers = getShuffledBingoNumbers();
         gameState = true;
-        callInterval = setInterval(broadcastShuffledNumbers, 3000);
         players = userToNumber.size;
         broadcast({
           type: "gameStarted",
@@ -133,6 +132,9 @@ function startTimer() {
           users: Object.fromEntries(userToNumber),
           players: userToNumber.size,
         });
+        setTimeout(() => {
+          callInterval = setInterval(broadcastShuffledNumbers, 3000);
+        }, 1000);
         clearInterval(timer);
       } else {
         startTimer();
@@ -217,22 +219,22 @@ function allNumbersThatMakeLine(card, d, u) {
       console.log("Line making numbers: ", lineMakingArray);
       let html = "";
       html += `<!-- BINGO Header -->
-<div class="bg-yellow-300 fw-bold">B</div>
-<div class="bg-yellow-300 fw-bold">I</div>
-<div class="bg-yellow-300 fw-bold">N</div>
-<div class="bg-yellow-300 fw-bold">G</div>
-<div class="bg-yellow-300 fw-bold">O</div>
+<div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">B</div>
+<div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">I</div>
+<div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">N</div>
+<div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">G</div>
+<div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">O</div>
 `;
 
       const getClass = (value) => {
         if (value == current)
-          return "bg-green-900 text-black flex justify-center text-white";
+          return "bg-gradient-to-br from-teal-700 via-teal-900 to-gray-400 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
         if (lineMakingArray.includes(value))
-          return "bg-green-300 text-black flex justify-center";
+          return "bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
 
         if (d.includes(value))
-          return "bg-red-300 text-white flex justify-center";
-        return "bg-gray-200 text-black flex justify-center";
+          return "bg-gradient-to-br from-red-400 via-red-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
+        return "bg-gradient-to-br from-orange-400 via-orange-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
       };
 
       html += `
