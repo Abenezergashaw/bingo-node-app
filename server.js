@@ -194,7 +194,16 @@ function broadcastShuffledNumbers() {
     });
   } else {
     clearInterval(callInterval);
+    drawnNumbers = [];
+    numbers = [];
+
     startTimer();
+    players = 0;
+    // timer = 10;
+    count = 0;
+    lineMakingArray = [];
+    someoneBingo = false;
+    gameState = false;
     console.log("All 75 numbers have been called!");
   }
 }
