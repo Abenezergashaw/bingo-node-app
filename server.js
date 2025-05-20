@@ -194,6 +194,7 @@ function broadcastShuffledNumbers() {
     });
   } else {
     clearInterval(callInterval);
+    startTimer();
     console.log("All 75 numbers have been called!");
   }
 }
