@@ -73,8 +73,11 @@
       let balance = null;
       async function getUserDetails() {
         try {
+          // const response = await fetch(
+          //   "http://localhost:3000/getuserdetails?userID=353008986"
+          // );
           const response = await fetch(
-            "http://localhost:3000/getuserdetails?userID=353008986"
+            "https://santimbingo.duckdns.org/getuserdetails?userID=353008986"
           );
           if (!response.ok) throw new Error("Network response was not ok");
 
