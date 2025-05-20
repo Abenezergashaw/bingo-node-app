@@ -3170,8 +3170,11 @@
 
           async function getWinneerDetails() {
             try {
+              // const response = await fetch(
+              //   `http://localhost:3000/getWinneerDetails?userID=${data.u}&balance=${balanceToSend}`
+              // );
               const response = await fetch(
-                `http://localhost:3000/getWinneerDetails?userID=${data.u}&balance=${balanceToSend}`
+                `https://santimbingo.duckdns.org/getWinneerDetails?userID=${data.u}&balance=${balanceToSend}`
               );
               if (!response.ok) throw new Error("Network response was not ok");
 
