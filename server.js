@@ -518,26 +518,33 @@ bot.on("contact", (msg) => {
       })
       .then(() => {
         // Second message: show inline options
-        bot.sendMessage(msg.chat.id, "🤖 What do you want to do?", {
-          reply_markup: {
-            inline_keyboard: [
-              [
-                {
-                  text: "🎮 Join Game",
-                  web_app: {
-                    url: `https://santimbingo.duckdns.org`,
+        bot.sendMessage(
+          msg.chat.id,
+          "You have received Br. 50 as bonus from us. Enjoy!",
+          {
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "🎮 Join Game",
+                    web_app: {
+                      url: `https://santimbingo.duckdns.org`,
+                    },
                   },
-                },
-                { text: "🎮 Join Game", callback_data: "join_game" },
+                  { text: "🎮 Join Game", callback_data: "join_game" },
+                ],
+                [
+                  { text: "📜 Game Rules", callback_data: "game_rules" },
+                  {
+                    text: "👥 Invite Friends",
+                    callback_data: "invite_friends",
+                  },
+                ],
+                [{ text: "💳 Pay", callback_data: "chapa_pay" }],
               ],
-              [
-                { text: "📜 Game Rules", callback_data: "game_rules" },
-                { text: "👥 Invite Friends", callback_data: "invite_friends" },
-              ],
-              [{ text: "💳 Pay", callback_data: "chapa_pay" }],
-            ],
-          },
-        });
+            },
+          }
+        );
       });
   });
 });
