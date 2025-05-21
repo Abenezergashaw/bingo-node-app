@@ -3202,6 +3202,9 @@
               if (!response.ok) throw new Error("Network response was not ok");
 
               const dataz = await response.json();
+              if (dataz) {
+                toggleModal(true);
+              }
               if (username == data.u) {
                 winnerUsername = "You";
               } else {
@@ -3220,7 +3223,6 @@
           // alert(winnerUsername + "has won");
           // }
 
-          toggleModal(true);
           // console.log("Bingo");
         } else if (data.type === "gameFinished") {
           window.location.href = "/index.html";
