@@ -114,7 +114,7 @@ app.get("/getWinneerDetails", (req, res) => {
 
   console.log("USer ID:", userID);
   console.log("is theis winner", isThisWinner);
-  if (isThisWinner) {
+  if (isThisWinner === "true") {
     console.log("This winners page");
     db.run(
       `UPDATE users SET balance = balance + ? WHERE telegram_id = ?`,
