@@ -519,6 +519,7 @@ bot.onText(/\/start/, (msg) => {
           reply_markup: {
             keyboard: [[{ text: "Send Phone Number", request_contact: true }]],
             one_time_keyboard: true,
+            resize_keyboard: true,
           },
         });
       }
