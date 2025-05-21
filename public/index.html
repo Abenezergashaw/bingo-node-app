@@ -3044,7 +3044,7 @@
                 //   "http://localhost:3000/getuserdetails?userID=353008986"
                 // );
                 const response = await fetch(
-                  `https://santimbingo.duckdns.org/decreasePlayerBalance?userID=${userID.id}`
+                  `https://santimbingo.duckdns.org/decreasePlayerBalance?userID=${username}`
                 );
                 if (!response.ok)
                   throw new Error("Network response was not ok");
