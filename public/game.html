@@ -163,6 +163,12 @@
         >
           Bingo
         </button>
+        <button
+          class="border-0 mt-2 px-10 py-1 text-white refresh-button rounded-3xl shadow-[0_1px_2px_white] bg-gradient-to-br from-orange-400 via-orange-600 to-gray-600 opacity-100 text-white"
+          style="width: 50%"
+        >
+          Refresh
+        </button>
       </div>
     </div>
 
@@ -3290,6 +3296,15 @@
         };
         socket.send(JSON.stringify(d));
       });
+      document
+        .querySelector(".refresh-button")
+        .addEventListener("click", () => {
+          socket.send(
+            JSON.stringify({
+              type: "refreshGameState",
+            })
+          );
+        });
     </script>
   </body>
 </html>
