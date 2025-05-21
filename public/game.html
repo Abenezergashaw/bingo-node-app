@@ -175,10 +175,7 @@
         class="bg-white rounded-xl p-6 w-full max-w-md shadow-lg relative flex items-center justify-center flex-col"
       >
         <h2 class="text-xl font-bold mb-4 username"></h2>
-        <div
-          class="winner-card grid grid-cols-5 gap-1 bg-gray-300 p-2 opacity-90 flex justify-center flex-col items-center rounded"
-          style="width: 80%; margin: 0 auto"
-        ></div>
+        <div class="winner-card" style="width: 80%; margin: 0 auto"></div>
         <!-- <button
           onclick="toggleModal(false)"
           class="px-4 py-2 bg-red-500 text-white rounded"
@@ -3253,6 +3250,7 @@
           type: "bingo",
           c: cards[number - 1],
           username,
+          n: number - 1,
         };
         socket.send(JSON.stringify(d));
       });

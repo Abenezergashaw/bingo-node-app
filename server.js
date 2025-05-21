@@ -215,7 +215,7 @@ function broadcastShuffledNumbers() {
   }
 }
 
-function allNumbersThatMakeLine(card, d, u) {
+function allNumbersThatMakeLine(card, d, u, nn) {
   if (!someoneBingo) {
     let line1 = [card.b1, card.b2, card.b3, card.b4, card.b5];
     let line2 = [card.i1, card.i2, card.i3, card.i4, card.i5];
@@ -261,6 +261,8 @@ function allNumbersThatMakeLine(card, d, u) {
       console.log("Line making numbers: ", lineMakingArray);
       let html = "";
       html += `<!-- BINGO Header -->
+<div class="text-white font-semibold  w-100 flex justify-center items-center">${nn}</div>
+      <div class="grid grid-cols-5 gap-1 bg-gray-300 p-2 opacity-90 flex justify-center flex-col items-center rounded" style="width:100%">
 <div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">B</div>
 <div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">I</div>
 <div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">N</div>
@@ -309,6 +311,7 @@ function allNumbersThatMakeLine(card, d, u) {
 <div class="${getClass(card.n5)}" id="n4">${card.n5}</div>
 <div class="${getClass(card.g5)}" id="g5">${card.g5}</div>
 <div class="${getClass(card.o5)}" id="o5">${card.o5}</div>
+</div>
 `;
 
       broadcast({
@@ -421,7 +424,7 @@ wss.on("connection", (ws) => {
     } else if (data.type === "bingo") {
       console.log(data.c);
       console.log("Drawn numbers: ", drawnNumbers);
-      allNumbersThatMakeLine(data.c, drawnNumbers, data.username);
+      allNumbersThatMakeLine(data.c, drawnNumbers, data.username, data.n);
     } else if (data.type == "refres0hGameState") {
       // ws.send(
       //   JSON.stringify({
