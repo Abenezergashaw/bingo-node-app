@@ -99,6 +99,7 @@ app.get("/decreasePlayerBalance", (req, res) => {
         //   email: "john@example.com",
         // };
         // res.json(usersFromDB);
+        console.log("USer decreased");
       }
     }
   );
