@@ -3052,7 +3052,7 @@
                 console.error("Failed to fetch user details:", error);
               }
             }
-
+            updateBalance();
             const query = `?username=${encodeURIComponent(
               username
             )}&number=${encodeURIComponent(

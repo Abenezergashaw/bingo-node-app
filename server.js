@@ -117,20 +117,6 @@ app.get("/getWinneerDetails", (req, res) => {
         return console.error("Error updating score:", err.message);
       }
       console.log(`Rows updated: ${this.changes}`);
-      db.all(
-        `SELECT * FROM users WHERE telegram_id = ${userID}`,
-        [],
-        (err, rows) => {
-          if (err) {
-            console.error("❌ Select error:", err.message);
-          } else {
-            console.log("\n📦 Fetched Data:");
-
-            const userData = rows;
-            res.json(userData);
-          }
-        }
-      );
     }
   );
 });
@@ -210,6 +196,8 @@ function broadcastShuffledNumbers() {
 }
 
 function allNumbersThatMakeLine(card, d, u) {
+  let un = null;
+
   if (!someoneBingo) {
     let line1 = [card.b1, card.b2, card.b3, card.b4, card.b5];
     let line2 = [card.i1, card.i2, card.i3, card.i4, card.i5];
@@ -304,12 +292,28 @@ function allNumbersThatMakeLine(card, d, u) {
 <div class="${getClass(card.g5)}" id="g5">${card.g5}</div>
 <div class="${getClass(card.o5)}" id="o5">${card.o5}</div>
 `;
+      db.all(
+        `SELECT * FROM users WHERE telegram_id = ${userID}`,
+        [],
+        (err, rows) => {
+          if (err) {
+            console.error("❌ Select error:", err.message);
+          } else {
+            console.log("\n📦 Fetched Data:");
 
-      broadcast({
-        type: "bingo",
-        html,
-        u,
-      });
+            const userData = json.parse(rows);
+            // res.json(userData);
+            un = userData[0].username;
+            console.log("Winner: ", un);
+            broadcast({
+              type: "bingo",
+              html,
+              u,
+              un,
+            });
+          }
+        }
+      );
 
       clearInterval(callInterval);
 
@@ -334,7 +338,7 @@ function allNumbersThatMakeLine(card, d, u) {
         lineMakingArray = [];
         someoneBingo = false;
         gameState = false;
-      }, 2500);
+      }, 4000);
     } else {
       broadcast({
         type: "blockUser",

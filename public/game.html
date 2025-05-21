@@ -3193,7 +3193,11 @@
           document.querySelector(".last-number-1-letter").textContent =
             letterReturn(drawnNumbers[drawnNumbers.length - 4]);
         } else if (data.type === "bingo") {
-          let winnerUsername = null;
+          if (data.u == username) {
+            let winnerUsername = "You";
+          } else {
+            let winnerUsername = data.un;
+          }
           let balanceToSend = parseInt(players * 10 * 0.8);
           document.querySelector(".winner-card").innerHTML = data.html;
 
@@ -3207,27 +3211,30 @@
               );
               if (!response.ok) throw new Error("Network response was not ok");
 
-              const dataz = await response.json();
-              if (dataz) {
-                toggleModal(true);
-              }
-              if (username == data.u) {
-                winnerUsername = "You";
-              } else {
-                winnerUsername = dataz[0].username;
-              }
-              document.querySelector(".username").textContent =
-                winnerUsername + "  won 👏👏👏";
-              return dataz;
+              // const dataz = await response.json();
+              // if (dataz) {
+              //   toggleModal(true);
+              // }
+              // if (username == data.u) {
+              //   winnerUsername = "You";
+              // } else {
+              //   winnerUsername = dataz[0].username;
+              // }
+              // document.querySelector(".username").textContent =
+              //   winnerUsername + "  won 👏👏👏";
+              // return dataz;
             } catch (error) {
               console.error("Failed to fetch user details:", error);
             }
           }
 
-          // if (username == data.u) {
-          getWinneerDetails();
-          // alert(winnerUsername + "has won");
-          // }
+          if (username == data.u) {
+            getWinneerDetails();
+            // alert(winnerUsername + "has won");
+          }
+          document.querySelector(".username").textContent =
+            winnerUsername + "  won 👏👏👏";
+          toggleModal(true);
 
           // console.log("Bingo");
         } else if (data.type === "gameFinished") {
