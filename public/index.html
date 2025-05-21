@@ -68,7 +68,7 @@
       const userID = tg.initDataUnsafe?.user;
       // const userID = "353008986";
       // alert(userID.id);
-      let username = userID.id;
+      let username = userID ? userID.id : "353008986";
 
       let balance = null;
       async function getUserDetails() {
