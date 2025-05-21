@@ -287,7 +287,7 @@ function allNumbersThatMakeLine(card, d, u) {
 
 <div class="${getClass(card.b3)}" id="b3">${card.b3}</div>
 <div class="${getClass(card.i3)}" id="i3">${card.i3}</div>
-<div class="free-space bg-green-300 flex justify-center" id="free">⭐</div>
+<div class="free-space bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers" id="free">⭐</div>
 <div class="${getClass(card.g3)}" id="g3">${card.g3}</div>
 <div class="${getClass(card.o3)}" id="o3">${card.o3}</div>
 

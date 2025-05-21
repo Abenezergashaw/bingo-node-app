@@ -175,7 +175,7 @@
       >
         <h2 class="text-xl font-bold mb-4 username"></h2>
         <div
-          class="winner-card grid grid-cols-5 gap-1 bg-gray-300 p-2 opacity-90 flex justify-center flex-col items-center rounded-3xl"
+          class="winner-card grid grid-cols-5 gap-1 bg-gray-300 p-2 opacity-90 flex justify-center flex-col items-center rounded"
           style="width: 80%; margin: 0 auto"
         ></div>
         <!-- <button
@@ -3202,9 +3202,11 @@
               if (!response.ok) throw new Error("Network response was not ok");
 
               const dataz = await response.json();
-              document.querySelector(".username").textContent =
-                dataz[0].username + " has won";
-
+              if (username == data.u) {
+                winnerUsername = "You";
+              } else {
+                winnerUsername = dataz[0].username;
+              }
               return dataz;
             } catch (error) {
               console.error("Failed to fetch user details:", error);
@@ -3214,6 +3216,8 @@
           if (username == data.u) {
             getWinneerDetails();
           }
+          document.querySelector(".username").textContent =
+            winnerUsername + " has won";
           toggleModal(true);
           // console.log("Bingo");
         } else if (data.type === "gameFinished") {
