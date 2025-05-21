@@ -159,6 +159,7 @@
         </div>
         <button
           class="bg-green-500 border-0 mt-2 px-10 py-1 text-white bingo-button"
+          style="width: 50%"
         >
           Bingo
         </button>
@@ -3193,11 +3194,7 @@
           document.querySelector(".last-number-1-letter").textContent =
             letterReturn(drawnNumbers[drawnNumbers.length - 4]);
         } else if (data.type === "bingo") {
-          if (data.u == username) {
-            let winnerUsername = "You";
-          } else {
-            let winnerUsername = data.un;
-          }
+          let winnerUsername = null;
           let balanceToSend = parseInt(players * 10 * 0.8);
           document.querySelector(".winner-card").innerHTML = data.html;
 
@@ -3211,30 +3208,27 @@
               );
               if (!response.ok) throw new Error("Network response was not ok");
 
-              // const dataz = await response.json();
-              // if (dataz) {
-              //   toggleModal(true);
-              // }
-              // if (username == data.u) {
-              //   winnerUsername = "You";
-              // } else {
-              //   winnerUsername = dataz[0].username;
-              // }
-              // document.querySelector(".username").textContent =
-              //   winnerUsername + "  won 👏👏👏";
-              // return dataz;
+              const dataz = await response.json();
+              if (dataz) {
+                toggleModal(true);
+              }
+              if (username == data.u) {
+                winnerUsername = "You";
+              } else {
+                winnerUsername = dataz[0].username;
+              }
+              document.querySelector(".username").textContent =
+                winnerUsername + "  won 👏👏👏";
+              return dataz;
             } catch (error) {
               console.error("Failed to fetch user details:", error);
             }
           }
 
-          if (username == data.u) {
-            getWinneerDetails();
-            // alert(winnerUsername + "has won");
-          }
-          document.querySelector(".username").textContent =
-            winnerUsername + "  won 👏👏👏";
-          toggleModal(true);
+          // if (username == data.u) {
+          getWinneerDetails();
+          // alert(winnerUsername + "has won");
+          // }
 
           // console.log("Bingo");
         } else if (data.type === "gameFinished") {
