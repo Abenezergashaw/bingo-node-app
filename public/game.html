@@ -3207,18 +3207,19 @@
               } else {
                 winnerUsername = dataz[0].username;
               }
+              document.querySelector(".username").textContent =
+                winnerUsername + " has won";
               return dataz;
             } catch (error) {
               console.error("Failed to fetch user details:", error);
             }
           }
 
-          if (username == data.u) {
-            getWinneerDetails();
-            alert(winnerUsername + "has won");
-          }
-          document.querySelector(".username").textContent =
-            winnerUsername + " has won";
+          // if (username == data.u) {
+          getWinneerDetails();
+          // alert(winnerUsername + "has won");
+          // }
+
           toggleModal(true);
           // console.log("Bingo");
         } else if (data.type === "gameFinished") {
