@@ -263,12 +263,12 @@ function allNumbersThatMakeLine(card, d, u) {
 
       const getClass = (value) => {
         if (value == current)
-          return "bg-gradient-to-br from-teal-600 via-teal-800 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
+          return "bg-gradient-to-br from-teal-800 via-teal-900 to-gray-700 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
         if (lineMakingArray.includes(value))
           return "bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
 
         if (d.includes(value))
-          return "bg-gradient-to-br from-orange-400 via-orange-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
+          return "bg-gradient-to-br from-slate-100 via-gray-50 to-pink-100 opacity-100 text-black h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
         return "bg-gradient-to-br from-slate-100 via-gray-50 to-pink-100 opacity-100 text-black h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
       };
 
