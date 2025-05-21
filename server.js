@@ -254,22 +254,22 @@ function allNumbersThatMakeLine(card, d, u) {
       console.log("Line making numbers: ", lineMakingArray);
       let html = "";
       html += `<!-- BINGO Header -->
-<div class="text-xl font-bold bg-gradient-to-br from-green-300 via-emerald-200 to-green-300 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">B</div>
-<div class="text-xl font-bold bg-gradient-to-br from-green-300 via-emerald-200 to-green-300 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">I</div>
-<div class="text-xl font-bold bg-gradient-to-br from-green-300 via-emerald-200 to-green-300 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">N</div>
-<div class="text-xl font-bold bg-gradient-to-br from-green-300 via-emerald-200 to-green-300 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">G</div>
-<div class="text-xl font-bold bg-gradient-to-br from-green-300 via-emerald-200 to-green-300 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">O</div>
+<div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">B</div>
+<div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">I</div>
+<div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">N</div>
+<div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">G</div>
+<div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">O</div>
 `;
 
       const getClass = (value) => {
         if (value == current)
-          return "bg-gradient-to-br from-green-500 via-green-200 to-green-500 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
+          return "bg-gradient-to-br from-teal-600 via-teal-800 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
         if (lineMakingArray.includes(value))
-          return "bg-gradient-to-br from-green-300 via-green-50 to-green-300 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
+          return "bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
 
         if (d.includes(value))
-          return "bg-gradient-to-br from-green-100 via-emerald-200 to-lime-400 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
-        return "bg-gradient-to-br from-slate-100 via-gray-50 to-pink-100 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
+          return "bg-gradient-to-br from-orange-400 via-orange-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
+        return "bg-gradient-to-br from-slate-100 via-gray-50 to-pink-100 opacity-100 text-black h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers";
       };
 
       html += `
