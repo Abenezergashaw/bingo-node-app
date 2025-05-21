@@ -172,10 +172,11 @@
     >
       <!-- Modal Box -->
       <div
-        class="bg-white rounded-xl p-6 w-full max-w-md shadow-lg relative flex items-center justify-center flex-col"
+        class="bg-gray-300 opacity-80 rounded-xl p-6 shadow-lg relative flex items-center justify-center flex-col"
+        style="width: 80%"
       >
         <h2 class="text-xl font-bold mb-4 username"></h2>
-        <div class="winner-card" style="width: 80%; margin: 0 auto"></div>
+        <div class="winner-card" style="width: 100%; margin: 0 auto"></div>
         <!-- <button
           onclick="toggleModal(false)"
           class="px-4 py-2 bg-red-500 text-white rounded"
@@ -188,11 +189,11 @@
     <script>
       const socket = new WebSocket("wss://santimbingo.duckdns.org/");
 
-      // socket.send(
-      //   JSON.stringify({
-      //     type: "refreshGameState",
-      //   })
-      // );
+      socket.send(
+        JSON.stringify({
+          type: "refreshGameState",
+        })
+      );
 
       function toggleModal(show) {
         document.getElementById("modal").classList.toggle("hidden", !show);
@@ -3240,7 +3241,7 @@
             window.location.href = "/index.html";
           }
         } else if (data.type == "refreshGameState") {
-          let drawnNumbersForRefresh = data.drawnNumbers;
+          // let drawnNumbersForRefresh = data.drawnNumbers;
           // alert(drawnNumbersForRefresh[0]);
         }
       });

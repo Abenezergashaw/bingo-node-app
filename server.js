@@ -427,7 +427,7 @@ wss.on("connection", (ws) => {
       console.log(data.c);
       console.log("Drawn numbers: ", drawnNumbers);
       allNumbersThatMakeLine(data.c, drawnNumbers, data.username, data.n);
-    } else if (data.type == "refres0hGameState") {
+    } else if (data.type == "refreshGameState") {
       // ws.send(
       //   JSON.stringify({
       //     type: "gettingDrawnNumbers",
