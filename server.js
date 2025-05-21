@@ -113,6 +113,7 @@ app.get("/getWinneerDetails", (req, res) => {
   const { userID, balance, isThisWinner } = req.query;
 
   console.log("USer ID:", userID);
+  console.log("is theis winner", isThisWinner);
   if (isThisWinner) {
     db.run(
       `UPDATE users SET balance = balance + ? WHERE telegram_id = ?`,
