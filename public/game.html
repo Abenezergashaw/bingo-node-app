@@ -190,6 +190,12 @@
     <script>
       const socket = new WebSocket("wss://santimbingo.duckdns.org/");
 
+      socket.send(
+        JSON.stringify({
+          type: "refreshGameState",
+        })
+      );
+
       function toggleModal(show) {
         document.getElementById("modal").classList.toggle("hidden", !show);
       }
@@ -3211,7 +3217,7 @@
                 winnerUsername = dataz[0].username;
               }
               document.querySelector(".username").textContent =
-                winnerUsername + " has won";
+                winnerUsername + "  won 👏👏👏";
               return dataz;
             } catch (error) {
               console.error("Failed to fetch user details:", error);
@@ -3231,6 +3237,9 @@
           if (username == data.u) {
             window.location.href = "/index.html";
           }
+        } else if (data.type == "refreshGameState") {
+          let drawnNumbersForRefresh = data.drawnNumbers;
+          alert(drawnNumbersForRefresh[0]);
         }
       });
 

@@ -14,6 +14,7 @@ const bot = new TelegramBot(token, { polling: true });
 let telegramId;
 
 const { json } = require("stream/consumers");
+const { type } = require("os");
 // const TelegramBot = require("node-telegram-bot-api");
 
 // const token = "7967803106:AAEZV06ZdA693dV3SCOD9Y-Ch3LTrGpp02Y"; // demo only
@@ -415,6 +416,13 @@ wss.on("connection", (ws) => {
       console.log(data.c);
       console.log("Drawn numbers: ", drawnNumbers);
       allNumbersThatMakeLine(data.c, drawnNumbers, data.username);
+    } else if (data.type == "refres0hGameState") {
+      ws.send(
+        JSON.stringify({
+          type: "gettingDrawnNumbers",
+          drawnNumbers,
+        })
+      );
     }
   });
 
