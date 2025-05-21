@@ -99,6 +99,10 @@ app.get("/decreasePlayerBalance", (req, res) => {
         //   email: "john@example.com",
         // };
         // res.json(usersFromDB);
+        const userData = {
+          proceed: true,
+        };
+        res.json(userData);
         console.log("USer decreased");
       }
     }
