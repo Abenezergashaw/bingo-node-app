@@ -190,11 +190,11 @@
     <script>
       const socket = new WebSocket("wss://santimbingo.duckdns.org/");
 
-      socket.send(
-        JSON.stringify({
-          type: "refreshGameState",
-        })
-      );
+      // socket.send(
+      //   JSON.stringify({
+      //     type: "refreshGameState",
+      //   })
+      // );
 
       function toggleModal(show) {
         document.getElementById("modal").classList.toggle("hidden", !show);
