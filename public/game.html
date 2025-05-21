@@ -15,7 +15,7 @@
       <div
         class="w-20 h-10 bg-gradient-to-r from-green-500 to-green-300 text-black rounded-3xl shadow flex flex-col items-center justify-center text-[12px]"
       >
-        <span class="font-extrabold leading-tight counter">45</span>
+        <span class="font-extrabold leading-tight counter">0/75</span>
         <span class="text-[10px] font-semibold">Call</span>
       </div>
 
@@ -3016,9 +3016,9 @@
       let players = params.get("players");
 
       if (players) {
-        document.querySelector(".win").textContent = `Br. ${
+        document.querySelector(".win").textContent = `Br. ${parseInt(
           players * 0.8 * 10
-        }`;
+        )}`;
         document.querySelector(".stake").textContent = `Br. ${10}`;
         document.querySelector(".players").textContent = `${players}`;
       }
@@ -3254,6 +3254,27 @@
               document
                 .querySelector(`.number-${data.drawnNumbers[i]}`)
                 .classList.remove(...defaultBG.split(" "));
+
+              document.querySelector(".current-number").textContent =
+                data.drawnNumbers[i];
+              document.querySelector(".current-number-letter").textContent =
+                letterReturn(current);
+
+              document.querySelector(".counter").textContent =
+                data.drawnNumbers.length + "/75";
+              // console.log(drawnNumbers);
+              document.querySelector(".last-number-3").textContent =
+                data.drawnNumbers[data.drawnNumbers.length - 2];
+              document.querySelector(".last-number-3-letter").textContent =
+                letterReturn(data.drawnNumbers[data.drawnNumbers.length - 2]);
+              document.querySelector(".last-number-2").textContent =
+                data.drawnNumbers[data.drawnNumbers.length - 3];
+              document.querySelector(".last-number-2-letter").textContent =
+                letterReturn(data.drawnNumbers[data.drawnNumbers.length - 3]);
+              document.querySelector(".last-number-1").textContent =
+                data.drawnNumbers[data.drawnNumbers.length - 4];
+              document.querySelector(".last-number-1-letter").textContent =
+                letterReturn(data.drawnNumbers[data.drawnNumbers.length - 4]);
             }
           }
         }
