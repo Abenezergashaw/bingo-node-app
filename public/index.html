@@ -3051,19 +3051,21 @@
                 );
                 if (!response.ok)
                   throw new Error("Network response was not ok");
+
+                const query = `?username=${encodeURIComponent(
+                  username
+                )}&number=${encodeURIComponent(
+                  number
+                )}&players=${encodeURIComponent(players)}`;
+
+                // setTimeout(() => {
+                window.location.href = "/game.html" + query;
               } catch (error) {
                 console.error("Failed to fetch user details:", error);
               }
             }
             updateBalance();
-            const query = `?username=${encodeURIComponent(
-              username
-            )}&number=${encodeURIComponent(
-              number
-            )}&players=${encodeURIComponent(players)}`;
 
-            // setTimeout(() => {
-            window.location.href = "/game.html" + query;
             // }, 5000);
           } else {
             console.log("Username not found");
