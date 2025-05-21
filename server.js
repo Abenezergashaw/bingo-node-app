@@ -105,32 +105,33 @@ app.get("/decreasePlayerBalance", (req, res) => {
 });
 
 app.get("/getWinneerDetails", (req, res) => {
-  const { userID, balance } = req.query;
+  const { userID, balance, isThisWinner } = req.query;
 
   console.log("USer ID:", userID);
-
-  db.run(
-    `UPDATE users SET balance = balance + ? WHERE telegram_id = ?`,
-    [balance, userID],
-    function (err) {
-      if (err) {
-        return console.error("Error updating score:", err.message);
-      }
-      console.log(`Rows updated: ${this.changes}`);
-      db.all(
-        `SELECT * FROM users WHERE telegram_id = ${userID}`,
-        [],
-        (err, rows) => {
-          if (err) {
-            console.error("❌ Select error:", err.message);
-          } else {
-            console.log("\n📦 Fetched Data:");
-
-            const userData = rows;
-            res.json(userData);
-          }
+  if (isThisWinner) {
+    db.run(
+      `UPDATE users SET balance = balance + ? WHERE telegram_id = ?`,
+      [balance, userID],
+      function (err) {
+        if (err) {
+          return console.error("Error updating score:", err.message);
         }
-      );
+        console.log(`Rows updated: ${this.changes}`);
+      }
+    );
+  }
+  db.all(
+    `SELECT * FROM users WHERE telegram_id = ${userID}`,
+    [],
+    (err, rows) => {
+      if (err) {
+        console.error("❌ Select error:", err.message);
+      } else {
+        console.log("\n📦 Fetched Data:");
+
+        const userData = rows;
+        res.json(userData);
+      }
     }
   );
 });
