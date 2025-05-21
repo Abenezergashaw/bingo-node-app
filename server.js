@@ -263,7 +263,7 @@ function allNumbersThatMakeLine(card, d, u, nn) {
       console.log("Line making numbers: ", lineMakingArray);
       let html = "";
       html += `<!-- BINGO Header -->
-<div class="text-white font-semibold  w-100 flex justify-center items-center">${nn}</div>
+<div class="text-black font-bold  w-100 flex justify-center items-center text-xl">${nn}</div>
       <div class="grid grid-cols-5 gap-1 bg-gray-300 p-2 opacity-90 flex justify-center flex-col items-center rounded" style="width:100%">
 <div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">B</div>
 <div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">I</div>
