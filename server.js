@@ -417,12 +417,13 @@ wss.on("connection", (ws) => {
       console.log("Drawn numbers: ", drawnNumbers);
       allNumbersThatMakeLine(data.c, drawnNumbers, data.username);
     } else if (data.type == "refres0hGameState") {
-      ws.send(
-        JSON.stringify({
-          type: "gettingDrawnNumbers",
-          drawnNumbers,
-        })
-      );
+      // ws.send(
+      //   JSON.stringify({
+      //     type: "gettingDrawnNumbers",
+      //     drawnNumbers,
+      //   })
+      // );
+      console.log(drawnNumbers);
     }
   });
 
