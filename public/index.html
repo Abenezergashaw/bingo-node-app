@@ -88,7 +88,7 @@
 
           const data = await response.json();
 
-          username = userID.id;
+          // username = userID.id;
           balance = data[0].balance;
           document.querySelector(".balance").textContent = "Br. " + balance;
           socket.addEventListener("open", () => {
