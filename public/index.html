@@ -63,24 +63,24 @@
     <script>
       const socket = new WebSocket("wss://santimbingo.duckdns.org/");
 
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker
-            .register("/service-worker.js")
-            .then((reg) => {
-              console.log("Service Worker registered: m", reg.scope);
+      // if ("serviceWorker" in navigator) {
+      //   window.addEventListener("load", () => {
+      //     navigator.serviceWorker
+      //       .register("/service-worker.js")
+      //       .then((reg) => {
+      //         console.log("Service Worker registered: m", reg.scope);
 
-              // Preload audio so it triggers fetch and caches it
-              const audio = new Audio(
-                "https://santimbingo.duckdns.org/assets/start.m4a"
-              );
-              audio.load();
-            })
-            .catch((err) => {
-              console.error("Service Worker registration failed:", err);
-            });
-        });
-      }
+      //         // Preload audio so it triggers fetch and caches it
+      //         const audio = new Audio(
+      //           "https://santimbingo.duckdns.org/assets/start.m4a"
+      //         );
+      //         audio.load();
+      //       })
+      //       .catch((err) => {
+      //         console.error("Service Worker registration failed:", err);
+      //       });
+      //   });
+      // }
       document.getElementById("play").addEventListener("click", () => {
         const audio = new Audio(
           "https://santimbingo.duckdns.org/assets/start.m4a"
