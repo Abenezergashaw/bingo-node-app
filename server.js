@@ -616,22 +616,25 @@ bot.on("callback_query", (query) => {
       responseText = "🎮 You've joined the game!";
       break;
     case "game_rules":
+      // - 🟧 *Two Lines*
+      // - 🟥 *Full House* (all numbers)
       bot.sendMessage(
         chatId,
         `🎉 Welcome to Santi Bingo! 🎉
 
 📋 *Game Rules:*
 
-1️⃣ You will receive a Bingo ticket with 15 random numbers.
+1️⃣ You can select any cards that are available (not taken by other players) until the game starts.
 
-2️⃣ Numbers will be called one by one. Stay alert!
+2️⃣ Numbers will be called one by one 4 seconds apart. Stay alert!
 
 3️⃣ Mark the numbers on your ticket as they are called.
 
 4️⃣ Prizes are awarded for:
-- 🟩 *One Line* (any row)
-- 🟧 *Two Lines*
-- 🟥 *Full House* (all numbers)
+
+     🟩 *One Line* (any row)
+     
+5. Only a player who pressed the bingo button first is awarded with the winning amount. So be quick when bingo.
 
 🏆 First to complete each wins the prize!
 
