@@ -575,7 +575,7 @@ bot.on("contact", (msg) => {
       })
       .then(() => {
         db.get(
-          "SELECT * FROM referrals WHERE telegram_id = ?",
+          "SELECT * FROM referrals WHERE user_id = ?",
           [telegramId],
           (err, row) => {
             if (err) return console.error(err);
