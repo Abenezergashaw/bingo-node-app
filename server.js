@@ -497,7 +497,7 @@ bot.onText(/\/start/, (msg) => {
                   { text: "📜 Game Rules", callback_data: "game_rules" },
                   {
                     text: "👥 Invite Friends",
-                    url: `https://t.me/santim_bingo_bot?start=${telegramId}`,
+                    callback_data: "invite_friends",
                   },
                 ],
                 [
@@ -572,7 +572,7 @@ bot.on("contact", (msg) => {
                   { text: "📜 Game Rules", callback_data: "game_rules" },
                   {
                     text: "👥 Invite Friends",
-                    url: `https://t.me/santim_bingo_bot?start=${telegramId}`,
+                    callback_data: "invite_friends",
                   },
                 ],
                 [{ text: "💳 Deposit", callback_data: "chapa_pay" }],
@@ -646,7 +646,12 @@ bot.on("callback_query", (query) => {
 
       break;
     case "invite_friends":
-      responseText = "👥 Share this bot with your friends to invite them!";
+      bot.sendMessage(
+        chatId,
+        `
+        You can refer Santim Bingo to your family and friends and get Br.10 when they start the bot. Your invite link: /n https://t.me/santim_bingo_bot?start=${telegramId} 
+        `
+      );
       break;
     case "chapa_pay":
       // 🔍 Fetch user from DB
