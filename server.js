@@ -574,6 +574,18 @@ bot.on("contact", (msg) => {
         },
       })
       .then(() => {
+        db.get(
+          "SELECT * FROM referrals WHERE telegram_id = ?",
+          [telegramId],
+          (err, row) => {
+            if (err) return console.error(err);
+
+            if (row) {
+              console.log("Referrer and referred", row);
+            }
+          }
+        );
+
         bot.sendPhoto(
           msg.chat.id,
           "https://santimbingo.duckdns.org/assets/bot_logo_1.webp",
