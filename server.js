@@ -582,9 +582,19 @@ bot.on("contact", (msg) => {
 
             if (row) {
               console.log("Referrer and referred", row);
-              bot.sendMessage(
-                row.referrer_id,
-                "Someone joined via your invite link. You have received Br. 10."
+              db.run(
+                `UPDATE users SET balance = balance + ? WHERE telegram_id = ?`,
+                [10, row.referrer_id],
+                function (err) {
+                  if (err) {
+                    return console.error("Error updating score:", err.message);
+                  }
+                  // console.log(`Rows updated: ${this.changes}`);
+                  bot.sendMessage(
+                    row.referrer_id,
+                    "Someone joined via your invite link. You have received Br. 10."
+                  );
+                }
               );
             }
           }
