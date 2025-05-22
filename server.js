@@ -582,6 +582,10 @@ bot.on("contact", (msg) => {
 
             if (row) {
               console.log("Referrer and referred", row);
+              bot.sendMessage(
+                row.referrer_id,
+                "Someone joined via your invite link. You have received Br. 10."
+              );
             }
           }
         );
