@@ -475,7 +475,7 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   const referrerId = match[1];
 
   if (referrerId && referrerId != telegramId.toString()) {
-    console.log(`User ${newUserId} was referred by ${referrerId}`);
+    console.log(`User ${telegramId} was referred by ${referrerId}`);
 
     // Example: store in DB
     // saveReferral(newUserId, referrerId);
