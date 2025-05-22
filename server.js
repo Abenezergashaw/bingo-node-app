@@ -592,7 +592,36 @@ bot.on("contact", (msg) => {
                   // console.log(`Rows updated: ${this.changes}`);
                   bot.sendMessage(
                     row.referrer_id,
-                    `${username} joined via your invite link. You have received Br. 10.`
+                    `${username} joined via your invite link. You have received Br. 10.`,
+                    {
+                      reply_markup: {
+                        inline_keyboard: [
+                          [
+                            {
+                              text: "🎮 Play",
+                              web_app: {
+                                url: `https://santimbingo.duckdns.org`,
+                              },
+                            },
+                            {
+                              text: "💰 Balance",
+                              callback_data: "view_balance",
+                            },
+                          ],
+                          [
+                            {
+                              text: "📜 Game Rules",
+                              callback_data: "game_rules",
+                            },
+                            {
+                              text: "👥 Invite Friends",
+                              callback_data: "invite_friends",
+                            },
+                          ],
+                          [{ text: "💳 Deposit", callback_data: "chapa_pay" }],
+                        ],
+                      },
+                    }
                   );
                 }
               );
