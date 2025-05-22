@@ -588,7 +588,7 @@ bot.on("callback_query", (query) => {
   const chatId = query.message.chat.id;
   const data = query.data;
   telegramId = callbackQuery.from.id;
-
+  console.log("Telegram id: ", telegramId);
   let responseText = "";
 
   switch (data) {
