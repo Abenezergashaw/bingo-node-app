@@ -515,13 +515,19 @@ bot.onText(/\/start/, (msg) => {
         });
       } else {
         console.log("Not found");
-        bot.sendMessage(msg.chat.id, "📱 Please share your phone number:", {
-          reply_markup: {
-            keyboard: [[{ text: "Send Phone Number", request_contact: true }]],
-            one_time_keyboard: true,
-            resize_keyboard: true,
-          },
-        });
+        bot.sendMessage(
+          msg.chat.id,
+          "To start the app, 📱 Please share your phone number first: ",
+          {
+            reply_markup: {
+              keyboard: [
+                [{ text: "Send Phone Number", request_contact: true }],
+              ],
+              one_time_keyboard: true,
+              resize_keyboard: true,
+            },
+          }
+        );
       }
     }
   );
@@ -539,16 +545,13 @@ bot.on("contact", (msg) => {
 
   db.run(sql, [telegramId, username, phoneNumber], (err) => {
     if (err) return console.error(err);
-
-    // First message: confirm saving and remove keyboard
     bot
-      .sendMessage(msg.chat.id, "✅ Phone number saved. Thank you!", {
+      .sendMessage(msg.chat.id, "✅ Successfully registered. Thank you!", {
         reply_markup: {
           remove_keyboard: true,
         },
       })
       .then(() => {
-        // Second message: show inline options
         bot.sendMessage(
           msg.chat.id,
           "You have received Br. 50 as bonus from us. Enjoy!",
