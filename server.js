@@ -616,7 +616,31 @@ bot.on("callback_query", (query) => {
       responseText = "🎮 You've joined the game!";
       break;
     case "game_rules":
-      responseText = "📜 Game Rules:\n1. Rule one\n2. Rule two\n3. Rule three";
+      bot.sendMessage(
+        chatId,
+        `🎉 Welcome to Santi Bingo! 🎉
+
+📋 *Game Rules:*
+
+1️⃣ You will receive a Bingo ticket with 15 random numbers.
+
+2️⃣ Numbers will be called one by one. Stay alert!
+
+3️⃣ Mark the numbers on your ticket as they are called.
+
+4️⃣ Prizes are awarded for:
+- 🟩 *One Line* (any row)
+- 🟧 *Two Lines*
+- 🟥 *Full House* (all numbers)
+
+🏆 First to complete each wins the prize!
+
+🚫 No cheating — the game automatically checks winners.
+
+🤖 Good luck and have fun playing with friends!`,
+        { parse_mode: "Markdown" }
+      );
+
       break;
     case "invite_friends":
       responseText = "👥 Share this bot with your friends to invite them!";
