@@ -497,7 +497,7 @@ bot.onText(/\/start/, (msg) => {
                   { text: "📜 Game Rules", callback_data: "game_rules" },
                   {
                     text: "👥 Invite Friends",
-                    callback_data: "invite_friends",
+                    url: `https://t.me/santim_bingo_bot?start=${telegramId}`,
                   },
                 ],
                 [
@@ -572,7 +572,7 @@ bot.on("contact", (msg) => {
                   { text: "📜 Game Rules", callback_data: "game_rules" },
                   {
                     text: "👥 Invite Friends",
-                    callback_data: "invite_friends",
+                    url: `https://t.me/santim_bingo_bot?start=${telegramId}`,
                   },
                 ],
                 [{ text: "💳 Deposit", callback_data: "chapa_pay" }],
@@ -633,8 +633,8 @@ bot.on("callback_query", (query) => {
 4️⃣ Prizes are awarded for:
 
      🟩 *One Line* (any row)
-     
-5. Only a player who pressed the bingo button first is awarded with the winning amount. So be quick when bingo.
+
+5️⃣ Only a player who pressed the bingo button first is awarded with the winning amount. So be quick when bingo.
 
 🏆 First to complete each wins the prize!
 
