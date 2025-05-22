@@ -477,14 +477,19 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   if (referrerId && referrerId != telegramId.toString()) {
     console.log(`User ${telegramId} was referred by ${referrerId}`);
 
-    // Example: store in DB
-    // saveReferral(newUserId, referrerId);
+    const sql = `
+    INSERT OR IGNORE INTO users (user_id, referrer_id)
+    VALUES (?, ?)
+  `;
 
-    // Optional: reward the referrer
-    bot.sendMessage(
-      referrerId,
-      `🎉 Your friend ${msg.from.first_name} joined using your link!`
-    );
+    db.run(sql, [telegramId, referrerId], (err) => {
+      if (err) return console.error(err);
+    });
+
+    // bot.sendMessage(
+    //   referrerId,
+    //   `🎉 Your friend ${msg.from.first_name} joined using your link!`
+    // );
   }
 
   console.log(referrerId);
