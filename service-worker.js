@@ -1,5 +1,5 @@
 const CACHE_NAME = "audio-cache-v1";
-const AUDIO_URL = "https://santimbingo.duckdns.org/public/audio/start.m4a";
+const AUDIO_URL = "https://santimbingo.duckdns.org/assets/start.m4a";
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
