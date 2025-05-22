@@ -603,8 +603,8 @@ bot.on("callback_query", (query) => {
               "❌ Could not fetch balance. Please try again."
             );
           }
-          // bot.sendMessage(chatId, "");
-          console.log(row);
+          bot.sendMessage(chatId, "Balance: Br. " + row.balance);
+          // console.log(row);
           return;
         }
       );
