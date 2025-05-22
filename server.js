@@ -491,7 +491,7 @@ bot.onText(/\/start/, (msg) => {
                       url: `https://santimbingo.duckdns.org`,
                     },
                   },
-                  { text: "🔍 View Balance", callback_data: "view_balance" },
+                  { text: "💰  Balance", callback_data: "view_balance" },
                 ],
                 [
                   { text: "📜 Game Rules", callback_data: "game_rules" },
@@ -502,7 +502,7 @@ bot.onText(/\/start/, (msg) => {
                 ],
                 [
                   {
-                    text: "💳 Pay",
+                    text: "💳 Deposit",
                     callback_data: "chapa_pay",
                     // web_app: {
                     //   url: "https://checkout.chapa.co/checkout/payment/vsm0pB26dZh5Blb9AFl6lkQkMSByl2QDvy1VAbxE9FdLM",
@@ -561,12 +561,12 @@ bot.on("contact", (msg) => {
               inline_keyboard: [
                 [
                   {
-                    text: "🎮 Join Game",
+                    text: "🎮 Play",
                     web_app: {
                       url: `https://santimbingo.duckdns.org`,
                     },
                   },
-                  { text: "🎮 Join Game", callback_data: "join_game" },
+                  { text: "💰 Balance", callback_data: "view_balance" },
                 ],
                 [
                   { text: "📜 Game Rules", callback_data: "game_rules" },
@@ -575,7 +575,7 @@ bot.on("contact", (msg) => {
                     callback_data: "invite_friends",
                   },
                 ],
-                [{ text: "💳 Pay", callback_data: "chapa_pay" }],
+                [{ text: "💳 Deposit", callback_data: "chapa_pay" }],
               ],
             },
           }
