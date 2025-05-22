@@ -552,10 +552,11 @@ bot.on("contact", (msg) => {
         },
       })
       .then(() => {
-        bot.sendMessage(
+        bot.sendPhoto(
           msg.chat.id,
-          "You have received Br. 50 as bonus from us. Enjoy!",
+          "https://santimbingo.duckdns.org/assets/bot_logo_1.webp",
           {
+            caption: "You have received Br. 50 as bonus from us. Enjoy!",
             reply_markup: {
               inline_keyboard: [
                 [
