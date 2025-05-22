@@ -592,7 +592,7 @@ bot.on("contact", (msg) => {
                   // console.log(`Rows updated: ${this.changes}`);
                   bot.sendMessage(
                     row.referrer_id,
-                    "Someone joined via your invite link. You have received Br. 10."
+                    `${username} joined via your invite link. You have received Br. 10.`
                   );
                 }
               );
