@@ -592,6 +592,22 @@ bot.on("callback_query", (query) => {
 
   switch (data) {
     case "view_balance":
+      db.get(
+        "SELECT balance FROM users WHERE telegram_id = ?",
+        [telegramId],
+        async (err, row) => {
+          if (err || !row) {
+            console.error("DB error:", err);
+            bot.sendMessage(
+              chatId,
+              "❌ Could not fetch balance. Please try again."
+            );
+            // bot.sendMessage(chatId, "");
+            console.log(row);
+            return;
+          }
+        }
+      );
       responseText = "💰 Your current balance is 50 coins.";
       break;
     case "join_game":
@@ -700,5 +716,5 @@ bot.on("callback_query", (query) => {
       responseText = "❓ Unknown action.";
   }
 
-  bot.sendMessage(chatId, responseText);
+  // bot.sendMessage(chatId, responseText);
 });
