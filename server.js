@@ -478,7 +478,7 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
     console.log(`User ${telegramId} was referred by ${referrerId}`);
 
     const sql = `
-    INSERT OR IGNORE INTO users (user_id, referrer_id)
+    INSERT OR IGNORE INTO referrals (user_id, referrer_id)
     VALUES (?, ?)
   `;
 
