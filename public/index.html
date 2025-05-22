@@ -67,7 +67,7 @@
           navigator.serviceWorker
             .register("/service-worker.js")
             .then((reg) => {
-              console.log("Service Worker registered:", reg.scope);
+              console.log("Service Worker registered: m", reg.scope);
 
               // Preload audio so it triggers fetch and caches it
               const audio = new Audio(
