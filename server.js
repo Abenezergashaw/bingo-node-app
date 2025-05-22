@@ -474,24 +474,6 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   telegramId = msg.from.id.toString();
   const referrerId = match[1];
 
-  if (referrerId && referrerId != telegramId.toString()) {
-    console.log(`User ${telegramId} was referred by ${referrerId}`);
-
-    const sql = `
-    INSERT OR IGNORE INTO referrals (user_id, referrer_id)
-    VALUES (?, ?)
-  `;
-
-    db.run(sql, [telegramId, referrerId], (err) => {
-      if (err) return console.error(err);
-    });
-
-    // bot.sendMessage(
-    //   referrerId,
-    //   `🎉 Your friend ${msg.from.first_name} joined using your link!`
-    // );
-  }
-
   console.log(referrerId);
   console.log("Telegram ID: ", telegramId);
   db.get(
@@ -535,6 +517,25 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
           });
         });
       } else {
+        if (referrerId && referrerId != telegramId.toString()) {
+          console.log(
+            `Inside not found ::: User ${telegramId} was referred by ${referrerId}`
+          );
+
+          const sql = `
+    INSERT OR IGNORE INTO referrals (user_id, referrer_id)
+    VALUES (?, ?)
+  `;
+
+          db.run(sql, [telegramId, referrerId], (err) => {
+            if (err) return console.error(err);
+          });
+
+          // bot.sendMessage(
+          //   referrerId,
+          //   `🎉 Your friend ${msg.from.first_name} joined using your link!`
+          // );
+        }
         console.log("Not found");
         bot.sendMessage(
           msg.chat.id,
