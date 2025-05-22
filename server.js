@@ -602,10 +602,10 @@ bot.on("callback_query", (query) => {
               chatId,
               "❌ Could not fetch balance. Please try again."
             );
-            // bot.sendMessage(chatId, "");
-            console.log(row);
-            return;
           }
+          // bot.sendMessage(chatId, "");
+          console.log(row);
+          return;
         }
       );
       responseText = "💰 Your current balance is 50 coins.";
