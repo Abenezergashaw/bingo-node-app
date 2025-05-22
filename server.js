@@ -470,8 +470,11 @@ server.listen(3000, () => {
 });
 
 // /start command
-bot.onText(/\/start/, (msg) => {
+bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   telegramId = msg.from.id.toString();
+  const referrerId = match[1];
+
+  console.log(referrerId);
   console.log("Telegram ID: ", telegramId);
   db.get(
     "SELECT * FROM users WHERE telegram_id = ?",
@@ -649,7 +652,7 @@ bot.on("callback_query", (query) => {
       bot.sendMessage(
         chatId,
         `
-        You can refer Santim Bingo to your family and friends and get Br.10 when they start the bot. Your invite link: /n https://t.me/santim_bingo_bot?start=${telegramId} 
+        You can refer Santim Bingo to your family and friends and get Br.10 when they start the bot. Your invite link: \n https://t.me/santim_bingo_bot?start=${telegramId} 
         `
       );
       break;
