@@ -473,90 +473,97 @@ server.listen(3000, () => {
   console.log("Server running at http://localhost:3000");
 });
 
+const adminUser = "353008986";
+
 // /start command
 bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   telegramId = msg.from.id.toString();
-  const referrerId = match[1];
 
-  console.log(referrerId);
-  console.log("Telegram ID: ", telegramId);
-  db.get(
-    "SELECT * FROM users WHERE telegram_id = ?",
-    [telegramId],
-    (err, row) => {
-      if (err) return console.error(err);
+  if (telegramId == adminUser) {
+    bot.sendMessage(msg.chat.id, "👋 Welcome Admin");
+  } else {
+    const referrerId = match[1];
 
-      if (row) {
-        bot.sendMessage(msg.chat.id, "👋 Welcome back!").then(() => {
-          bot.sendMessage(msg.chat.id, "🤖 What do you want to do?", {
-            reply_markup: {
-              inline_keyboard: [
-                [
-                  {
-                    text: "🎮 Join Game",
-                    web_app: {
-                      url: `https://santimbingo.duckdns.org`,
+    console.log(referrerId);
+    console.log("Telegram ID: ", telegramId);
+    db.get(
+      "SELECT * FROM users WHERE telegram_id = ?",
+      [telegramId],
+      (err, row) => {
+        if (err) return console.error(err);
+
+        if (row) {
+          bot.sendMessage(msg.chat.id, "👋 Welcome back!").then(() => {
+            bot.sendMessage(msg.chat.id, "🤖 What do you want to do?", {
+              reply_markup: {
+                inline_keyboard: [
+                  [
+                    {
+                      text: "🎮 Join Game",
+                      web_app: {
+                        url: `https://santimbingo.duckdns.org`,
+                      },
                     },
-                  },
-                  { text: "💰  Balance", callback_data: "view_balance" },
+                    { text: "💰  Balance", callback_data: "view_balance" },
+                  ],
+                  [
+                    { text: "📜 Game Rules", callback_data: "game_rules" },
+                    {
+                      text: "👥 Invite Friends",
+                      callback_data: "invite_friends",
+                    },
+                  ],
+                  [
+                    {
+                      text: "💳 Deposit",
+                      callback_data: "chapa_pay",
+                      // web_app: {
+                      //   url: "https://checkout.chapa.co/checkout/payment/vsm0pB26dZh5Blb9AFl6lkQkMSByl2QDvy1VAbxE9FdLM",
+                      // },
+                    },
+                  ],
                 ],
-                [
-                  { text: "📜 Game Rules", callback_data: "game_rules" },
-                  {
-                    text: "👥 Invite Friends",
-                    callback_data: "invite_friends",
-                  },
-                ],
-                [
-                  {
-                    text: "💳 Deposit",
-                    callback_data: "chapa_pay",
-                    // web_app: {
-                    //   url: "https://checkout.chapa.co/checkout/payment/vsm0pB26dZh5Blb9AFl6lkQkMSByl2QDvy1VAbxE9FdLM",
-                    // },
-                  },
-                ],
-              ],
-            },
+              },
+            });
           });
-        });
-      } else {
-        if (referrerId && referrerId != telegramId.toString()) {
-          console.log(
-            `Inside not found ::: User ${telegramId} was referred by ${referrerId}`
-          );
+        } else {
+          if (referrerId && referrerId != telegramId.toString()) {
+            console.log(
+              `Inside not found ::: User ${telegramId} was referred by ${referrerId}`
+            );
 
-          const sql = `
+            const sql = `
     INSERT OR IGNORE INTO referrals (user_id, referrer_id)
     VALUES (?, ?)
   `;
 
-          db.run(sql, [telegramId, referrerId], (err) => {
-            if (err) return console.error(err);
-          });
+            db.run(sql, [telegramId, referrerId], (err) => {
+              if (err) return console.error(err);
+            });
 
-          // bot.sendMessage(
-          //   referrerId,
-          //   `🎉 Your friend ${msg.from.first_name} joined using your link!`
-          // );
-        }
-        console.log("Not found");
-        bot.sendMessage(
-          msg.chat.id,
-          "To start the app, 📱 Please share your phone number first: ",
-          {
-            reply_markup: {
-              keyboard: [
-                [{ text: "Send Phone Number", request_contact: true }],
-              ],
-              one_time_keyboard: true,
-              resize_keyboard: true,
-            },
+            // bot.sendMessage(
+            //   referrerId,
+            //   `🎉 Your friend ${msg.from.first_name} joined using your link!`
+            // );
           }
-        );
+          console.log("Not found");
+          bot.sendMessage(
+            msg.chat.id,
+            "To start the app, 📱 Please share your phone number first: ",
+            {
+              reply_markup: {
+                keyboard: [
+                  [{ text: "Send Phone Number", request_contact: true }],
+                ],
+                one_time_keyboard: true,
+                resize_keyboard: true,
+              },
+            }
+          );
+        }
       }
-    }
-  );
+    );
+  }
 });
 
 bot.on("contact", (msg) => {
