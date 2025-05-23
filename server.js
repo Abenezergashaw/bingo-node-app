@@ -41,6 +41,7 @@ let players = 0;
 let someoneBingo = false;
 let current = 0;
 let usersFromDB = [];
+let gameNumber = null;
 
 // db.all(`SELECT * FROM users`, [], (err, rows) => {
 //   if (err) {
@@ -184,6 +185,7 @@ function startTimer() {
             winning,
             profit
           );
+          gameNumber = this.lastID;
         });
 
         broadcast({
@@ -347,6 +349,19 @@ function allNumbersThatMakeLine(card, d, u, nn) {
         html,
         u,
       });
+
+      console.log("winner to be updated");
+
+      db.run(
+        `UPDATE games SET winner =  ? WHERE id = ?`,
+        [u, gameNumber],
+        function (err) {
+          if (err) {
+            return console.error("Error updating score:", err.message);
+          }
+          console.log("winner updated");
+        }
+      );
 
       clearInterval(callInterval);
 
