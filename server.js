@@ -351,7 +351,7 @@ function allNumbersThatMakeLine(card, d, u, nn) {
       });
 
       console.log("winner to be updated");
-
+      console.log(gameNumber, ":Game number");
       db.run(
         `UPDATE games SET winner =  ? WHERE id = ?`,
         [u, gameNumber],
@@ -359,6 +359,7 @@ function allNumbersThatMakeLine(card, d, u, nn) {
           if (err) {
             return console.error("Error updating score:", err.message);
           }
+
           console.log("winner updated");
         }
       );
