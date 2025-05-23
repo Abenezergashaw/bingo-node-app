@@ -885,7 +885,7 @@ bot.onText(/\/rules/, (msg) => {
   const telegramIdd = msg.from.id;
   bot.sendMessage(
     chatId,
-    `🎉 Welcome to Santi Bingo! 🎉
+    `🎉 Welcome to Santim Bingo! 🎉
 
 📋 *Game Rules:*
 
