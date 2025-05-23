@@ -861,3 +861,51 @@ bot.onText(/\/balance/, (msg) => {
     }
   );
 });
+
+bot.onText(/\/invite/, (msg) => {
+  const chatId = msg.chat.id;
+  const telegramIdd = msg.from.id;
+  bot.sendMessage(
+    chatId,
+    `
+        🎉 Invite & Earn with Santim Bingo!
+
+            Share the fun and earn Br.10 for every friend who starts the bot using your link!
+
+            Your personal invite link:
+            https://t.me/santim_bingo_bot?start=${telegramIdd}
+
+            Bring your family and friends to play, win, and enjoy Bingo together! 
+        `
+  );
+});
+
+bot.onText(/\/rules/, (msg) => {
+  const chatId = msg.chat.id;
+  const telegramIdd = msg.from.id;
+  bot.sendMessage(
+    chatId,
+    `🎉 Welcome to Santi Bingo! 🎉
+
+📋 *Game Rules:*
+
+1️⃣ You can select any cards that are available (not taken by other players) until the game starts.
+
+2️⃣ Numbers will be called one by one 4 seconds apart. Stay alert!
+
+3️⃣ Mark the numbers on your ticket as they are called.
+
+4️⃣ Prizes are awarded for:
+
+     🟩 *One Line* (any row)
+
+5️⃣ Only a player who pressed the bingo button first is awarded with the winning amount. So be quick when bingo.
+
+🏆 First to complete each wins the prize!
+
+🚫 No cheating — the game automatically checks winners.
+
+🤖 Good luck and have fun playing with friends!`,
+    { parse_mode: "Markdown" }
+  );
+});
