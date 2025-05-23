@@ -730,7 +730,14 @@ bot.on("callback_query", (query) => {
       bot.sendMessage(
         chatId,
         `
-        You can refer Santim Bingo to your family and friends and get Br.10 when they start the bot. Your invite link: \n https://t.me/santim_bingo_bot?start=${telegramId} 
+        🎉 Invite & Earn with Santim Bingo!
+
+Share the fun and earn Br.10 for every friend who starts the bot using your link!
+
+Your personal invite link:
+https://t.me/santim_bingo_bot?start=${telegramId}
+
+Bring your family and friends to play, win, and enjoy Bingo together! 
         `
       );
       break;
