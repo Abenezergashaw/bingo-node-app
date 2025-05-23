@@ -186,6 +186,7 @@ function startTimer() {
             profit
           );
           gameNumber = this.lastID;
+          console.log(this.lastID, "this.lastID");
         });
 
         broadcast({
