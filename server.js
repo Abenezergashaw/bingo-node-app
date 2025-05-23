@@ -168,8 +168,8 @@ function startTimer() {
         let winning = parseInt(players * 0.8 * 10);
         let profit = parseInt(players * 0.2 * 10);
         const sql = `
-            INSERT INTO games (players,winning, profit, winner)
-            VALUES (?,?,?,?)
+            INSERT INTO games (players,winning, profit, winner_cartela,winner)
+            VALUES (?,?,?,?,?)
           `;
         console.log(
           "To save successfully Games data",
@@ -177,7 +177,7 @@ function startTimer() {
           winning,
           profit
         );
-        db.run(sql, [players, winning, profit, ""], async function (err) {
+        db.run(sql, [players, winning, profit, 0, ""], async function (err) {
           if (err) return console.error(err);
           console.log(
             "Saved successfully Games data",
@@ -354,8 +354,8 @@ function allNumbersThatMakeLine(card, d, u, nn) {
       console.log("winner to be updated");
       console.log(gameNumber, ":Game number");
       db.run(
-        `UPDATE games SET winner =  ? WHERE id = ?`,
-        [u, gameNumber],
+        `UPDATE games SET winner_cartela = ?, winner =  ? WHERE id = ?`,
+        [nn, u, gameNumber],
         function (err) {
           if (err) {
             return console.error("Error updating score:", err.message);
