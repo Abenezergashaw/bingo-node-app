@@ -164,6 +164,17 @@ function startTimer() {
         numbers = getShuffledBingoNumbers();
         gameState = true;
         players = userToNumber.size;
+        let winning = parseInt(players * 0.8 * 10);
+        let profit = parseInt(players * 0.2 * 10);
+        const sql = `
+            INSERT INTO games (players,winning, profit, winner)
+            VALUES (?,?,?,?)
+          `;
+
+        db.run(sql, [players, winning, profit, ""], async (err) => {
+          if (err) return console.error(err);
+        });
+
         broadcast({
           type: "gameStarted",
           message: "Game has started!",
