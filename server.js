@@ -53,9 +53,9 @@ let usersFromDB = [];
 
 // });
 
-app.get("/service-worker.js", (req, res) => {
-  res.sendFile(path.join(__dirname, "service-worker.js"));
-});
+// app.get("/service-worker.js", (req, res) => {
+//   res.sendFile(path.join(__dirname, "service-worker.js"));
+// });
 
 app.get("/getuserdetails", (req, res) => {
   const { userID } = req.query;

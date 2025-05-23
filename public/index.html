@@ -65,22 +65,22 @@
 
       const BASE_URL = "https://santimbingo.duckdns.org/assets/";
 
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
-          .register("/service-worker.js")
-          .then((reg) => {
-            console.log("Service Worker registered:", reg.scope);
+      // if ("serviceWorker" in navigator) {
+      //   navigator.serviceWorker
+      //     .register("/service-worker.js")
+      //     .then((reg) => {
+      //       console.log("Service Worker registered:", reg.scope);
 
-            // Optional: preload all audios by creating Audio objects
-            for (let i = 1; i <= 75; i++) {
-              const audio = new Audio(`${BASE_URL}${i}.m4a`);
-              audio.load();
-            }
-          })
-          .catch((err) => {
-            console.error("SW registration failed:", err);
-          });
-      }
+      //       // Optional: preload all audios by creating Audio objects
+      //       for (let i = 1; i <= 75; i++) {
+      //         const audio = new Audio(`${BASE_URL}${i}.m4a`);
+      //         audio.load();
+      //       }
+      //     })
+      //     .catch((err) => {
+      //       console.error("SW registration failed:", err);
+      //     });
+      // }
       document.getElementById("play").addEventListener("click", () => {
         const audio = new Audio(
           "https://santimbingo.duckdns.org/assets/start.m4a"

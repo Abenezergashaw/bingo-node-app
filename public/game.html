@@ -195,7 +195,7 @@
     <script>
       const socket = new WebSocket("wss://santimbingo.duckdns.org/");
 
-      const BASE_URL = "https://santimbingo.duckdns.org/assets/";
+      // const BASE_URL = "https://santimbingo.duckdns.org/assets/";
       socket.addEventListener("open", () => {
         socket.send(
           JSON.stringify({
@@ -205,8 +205,8 @@
       });
 
       function playAudio(n) {
-        const audio = new Audio(`${BASE_URL}${n}.m4a`);
-        audio.play();
+        // const audio = new Audio(`${BASE_URL}${n}.m4a`);
+        // audio.play();
       }
 
       function toggleModal(show) {
@@ -3178,7 +3178,7 @@
         if (data.type === "numbersCalling") {
           let current = data.current;
           let count = data.count;
-          playAudio(current);
+          // playAudio(current);
           document
             .querySelector(`.number-${current}`)
             .classList.add(...drawnNumberBG.split(" "));
