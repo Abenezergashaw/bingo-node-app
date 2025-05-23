@@ -840,3 +840,24 @@ Bring your family and friends to play, win, and enjoy Bingo together!
 
   // bot.sendMessage(chatId, responseText);
 });
+
+bot.onText(/\/balance/, (msg) => {
+  const chatId = msg.chat.id;
+  const telegramIdd = msg.from.id;
+  db.get(
+    "SELECT balance FROM users WHERE telegram_id = ?",
+    [telegramIdd],
+    async (err, row) => {
+      if (err || !row) {
+        console.error("DB error:", err);
+        bot.sendMessage(
+          chatId,
+          "❌ Could not fetch balance. Please try again."
+        );
+      }
+      bot.sendMessage(chatId, "Balance: Br. " + row.balance);
+      // console.log(row);
+      return;
+    }
+  );
+});
