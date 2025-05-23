@@ -173,6 +173,12 @@ function startTimer() {
 
         db.run(sql, [players, winning, profit, ""], async (err) => {
           if (err) return console.error(err);
+          console.log(
+            "Saved successfully Games data",
+            players,
+            winning,
+            profit
+          );
         });
 
         broadcast({
