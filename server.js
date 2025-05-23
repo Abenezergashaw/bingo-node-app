@@ -177,7 +177,7 @@ function startTimer() {
           winning,
           profit
         );
-        db.run(sql, [players, winning, profit, ""], async (err) => {
+        db.run(sql, [players, winning, profit, ""], async function (err) {
           if (err) return console.error(err);
           console.log(
             "Saved successfully Games data",
