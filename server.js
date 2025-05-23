@@ -170,7 +170,12 @@ function startTimer() {
             INSERT INTO games (players,winning, profit, winner)
             VALUES (?,?,?,?)
           `;
-
+        console.log(
+          "To save successfully Games data",
+          players,
+          winning,
+          profit
+        );
         db.run(sql, [players, winning, profit, ""], async (err) => {
           if (err) return console.error(err);
           console.log(
