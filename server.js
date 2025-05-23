@@ -870,12 +870,12 @@ bot.onText(/\/invite/, (msg) => {
     `
         🎉 Invite & Earn with Santim Bingo!
 
-            Share the fun and earn Br.10 for every friend who starts the bot using your link!
+Share the fun and earn Br.10 for every friend who starts the bot using your link!
 
-            Your personal invite link:
-            https://t.me/santim_bingo_bot?start=${telegramIdd}
+Your personal invite link:
+https://t.me/santim_bingo_bot?start=${telegramIdd}
 
-            Bring your family and friends to play, win, and enjoy Bingo together! 
+Bring your family and friends to play, win, and enjoy Bingo together! 
         `
   );
 });
