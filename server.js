@@ -1205,7 +1205,13 @@ Bring your family and friends to play, win, and enjoy Bingo together!
       })();
       break;
     case "get_users":
-      bot.sendMessage(chatId, "user base");
+      const message = `\`\`\`
+This is just some text
+formatted as code
+so it keeps alignment.
+\`\`\``;
+
+      bot.sendMessage(chatId, message, { parse_mode: "Markdown" });
       break;
     case "get_balance_today":
       // bot.sendMessage(chatId, "Today balacne");
