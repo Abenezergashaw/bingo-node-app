@@ -1197,7 +1197,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
           // console.log("Total rows:", counts.totalCount);
           bot.sendMessage(
             chatId,
-            `Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.totalCount}`
+            `\`\`\`Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.totalCount}\`\`\``, , { parse_mode: "Markdown" }
           );
         } catch (err) {
           console.error("Error fetching counts:", err);
@@ -1220,14 +1220,14 @@ so it keeps alignment.
         // console.log("Balance:", balance);
         bot.sendMessage(
           chatId,
-          `Balance for today ${new Date().getFullYear()}-${(
+          `\`\`\`Balance for today ${new Date().getFullYear()}-${(
             new Date().getMonth() + 1
           )
             .toString()
             .padStart(2, "0")}-${new Date()
             .getDate()
             .toString()
-            .padStart(2, "0")} : Br. ${balance}`
+            .padStart(2, "0")} : Br. ${balance}\`\`\``,, { parse_mode: "Markdown" }
         );
       })();
       break;
@@ -1279,7 +1279,7 @@ so it keeps alignment.
       (async () => {
         const balance = await getBalanceAlltime();
         // console.log("Balance:", balance);
-        bot.sendMessage(chatId, `All time  balance  : Br. ${balance}`);
+        bot.sendMessage(chatId, `\`\`\`All time  balance  : Br. ${balance}\`\`\``,, { parse_mode: "Markdown" });
       })();
 
     default:
