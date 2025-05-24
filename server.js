@@ -633,6 +633,28 @@ async function getBalanceByDate(targetDate) {
   });
 }
 
+function getProfitGroupedByDate() {
+  return new Promise((resolve, reject) => {
+    db.all(
+      `SELECT DATE(date) as day, SUM(profit) as total_profit
+       FROM games
+       GROUP BY day
+       ORDER BY day`,
+      [],
+      (err, rows) => {
+        if (err) return reject(err);
+
+        // Convert rows to an object like { "2025-05-24": 200, "2025-05-25": 150 }
+        const result = {};
+        rows.forEach(({ day, total_profit }) => {
+          result[day] = total_profit;
+        });
+        resolve(result);
+      }
+    );
+  });
+}
+
 bot.on("contact", (msg) => {
   const telegramId = msg.from.id.toString();
   const username = msg.from.first_name || "no_username";
@@ -932,7 +954,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
       bot.sendMessage(chatId, "user base");
       break;
     case "get_balance_today":
-      bot.sendMessage(chatId, "Today balacne");
+      // bot.sendMessage(chatId, "Today balacne");
       (async () => {
         const balance = await getBalanceByDate("2025-05-24");
         // console.log("Balance:", balance);
@@ -950,7 +972,18 @@ Bring your family and friends to play, win, and enjoy Bingo together!
       })();
       break;
     case "get_balance_week":
-      bot.sendMessage(chatId, "Week balacne");
+      // bot.sendMessage(chatId, "Week balacne");
+      (async () => {
+        const profitsByDate = await getProfitGroupedByDate();
+        console.log(profitsByDate);
+        // Example output:
+        // {
+        //   '2025-05-24': 200,
+        //   '2025-05-25': 150,
+        //   ...
+        // }
+      })();
+
       break;
     case "get_balance_month":
       bot.sendMessage(chatId, "Month balance");
