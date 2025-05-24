@@ -935,7 +935,18 @@ Bring your family and friends to play, win, and enjoy Bingo together!
       bot.sendMessage(chatId, "Today balacne");
       (async () => {
         const balance = await getBalanceByDate("2025-05-24");
-        console.log("Balance:", balance);
+        // console.log("Balance:", balance);
+        bot.sendMessage(
+          chatId,
+          `Balance for today ${new Date().getFullYear()}-${(
+            new Date().getMonth() + 1
+          )
+            .toString()
+            .padStart(2, "0")}-${new Date()
+            .getDate()
+            .toString()
+            .padStart(2, "0")}`
+        );
       })();
       break;
     case "get_balance_week":
