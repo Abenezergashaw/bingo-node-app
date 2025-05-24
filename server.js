@@ -704,12 +704,20 @@ function getProfitGroupedByDate(startDate, endDate) {
 }
 
 function formatProfitTable(profitsByDate) {
-  const header = "Date       | Profit";
-  const separator = `------------------------------------`;
+  const header = "Date       | Day       | Profit";
+  const separator = "----------------------------------------";
 
-  const rows = Object.entries(profitsByDate).map(
-    ([date, profit]) => `${date} | Br. ${profit}`
-  );
+  // Helper to get weekday name from date string
+  function getDayName(dateStr) {
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const date = new Date(dateStr);
+    return days[date.getDay()];
+  }
+
+  const rows = Object.entries(profitsByDate).map(([date, profit]) => {
+    const dayName = getDayName(date);
+    return `${date} | ${dayName.padEnd(9)} | Br. ${profit}`;
+  });
 
   // Calculate total profit sum
   const totalProfit = Object.values(profitsByDate).reduce(
@@ -718,8 +726,8 @@ function formatProfitTable(profitsByDate) {
   );
 
   // Add total row at the bottom
-  rows.push(`------------------------------------`);
-  rows.push(`Total      | Br. ${totalProfit}`);
+  rows.push(separator);
+  rows.push(`Total      |           | Br. ${totalProfit}`);
 
   return [header, separator, ...rows].join("\n");
 }
