@@ -918,6 +918,15 @@ Bring your family and friends to play, win, and enjoy Bingo together!
     case "get_users":
       bot.sendMessage(chatId, "user base");
       break;
+    case "get_balance_today":
+      bot.sendMessage(chatId, "Today balacne");
+      break;
+    case "get_balance_week":
+      bot.sendMessage(chatId, "Week balacne");
+      break;
+    case "get_balance_month":
+      bot.sendMessage(chatId, "Month balance");
+      break;
     default:
       responseText = "❓ Unknown action.";
   }
