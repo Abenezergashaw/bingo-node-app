@@ -749,6 +749,23 @@ function getMondayToToday() {
   };
 }
 
+function getMonthStartToToday() {
+  const today = new Date();
+
+  // First day of the month
+  const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+
+  // Format helper
+  function formatDate(date) {
+    return date.toISOString().slice(0, 10);
+  }
+
+  return {
+    monthStart: formatDate(firstDay),
+    today: formatDate(today),
+  };
+}
+
 bot.on("contact", (msg) => {
   const telegramId = msg.from.id.toString();
   const username = msg.from.first_name || "no_username";
@@ -1090,7 +1107,26 @@ Bring your family and friends to play, win, and enjoy Bingo together!
 
       break;
     case "get_balance_month":
-      bot.sendMessage(chatId, "Month balance");
+      (async () => {
+        const { monthStart, today } = getMonthStartToToday();
+        const start = "2025-05-20";
+        const end = "2025-05-25";
+
+        const profits = await getProfitGroupedByDate(monday, today);
+        console.log(profits);
+        // Example output:
+        // {
+        //   '2025-05-24': 200,
+        //   '2025-05-25': 150,
+        //   ...
+        // }
+        const message = formatProfitTable(profits);
+        bot.sendMessage(
+          chatId,
+          "Monthly Profit Summary:\n ------------------------------------ \n" +
+            message
+        );
+      })();
       break;
     default:
       responseText = "❓ Unknown action.";
