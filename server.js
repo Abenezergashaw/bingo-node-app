@@ -521,7 +521,7 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
 
   if (telegramId == adminUser) {
     bot
-      .sendMessage(msg.chat.id, `\`\`\`👋 Status: Admin \`\`\``, {
+      .sendMessage(msg.chat.id, `\`\`\`👮‍♂️ Admin \`\`\``, {
         parse_mode: "Markdown",
       })
       .then(() => {
