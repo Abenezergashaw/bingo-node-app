@@ -713,6 +713,11 @@ function getProfitGroupedByDate(startDate, endDate) {
   });
 }
 
+function getDayName(dateStr) {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-US", { weekday: "short" }); // e.g., Mon, Tue
+}
+
 function formatProfitTable(profitsByDate) {
   const header = "Date       | Day       | Profit";
   const separator = "----------------------------------------";
@@ -766,6 +771,56 @@ function formatProfitTableWithDaysCli(profitsByDate) {
 
   // Return the table string wrapped in triple backticks for Telegram Markdown formatting
   return "```\n" + table.toString() + "\n```";
+}
+
+function generateBoxTable(data) {
+  const headers = ["Date", "Day", "Profit"];
+  const rows = Object.entries(data).map(([date, profit]) => [
+    date,
+    getDayName(date),
+    `Br. ${profit}`,
+  ]);
+
+  const columnWidths = headers.map((_, colIndex) =>
+    Math.max(
+      headers[colIndex].length,
+      ...rows.map((row) => row[colIndex].length)
+    )
+  );
+
+  const drawLine = (left, middle, right) =>
+    left + columnWidths.map((w) => "─".repeat(w + 2)).join(middle) + right;
+
+  const drawRow = (cells) =>
+    "│" +
+    cells
+      .map((cell, i) => ` ${cell.toString().padEnd(columnWidths[i])} `)
+      .join("│") +
+    "│";
+
+  const top = drawLine("┌", "┬", "┐");
+  const sep = drawLine("├", "┼", "┤");
+  const bottom = drawLine("└", "┴", "┘");
+
+  const body = rows.map(drawRow).join("\n");
+  const total = Object.values(data).reduce((a, b) => a + b, 0);
+
+  const table =
+    top +
+    "\n" +
+    drawRow(headers) +
+    "\n" +
+    sep +
+    "\n" +
+    body +
+    "\n" +
+    sep +
+    "\n" +
+    drawRow(["Total", "", `Br. ${total}`]) +
+    "\n" +
+    bottom;
+
+  return "```\n" + table + "\n```"; // Telegram code block
 }
 
 function getMondayToToday() {
@@ -1185,11 +1240,13 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         //   '2025-05-25': 150,
         //   ...
         // }
-        const message = formatProfitTableWithDaysCli(profits);
+        // const message = formatProfitTableWithDaysCli(profits);
+        const message = generateBoxTable(profits);
         bot.sendMessage(
           chatId,
           "Weekly Profit Summary:\n ------------------------------------ \n" +
-            message
+            message,
+          { parse_mode: "Markdown" }
         );
       })();
 
