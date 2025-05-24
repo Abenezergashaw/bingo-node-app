@@ -519,7 +519,30 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   telegramId = msg.from.id.toString();
 
   if (telegramId == adminUser) {
-    bot.sendMessage(msg.chat.id, "👋 Welcome Admin");
+    bot.sendMessage(msg.chat.id, "👋 Welcome Admin").then(() => {
+      bot.sendMessage(msg.chat.id, "🤖 Actions", {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Get balance",
+              },
+              { text: "  Games ", callback_data: "get_games" },
+            ],
+            [{ text: "🤽🏻‍♂️ Users", callback_data: "users" }],
+            [
+              {
+                text: "💳 Deposit",
+                callback_data: "chapa_pay",
+                // web_app: {
+                //   url: "https://checkout.chapa.co/checkout/payment/vsm0pB26dZh5Blb9AFl6lkQkMSByl2QDvy1VAbxE9FdLM",
+                // },
+              },
+            ],
+          ],
+        },
+      });
+    });
   } else {
     const referrerId = match[1];
 
