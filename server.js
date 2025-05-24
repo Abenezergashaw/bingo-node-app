@@ -761,7 +761,7 @@ function formatProfitTableWithDays(profitsByDate) {
   rows.push(`Total      |      | Br. ${totalProfit}`);
 
   // Wrap with triple backticks for monospace in Telegram
-  return "```\n" + [header, separator, ...rows].join("\n") + "\n```";
+  return "\n" + [header, separator, ...rows].join("\n");
 }
 
 function getMondayToToday() {
