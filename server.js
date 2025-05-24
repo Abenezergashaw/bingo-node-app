@@ -89,8 +89,8 @@ app.get("/decreasePlayerBalance", (req, res) => {
 
   console.log("USer ID:", userID);
   db.all(
-    `UPDATE users SET balance = balance - ? WHERE telegram_id = ${userID}`,
-    [10],
+    `UPDATE users SET balance = balance - ?, played_games = played_games + ? WHERE telegram_id = ${userID}`,
+    [10, 1],
     (err, rows) => {
       if (err) {
         console.error("❌ Select error:", err.message);
@@ -122,8 +122,8 @@ app.get("/getWinneerDetails", (req, res) => {
   if (isThisWinner === "true") {
     console.log("This winners page");
     db.run(
-      `UPDATE users SET balance = balance + ? WHERE telegram_id = ?`,
-      [balance, userID],
+      `UPDATE users SET balance = balance + ?, won_games = won_games + ? WHERE telegram_id = ?`,
+      [balance, 1, userID],
       function (err) {
         if (err) {
           return console.error("Error updating score:", err.message);
@@ -611,8 +611,8 @@ bot.on("contact", (msg) => {
   const phoneNumber = msg.contact.phone_number;
 
   const sql = `
-    INSERT OR IGNORE INTO users (telegram_id, username, phone_number, balance)
-    VALUES (?, ?, ?, 50)
+    INSERT OR IGNORE INTO users (telegram_id, username, phone_number, balance, played_games,won_games)
+    VALUES (?, ?, ?, 50,0,0)
   `;
 
   db.run(sql, [telegramId, username, phoneNumber], (err) => {

@@ -1,2 +1,7 @@
-"tg-bot/bot.db" 
-"tg-bot/bot.db" 
+
+node_modules/
+.env
+.DS_Store
+*.log
+npm-debug.log*
+tg-bot/bot.db
