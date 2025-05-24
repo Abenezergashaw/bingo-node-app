@@ -1228,7 +1228,7 @@ Balance for today ${new Date().getFullYear()}-${(new Date().getMonth() + 1)
             .padStart(2, "0")}-${new Date()
             .getDate()
             .toString()
-            .padStart(2, "0")} : Br. ${balance}\`\`\``,
+            .padStart(2, "0")} : Br. ${balance}    \`\`\``,
           { parse_mode: "Markdown" }
         );
       })();
@@ -1284,7 +1284,7 @@ Balance for today ${new Date().getFullYear()}-${(new Date().getMonth() + 1)
         bot.sendMessage(
           chatId,
           `\`\`\`
-All time  balance  : Br. ${balance}\`\`\``,
+All time  balance  : Br. ${balance}       \`\`\``,
           { parse_mode: "Markdown" }
         );
       })();
