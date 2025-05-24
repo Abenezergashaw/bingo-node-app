@@ -945,7 +945,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
             .padStart(2, "0")}-${new Date()
             .getDate()
             .toString()
-            .padStart(2, "0")}`
+            .padStart(2, "0")} : Br. ${balance}`
         );
       })();
       break;
