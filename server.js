@@ -716,7 +716,7 @@ function formatProfitTable(profitsByDate) {
 
   const rows = Object.entries(profitsByDate).map(([date, profit]) => {
     const dayName = getDayName(date);
-    return `${date} | ${dayName.padEnd(9)} | Br. ${profit}`;
+    return `${date} | ${dayName.padEnd(9)}       | Br. ${profit}`;
   });
 
   // Calculate total profit sum
