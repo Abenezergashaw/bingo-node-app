@@ -620,10 +620,10 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   }
 });
 
-function getBalanceByDate(targetDate) {
+async function getBalanceByDate(targetDate) {
   return new Promise((resolve, reject) => {
     db.get(
-      "SELECT profit FROM games WHERE DATE(timestamp) = DATE(?)",
+      "SELECT profit FROM games WHERE DATE(date) = DATE(?)",
       [targetDate],
       (err, row) => {
         if (err) return reject(err);
