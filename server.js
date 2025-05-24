@@ -724,6 +724,31 @@ function formatProfitTable(profitsByDate) {
   return [header, separator, ...rows].join("\n");
 }
 
+function getMondayToToday() {
+  const today = new Date();
+
+  // getDay(): 0=Sunday, 1=Monday, ..., 6=Saturday
+  const dayOfWeek = today.getDay();
+
+  // Calculate how many days to subtract to get Monday
+  // If today is Sunday (0), treat as 7 for week calculations
+  const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+
+  // Get Monday's date
+  const monday = new Date(today);
+  monday.setDate(today.getDate() - diffToMonday);
+
+  // Return as formatted strings YYYY-MM-DD or as Date objects
+  function formatDate(date) {
+    return date.toISOString().slice(0, 10);
+  }
+
+  return {
+    monday: formatDate(monday),
+    today: formatDate(today),
+  };
+}
+
 bot.on("contact", (msg) => {
   const telegramId = msg.from.id.toString();
   const username = msg.from.first_name || "no_username";
@@ -1043,10 +1068,11 @@ Bring your family and friends to play, win, and enjoy Bingo together!
     case "get_balance_week":
       // bot.sendMessage(chatId, "Week balacne");
       (async () => {
+        const { monday, today } = getMondayToToday();
         const start = "2025-05-20";
         const end = "2025-05-25";
 
-        const profits = await getProfitGroupedByDate(start, end);
+        const profits = await getProfitGroupedByDate(monday, today);
         console.log(profits);
         // Example output:
         // {
