@@ -1204,7 +1204,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         //   '2025-05-25': 150,
         //   ...
         // }
-        const message = formatProfitTable(profits);
+        const message = formatProfitTableWithDays(profits);
         bot.sendMessage(
           chatId,
           "Monthly Profit Summary:\n ------------------------------------ \n" +
