@@ -620,6 +620,20 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   }
 });
 
+function getBalanceByDate(targetDate) {
+  return new Promise((resolve, reject) => {
+    db.get(
+      "SELECT profit FROM games WHERE DATE(timestamp) = DATE(?)",
+      [targetDate],
+      (err, row) => {
+        if (err) return reject(err);
+        if (!row) return resolve(0);
+        return resolve(row.profit);
+      }
+    );
+  });
+}
+
 bot.on("contact", (msg) => {
   const telegramId = msg.from.id.toString();
   const username = msg.from.first_name || "no_username";
@@ -920,6 +934,10 @@ Bring your family and friends to play, win, and enjoy Bingo together!
       break;
     case "get_balance_today":
       bot.sendMessage(chatId, "Today balacne");
+      (async () => {
+        const balance = await getBalanceByDate("2025-05-24");
+        console.log("Balance:", balance);
+      })();
       break;
     case "get_balance_week":
       bot.sendMessage(chatId, "Week balacne");
