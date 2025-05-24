@@ -3,6 +3,7 @@ const WebSocket = require("ws");
 const express = require("express");
 const db = require("./db");
 const cors = require("cors");
+const Table = require("cli-table3");
 
 const TelegramBot = require("node-telegram-bot-api");
 const path = require("path"); // Replace with your bot token
@@ -741,27 +742,30 @@ function formatProfitTable(profitsByDate) {
   return [header, separator, ...rows].join("\n");
 }
 
-function formatProfitTableWithDays(profitsByDate) {
-  const header = "Date       | Day  | Profit";
-  const separator = "--------------------------------";
-
-  const rows = Object.entries(profitsByDate).map(([date, profit]) => {
-    const dayName = new Date(date).toLocaleDateString("en-US", {
-      weekday: "short",
-    }); // e.g. "Mon"
-    return `${date} | ${dayName.padEnd(4)} | Br. ${profit}`;
+function formatProfitTableWithDaysCli(profitsByDate) {
+  // Create a new table with column headers
+  const table = new Table({
+    head: ["Date", "Day", "Profit"],
+    colWidths: [12, 6, 10],
+    style: { head: ["cyan"] },
   });
 
-  // Total profit
-  const totalProfit = Object.values(profitsByDate).reduce(
-    (sum, p) => sum + p,
-    0
-  );
-  rows.push("--------------------------------");
-  rows.push(`Total      |      | Br. ${totalProfit}`);
+  let totalProfit = 0;
 
-  // Wrap with triple backticks for monospace in Telegram
-  return "\n" + [header, separator, ...rows].join("\n");
+  // Add each row to the table
+  Object.entries(profitsByDate).forEach(([date, profit]) => {
+    const dayName = new Date(date).toLocaleDateString("en-US", {
+      weekday: "short",
+    });
+    totalProfit += profit;
+    table.push([date, dayName, `Br. ${profit}`]);
+  });
+
+  // Add a separator row and then the total row
+  table.push([], ["Total", "", `Br. ${totalProfit}`]);
+
+  // Return the table string wrapped in triple backticks for Telegram Markdown formatting
+  return "```\n" + table.toString() + "\n```";
 }
 
 function getMondayToToday() {
@@ -1181,7 +1185,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         //   '2025-05-25': 150,
         //   ...
         // }
-        const message = formatProfitTableWithDays(profits);
+        const message = formatProfitTableWithDaysCli(profits);
         bot.sendMessage(
           chatId,
           "Weekly Profit Summary:\n ------------------------------------ \n" +
@@ -1204,7 +1208,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         //   '2025-05-25': 150,
         //   ...
         // }
-        const message = formatProfitTableWithDays(profits);
+        const message = formatProfitTableWithDaysCli(profits);
         bot.sendMessage(
           chatId,
           "Monthly Profit Summary:\n ------------------------------------ \n" +
