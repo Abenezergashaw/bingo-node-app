@@ -655,6 +655,17 @@ function getProfitGroupedByDate() {
   });
 }
 
+function formatProfitTable(profitsByDate) {
+  const header = "Date       | Profit";
+  const separator = "------------------";
+
+  const rows = Object.entries(profitsByDate).map(
+    ([date, profit]) => `${date} | ${profit}`
+  );
+
+  return [header, separator, ...rows].join("\n");
+}
+
 bot.on("contact", (msg) => {
   const telegramId = msg.from.id.toString();
   const username = msg.from.first_name || "no_username";
@@ -982,6 +993,8 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         //   '2025-05-25': 150,
         //   ...
         // }
+        const message = formatProfitTable(profitsByDate);
+        bot.sendMessage(chatId, "📊 Profit Summary:\n" + message);
       })();
 
       break;
