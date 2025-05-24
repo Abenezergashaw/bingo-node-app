@@ -520,26 +520,32 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   telegramId = msg.from.id.toString();
 
   if (telegramId == adminUser) {
-    bot
-      .sendMessage(msg.chat.id, `\`\`\`👮‍♂️ Admin \`\`\``, {
+    // bot
+    //   .sendMessage(msg.chat.id, `\`\`\`👮‍♂️ Admin \`\`\``, {
+    //     parse_mode: "Markdown",
+    //   })
+    //   .then(() => {
+    bot.sendMessage(
+      msg.chat.id,
+      `\`\`\`👮‍♂️ Admin \`\`\``,
+      {
         parse_mode: "Markdown",
-      })
-      .then(() => {
-        bot.sendMessage(msg.chat.id, "🤖 Actions", {
-          reply_markup: {
-            inline_keyboard: [
-              [
-                {
-                  text: "Get balance",
-                  callback_data: "get_balance",
-                },
-                { text: "  Games ", callback_data: "get_games" },
-              ],
-              [{ text: "🤽🏻‍♂️ Users", callback_data: "get_users" }],
+      },
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Get balance",
+                callback_data: "get_balance",
+              },
+              { text: "  Games ", callback_data: "get_games" },
             ],
-          },
-        });
-      });
+            [{ text: "🤽🏻‍♂️ Users", callback_data: "get_users" }],
+          ],
+        },
+      }
+    );
   } else {
     const referrerId = match[1];
 
