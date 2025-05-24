@@ -711,6 +711,15 @@ function formatProfitTable(profitsByDate) {
     ([date, profit]) => `${date} | Br. ${profit}`
   );
 
+  // Calculate total profit sum
+  const totalProfit = Object.values(profitsByDate).reduce(
+    (sum, val) => sum + val,
+    0
+  );
+
+  // Add total row at the bottom
+  rows.push(`Total      | Br. ${totalProfit}`);
+
   return [header, separator, ...rows].join("\n");
 }
 
