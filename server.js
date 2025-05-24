@@ -526,6 +526,7 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
             [
               {
                 text: "Get balance",
+                callback_data: "get_balance",
               },
               { text: "  Games ", callback_data: "get_games" },
             ],
