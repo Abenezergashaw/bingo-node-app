@@ -1213,7 +1213,7 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
       })();
       break;
     case "get_users":
-      bot.sendMessage(chatId, `\`\`\`👥Users \`\`\``, {
+      bot.sendMessage(chatId, `\`\`\`Users \`\`\``, {
         parse_mode: "Markdown",
         reply_markup: {
           inline_keyboard: [
