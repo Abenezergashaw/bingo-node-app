@@ -1213,13 +1213,25 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
       })();
       break;
     case "get_users":
-      const message = `\`\`\`
-This is just some text
-formatted as code
-so it keeps alignment.
-\`\`\``;
-
-      bot.sendMessage(chatId, message, { parse_mode: "Markdown" });
+      bot.sendMessage(chatId, `\`\`\`👥 \`\`\``, {
+        parse_mode: "Markdown",
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Search user by id",
+                callback_data: "search_id",
+              },
+              { text: "Search user by name", callback_data: "search_name" },
+            ],
+            [
+              { text: "All users", callback_data: "search_all" },
+              { text: "Last winner", callback_data: "search_last_winner" },
+            ],
+            [{ text: "Leaderboard", callback_data: "search_leaderboard" }],
+          ],
+        },
+      });
       break;
     case "get_balance_today":
       // bot.sendMessage(chatId, "Today balacne");
