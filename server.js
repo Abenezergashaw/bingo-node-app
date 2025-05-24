@@ -635,7 +635,7 @@ async function getBalanceByDate(targetDate) {
 
 async function getBalanceAlltime() {
   return new Promise((resolve, reject) => {
-    db.get("SELECT SUM(profit) as total", [], (err, row) => {
+    db.get("SELECT SUM(profit) as total from games", [], (err, row) => {
       if (err) return reject(err);
       return resolve(row.total || 0); // if no rows matched, return 0
     });
