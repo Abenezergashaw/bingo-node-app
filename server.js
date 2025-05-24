@@ -657,10 +657,10 @@ function getProfitGroupedByDate() {
 
 function formatProfitTable(profitsByDate) {
   const header = "Date       | Profit";
-  const separator = "------------------";
+  const separator = "----------------------------";
 
   const rows = Object.entries(profitsByDate).map(
-    ([date, profit]) => `${date} | ${profit}`
+    ([date, profit]) => `${date} | Br. ${profit}`
   );
 
   return [header, separator, ...rows].join("\n");
@@ -994,7 +994,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         //   ...
         // }
         const message = formatProfitTable(profitsByDate);
-        bot.sendMessage(chatId, "📊 Profit Summary:\n" + message);
+        bot.sendMessage(chatId, "Weekly Profit Summary:\n" + message);
       })();
 
       break;
