@@ -1242,12 +1242,9 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         // }
         // const message = formatProfitTableWithDaysCli(profits);
         const message = generateBoxTable(profits);
-        bot.sendMessage(
-          chatId,
-          "Weekly Profit Summary:\n ------------------------------------ \n" +
-            message,
-          { parse_mode: "Markdown" }
-        );
+        bot.sendMessage(chatId, "Weekly Profit Summary:\n" + message, {
+          parse_mode: "Markdown",
+        });
       })();
 
       break;
@@ -1265,12 +1262,10 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         //   '2025-05-25': 150,
         //   ...
         // }
-        const message = formatProfitTableWithDaysCli(profits);
-        bot.sendMessage(
-          chatId,
-          "Monthly Profit Summary:\n ------------------------------------ \n" +
-            message
-        );
+        const message = generateBoxTable(profits);
+        bot.sendMessage(chatId, "Monthly Profit Summary:\n" + message, {
+          parse_mode: "Markdown",
+        });
       })();
       break;
     case "get_balance_all":
