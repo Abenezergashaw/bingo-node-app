@@ -1223,9 +1223,7 @@ so it keeps alignment.
         bot.sendMessage(
           chatId,
           `\`\`\`
-          Balance for today ${new Date().getFullYear()}-${(
-            new Date().getMonth() + 1
-          )
+Balance for today ${new Date().getFullYear()}-${(new Date().getMonth() + 1)
             .toString()
             .padStart(2, "0")}-${new Date()
             .getDate()
@@ -1286,7 +1284,7 @@ so it keeps alignment.
         bot.sendMessage(
           chatId,
           `\`\`\`
-          All time  balance  : Br. ${balance}\`\`\``,
+All time  balance  : Br. ${balance}\`\`\``,
           { parse_mode: "Markdown" }
         );
       })();
