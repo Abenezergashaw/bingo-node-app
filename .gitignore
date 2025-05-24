@@ -4,4 +4,4 @@ node_modules/
 .DS_Store
 *.log
 npm-debug.log*
-tg-bot/bot.db
+tg-bot/
