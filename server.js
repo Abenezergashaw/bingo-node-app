@@ -897,7 +897,20 @@ Bring your family and friends to play, win, and enjoy Bingo together!
       break;
 
     case "get_balance":
-      bot.sendMessage(chatId, "Daily balance");
+      bot.sendMessage(chatId, "Select date margin", {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Today",
+                callback_data: "get_balance_today",
+              },
+              { text: "  This week ", callback_data: "get_balance_week" },
+            ],
+            [{ text: "This Month", callback_data: "get_balance_month" }],
+          ],
+        },
+      });
       break;
     case "get_games":
       bot.sendMessage(chatId, "total games");
