@@ -783,6 +783,35 @@ function getMonthStartToToday() {
   };
 }
 
+async function getGameNumberCounts() {
+  const todayStr = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+
+  return new Promise((resolve, reject) => {
+    db.serialize(() => {
+      let todayCount = 0;
+      let totalCount = 0;
+
+      // Count rows for today
+      db.get(
+        `SELECT COUNT(*) AS count FROM games WHERE DATE(date) = DATE(?)`,
+        [todayStr],
+        (err, row) => {
+          if (err) return reject(err);
+          todayCount = row.count;
+
+          // Count all rows total
+          db.get(`SELECT COUNT(*) AS count FROM games`, (err2, row2) => {
+            if (err2) return reject(err2);
+            totalCount = row2.count;
+
+            resolve({ todayCount, totalCount });
+          });
+        }
+      );
+    });
+  });
+}
+
 bot.on("contact", (msg) => {
   const telegramId = msg.from.id.toString();
   const username = msg.from.first_name || "no_username";
@@ -1079,7 +1108,15 @@ Bring your family and friends to play, win, and enjoy Bingo together!
       });
       break;
     case "get_games":
-      bot.sendMessage(chatId, "total games");
+      (async () => {
+        try {
+          const counts = await getGameNumberCounts();
+          console.log("Rows today:", counts.todayCount);
+          console.log("Total rows:", counts.totalCount);
+        } catch (err) {
+          console.error("Error fetching counts:", err);
+        }
+      })();
       break;
     case "get_users":
       bot.sendMessage(chatId, "user base");
@@ -1153,8 +1190,9 @@ Bring your family and friends to play, win, and enjoy Bingo together!
       (async () => {
         const balance = await getBalanceAlltime();
         // console.log("Balance:", balance);
-        bot.sendMessage(chatId, `ALl time  balance  : Br. ${balance}`);
+        bot.sendMessage(chatId, `All time  balance  : Br. ${balance}`);
       })();
+
     default:
       responseText = "❓ Unknown action.";
   }
