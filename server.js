@@ -519,7 +519,7 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   telegramId = msg.from.id.toString();
 
   if (telegramId == adminUser) {
-    bot.sendMessage(msg.chat.id, "👋 Welcome Admin").then(() => {
+    bot.sendMessage(msg.chat.id, "👋 Status: Admin").then(() => {
       bot.sendMessage(msg.chat.id, "🤖 Actions", {
         reply_markup: {
           inline_keyboard: [
@@ -530,7 +530,7 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
               },
               { text: "  Games ", callback_data: "get_games" },
             ],
-            [{ text: "🤽🏻‍♂️ Users", callback_data: "users" }],
+            [{ text: "🤽🏻‍♂️ Users", callback_data: "get_users" }],
           ],
         },
       });
@@ -894,6 +894,16 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         }
       );
       responseText = "Payment ongoing";
+      break;
+
+    case "get_balance":
+      bot.sendMessage(chatId, "Daily balance");
+      break;
+    case "get_games":
+      bot.sendMessage(chatId, "total games");
+      break;
+    case "get_users":
+      bot.sendMessage(chatId, "user base");
       break;
     default:
       responseText = "❓ Unknown action.";
