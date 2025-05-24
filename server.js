@@ -1112,7 +1112,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         const start = "2025-05-20";
         const end = "2025-05-25";
 
-        const profits = await getProfitGroupedByDate(monday, today);
+        const profits = await getProfitGroupedByDate(monthStart, today);
         console.log(profits);
         // Example output:
         // {
