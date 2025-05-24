@@ -623,12 +623,11 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
 async function getBalanceByDate(targetDate) {
   return new Promise((resolve, reject) => {
     db.get(
-      "SELECT profit FROM games WHERE DATE(date) = DATE(?)",
+      "SELECT SUM(profit) as total FROM games WHERE DATE(date) = DATE(?)",
       [targetDate],
       (err, row) => {
         if (err) return reject(err);
-        if (!row) return resolve(0);
-        return resolve(row.profit);
+        return resolve(row.total || 0); // if no rows matched, return 0
       }
     );
   });
