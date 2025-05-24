@@ -741,6 +741,29 @@ function formatProfitTable(profitsByDate) {
   return [header, separator, ...rows].join("\n");
 }
 
+function formatProfitTableWithDays(profitsByDate) {
+  const header = "Date       | Day  | Profit";
+  const separator = "--------------------------------";
+
+  const rows = Object.entries(profitsByDate).map(([date, profit]) => {
+    const dayName = new Date(date).toLocaleDateString("en-US", {
+      weekday: "short",
+    }); // e.g. "Mon"
+    return `${date} | ${dayName.padEnd(4)} | Br. ${profit}`;
+  });
+
+  // Total profit
+  const totalProfit = Object.values(profitsByDate).reduce(
+    (sum, p) => sum + p,
+    0
+  );
+  rows.push("--------------------------------");
+  rows.push(`Total      |      | Br. ${totalProfit}`);
+
+  // Wrap with triple backticks for monospace in Telegram
+  return "```\n" + [header, separator, ...rows].join("\n") + "\n```";
+}
+
 function getMondayToToday() {
   const today = new Date();
 
@@ -1115,7 +1138,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
           // console.log("Total rows:", counts.totalCount);
           bot.sendMessage(
             chatId,
-            `Number of games Today: ${counts.todayCount} \n Number of games alltime: ${counts.totalCount}`
+            `Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.totalCount}`
           );
         } catch (err) {
           console.error("Error fetching counts:", err);
@@ -1158,7 +1181,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         //   '2025-05-25': 150,
         //   ...
         // }
-        const message = formatProfitTable(profits);
+        const message = formatProfitTableWithDays(profits);
         bot.sendMessage(
           chatId,
           "Weekly Profit Summary:\n ------------------------------------ \n" +
