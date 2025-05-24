@@ -719,6 +719,7 @@ function formatProfitTable(profitsByDate) {
 
   // Add total row at the bottom
   rows.push(`Total      | Br. ${totalProfit}`);
+  rows.push(`------------------------------------`);
 
   return [header, separator, ...rows].join("\n");
 }
