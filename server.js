@@ -633,6 +633,15 @@ async function getBalanceByDate(targetDate) {
   });
 }
 
+async function getBalanceAlltime() {
+  return new Promise((resolve, reject) => {
+    db.get("SELECT SUM(profit) as total", [], (err, row) => {
+      if (err) return reject(err);
+      return resolve(row.total || 0); // if no rows matched, return 0
+    });
+  });
+}
+
 function getProfitGroupedByDateGeneral() {
   return new Promise((resolve, reject) => {
     db.all(
@@ -727,7 +736,7 @@ function formatProfitTable(profitsByDate) {
 
   // Add total row at the bottom
   rows.push(separator);
-  rows.push(`Total      |           | Br. ${totalProfit}`);
+  rows.push(`Total      |   Br. ${totalProfit}`);
 
   return [header, separator, ...rows].join("\n");
 }
@@ -1061,7 +1070,10 @@ Bring your family and friends to play, win, and enjoy Bingo together!
               },
               { text: "  This week ", callback_data: "get_balance_week" },
             ],
-            [{ text: "This Month", callback_data: "get_balance_month" }],
+            [
+              { text: "This Month", callback_data: "get_balance_month" },
+              { text: "Total", callback_data: "get_balance_all" },
+            ],
           ],
         },
       });
@@ -1136,6 +1148,13 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         );
       })();
       break;
+    case "get_balance_all":
+      // bot.sendMessage(chatId, "Today balacne");
+      (async () => {
+        const balance = await getBalanceAlltime();
+        // console.log("Balance:", balance);
+        bot.sendMessage(chatId, `ALl time  balance  : Br. ${balance}`);
+      })();
     default:
       responseText = "❓ Unknown action.";
   }
