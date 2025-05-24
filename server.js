@@ -633,7 +633,7 @@ async function getBalanceByDate(targetDate) {
   });
 }
 
-function getProfitGroupedByDate() {
+function getProfitGroupedByDateGeneral() {
   return new Promise((resolve, reject) => {
     db.all(
       `SELECT DATE(date) as day, SUM(profit) as total_profit
@@ -655,9 +655,57 @@ function getProfitGroupedByDate() {
   });
 }
 
+function getProfitGroupedByDate(startDate, endDate) {
+  return new Promise((resolve, reject) => {
+    db.all(
+      `SELECT DATE(date) as day, SUM(profit) as total_profit
+       FROM games
+       WHERE DATE(date) BETWEEN DATE(?) AND DATE(?)
+       GROUP BY day
+       ORDER BY day`,
+      [startDate, endDate],
+      (err, rows) => {
+        if (err) return reject(err);
+
+        // Map the rows into a dictionary for quick access
+        const profitsMap = {};
+        rows.forEach(({ day, total_profit }) => {
+          profitsMap[day] = total_profit;
+        });
+
+        // Helper to generate all dates between startDate and endDate inclusive
+        function getDateRange(start, end) {
+          const dateArray = [];
+          let currentDate = new Date(start);
+          const endDateObj = new Date(end);
+
+          while (currentDate <= endDateObj) {
+            // Format YYYY-MM-DD
+            const formatted = currentDate.toISOString().slice(0, 10);
+            dateArray.push(formatted);
+            currentDate.setDate(currentDate.getDate() + 1);
+          }
+          return dateArray;
+        }
+
+        // Generate full date range
+        const allDates = getDateRange(startDate, endDate);
+
+        // Fill missing dates with zero profit
+        const result = {};
+        allDates.forEach((date) => {
+          result[date] = profitsMap[date] || 0;
+        });
+
+        resolve(result);
+      }
+    );
+  });
+}
+
 function formatProfitTable(profitsByDate) {
   const header = "Date       | Profit";
-  const separator = "----------------------------";
+  const separator = "------------------------------------";
 
   const rows = Object.entries(profitsByDate).map(
     ([date, profit]) => `${date} | Br. ${profit}`
@@ -985,18 +1033,22 @@ Bring your family and friends to play, win, and enjoy Bingo together!
     case "get_balance_week":
       // bot.sendMessage(chatId, "Week balacne");
       (async () => {
-        const profitsByDate = await getProfitGroupedByDate();
-        console.log(profitsByDate);
+        const start = "2025-05-20";
+        const end = "2025-05-25";
+
+        const profits = await getProfitGroupedByDate(start, end);
+        console.log(profits);
         // Example output:
         // {
         //   '2025-05-24': 200,
         //   '2025-05-25': 150,
         //   ...
         // }
-        const message = formatProfitTable(profitsByDate);
+        const message = formatProfitTable(profits);
         bot.sendMessage(
           chatId,
-          "Weekly Profit Summary:\n ----------------------- \n\n" + message
+          "Weekly Profit Summary:\n ------------------------------------ \n" +
+            message
         );
       })();
 
