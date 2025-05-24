@@ -994,7 +994,10 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         //   ...
         // }
         const message = formatProfitTable(profitsByDate);
-        bot.sendMessage(chatId, "Weekly Profit Summary:\n" + message);
+        bot.sendMessage(
+          chatId,
+          "Weekly Profit Summary:\n ----------------------- \n\n" + message
+        );
       })();
 
       break;
