@@ -1197,7 +1197,8 @@ Bring your family and friends to play, win, and enjoy Bingo together!
           // console.log("Total rows:", counts.totalCount);
           bot.sendMessage(
             chatId,
-            `\`\`\` Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.totalCount}\`\`\``,
+            `\`\`\`
+Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.totalCount}\`\`\``,
             { parse_mode: "Markdown" }
           );
         } catch (err) {
