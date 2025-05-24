@@ -1176,7 +1176,8 @@ Bring your family and friends to play, win, and enjoy Bingo together!
       break;
 
     case "get_balance":
-      bot.sendMessage(chatId, "Select date margin", {
+      bot.sendMessage(chatId, `\`\`\`📅 Select date margin\`\`\``, {
+        parse_mode: "Markdown",
         reply_markup: {
           inline_keyboard: [
             [
