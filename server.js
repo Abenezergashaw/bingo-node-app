@@ -1289,8 +1289,8 @@ Balance for today ${new Date().getFullYear()}-${(new Date().getMonth() + 1)
         // console.log("Balance:", balance);
         bot.sendMessage(
           chatId,
-          `\`\`\` \n
-All time  balance  : Br. ${balance}   \n    \`\`\``,
+          `\`\`\`\n
+Alltime balance :  Br. ${balance}  \n  \`\`\``,
           { parse_mode: "Markdown" }
         );
       })();
