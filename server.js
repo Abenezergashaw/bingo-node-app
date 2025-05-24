@@ -705,7 +705,7 @@ function getProfitGroupedByDate(startDate, endDate) {
 
 function formatProfitTable(profitsByDate) {
   const header = "Date       | Profit";
-  const separator = "------------------------------------";
+  const separator = `------------------------------------`;
 
   const rows = Object.entries(profitsByDate).map(
     ([date, profit]) => `${date} | Br. ${profit}`
@@ -718,8 +718,8 @@ function formatProfitTable(profitsByDate) {
   );
 
   // Add total row at the bottom
-  rows.push(`Total      | Br. ${totalProfit}`);
   rows.push(`------------------------------------`);
+  rows.push(`Total      | Br. ${totalProfit}`);
 
   return [header, separator, ...rows].join("\n");
 }
