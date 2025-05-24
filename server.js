@@ -1222,7 +1222,8 @@ so it keeps alignment.
         // console.log("Balance:", balance);
         bot.sendMessage(
           chatId,
-          `\`\`\`Balance for today ${new Date().getFullYear()}-${(
+          `\`\`\`
+          Balance for today ${new Date().getFullYear()}-${(
             new Date().getMonth() + 1
           )
             .toString()
@@ -1284,7 +1285,8 @@ so it keeps alignment.
         // console.log("Balance:", balance);
         bot.sendMessage(
           chatId,
-          `\`\`\`All time  balance  : Br. ${balance}\`\`\``,
+          `\`\`\`
+          All time  balance  : Br. ${balance}\`\`\``,
           { parse_mode: "Markdown" }
         );
       })();
