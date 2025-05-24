@@ -546,6 +546,7 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
         },
       }
     );
+    // });
   } else {
     const referrerId = match[1];
 
