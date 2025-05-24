@@ -525,27 +525,21 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
     //     parse_mode: "Markdown",
     //   })
     //   .then(() => {
-    bot.sendMessage(
-      msg.chat.id,
-      `\`\`\`👮‍♂️ Admin \`\`\``,
-      {
-        parse_mode: "Markdown",
-      },
-      {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: "Get balance",
-                callback_data: "get_balance",
-              },
-              { text: "  Games ", callback_data: "get_games" },
-            ],
-            [{ text: "🤽🏻‍♂️ Users", callback_data: "get_users" }],
+    bot.sendMessage(msg.chat.id, `\`\`\`👮‍♂️ Admin \`\`\``, {
+      parse_mode: "Markdown",
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "Get balance",
+              callback_data: "get_balance",
+            },
+            { text: "  Games ", callback_data: "get_games" },
           ],
-        },
-      }
-    );
+          [{ text: "🤽🏻‍♂️ Users", callback_data: "get_users" }],
+        ],
+      },
+    });
     // });
   } else {
     const referrerId = match[1];
