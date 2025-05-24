@@ -1111,8 +1111,12 @@ Bring your family and friends to play, win, and enjoy Bingo together!
       (async () => {
         try {
           const counts = await getGameNumberCounts();
-          console.log("Rows today:", counts.todayCount);
-          console.log("Total rows:", counts.totalCount);
+          // console.log("Rows today:", counts.todayCount);
+          // console.log("Total rows:", counts.totalCount);
+          bot.sendMessage(
+            chatId,
+            `Number of games Today: ${counts.todayCount} \n Number of games alltime: ${counts.totalCount}`
+          );
         } catch (err) {
           console.error("Error fetching counts:", err);
         }
