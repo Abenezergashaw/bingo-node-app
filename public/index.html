@@ -3239,6 +3239,7 @@
         setTimeout(() => {
           toast.classList.add("opacity-0", "translate-y-2");
           toast.addEventListener("transitionend", () => toast.remove());
+          container.innerHTML = "";
         }, duration);
       }
     </script>
