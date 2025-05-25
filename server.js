@@ -1510,10 +1510,7 @@ function generateUserBoxTable(user) {
   const headers = ["Field", "Value"];
 
   const columnWidths = headers.map((_, colIndex) =>
-    Math.max(
-      headers[colIndex].length,
-      ...entries.map((row) => row[colIndex].length)
-    )
+    Math.max(...entries.map((row) => row[colIndex].length))
   );
 
   const drawLine = (left, middle, right) =>
@@ -1532,8 +1529,7 @@ function generateUserBoxTable(user) {
 
   const body = entries.map(drawRow).join("\n");
 
-  const table =
-    top + "\n" + drawRow(headers) + "\n" + sep + "\n" + body + "\n" + bottom;
+  const table = top + "\n" + "\n" + sep + "\n" + body + "\n" + bottom;
 
   return "```\n" + table + "\n```"; // Telegram code block
 }
