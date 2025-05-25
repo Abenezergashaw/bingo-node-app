@@ -4,7 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Santim Bingo</title>
+    <style>
+      @keyframes fade-in-out {
+        0% {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        10% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        90% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        100% {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+      }
 
+      .animate-fade-in-out {
+        animation: fade-in-out 3s ease-in-out forwards;
+      }
+    </style>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body
