@@ -538,6 +538,9 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
           ],
           [{ text: "🤽🏻‍♂️ Users", callback_data: "get_users" }],
         ],
+        keyboard: [["📊 Get Balance", "🎮 Games"], ["👥 Users"]],
+        resize_keyboard: true,
+        one_time_keyboard: false,
       },
     });
     // });
