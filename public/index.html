@@ -3181,7 +3181,8 @@
           document.querySelector(".active-games").textContent = 0;
           console.log(data.u, ":::", data.players);
         } else if (data.type === "lowBalance") {
-          showToast("Insufficent funds. Please top up first.", "error", 5000);
+          // showToast("Insufficent funds. Please top up first.", "error", 5000);
+          shakeBox();
         }
       });
 
