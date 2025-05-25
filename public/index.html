@@ -3266,7 +3266,7 @@
         const toast = document.createElement("div");
 
         const baseClasses =
-          "text-white px-4 py-2 rounded shadow-lg transition-all duration-300";
+          "toast text-white px-4 py-2 rounded shadow-lg transition-all duration-300";
         const typeClasses = {
           success: "bg-green-600",
           error: "bg-red-600",
@@ -3280,7 +3280,9 @@
         toast.textContent = message;
 
         const container = document.getElementById("toast-container");
-        container.prepend(toast); // Add new toast to the top
+        if (document.querySelector(".toast")) {
+          container.prepend(toast); // Add new toast to the top
+        }
 
         // Auto remove
         setTimeout(() => {
