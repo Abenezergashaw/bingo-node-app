@@ -1316,7 +1316,10 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
           { parse_mode: "Markdown" }
         );
       })();
-
+      break;
+    case "search_id":
+      bot.sendMessage(chatId, "Hey");
+      break;
     default:
       responseText = "❓ Unknown action.";
   }
