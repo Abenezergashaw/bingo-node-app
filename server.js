@@ -1391,10 +1391,59 @@ bot.on("message", (msg) => {
   const chatId = msg.chat.id;
 
   if (text === "📊 Get Balance") {
-    bot.sendMessage(chatId, "💰 Your balance is Br. 200");
+    bot.sendMessage(chatId, `\`\`\`📅 Select date margin\`\`\``, {
+      parse_mode: "Markdown",
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "Today",
+              callback_data: "get_balance_today",
+            },
+            { text: "  This week ", callback_data: "get_balance_week" },
+          ],
+          [
+            { text: "This Month", callback_data: "get_balance_month" },
+            { text: "Total", callback_data: "get_balance_all" },
+          ],
+        ],
+      },
+    });
   } else if (text === "🎮 Games") {
-    bot.sendMessage(chatId, "Here are your recent games...");
+    (async () => {
+      try {
+        const counts = await getGameNumberCounts();
+        // console.log("Rows today:", counts.todayCount);
+        // console.log("Total rows:", counts.totalCount);
+        bot.sendMessage(
+          chatId,
+          `\`\`\`
+Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.totalCount}\`\`\``,
+          { parse_mode: "Markdown" }
+        );
+      } catch (err) {
+        console.error("Error fetching counts:", err);
+      }
+    })();
   } else if (text === "👥 Users") {
-    bot.sendMessage(chatId, "List of users...");
+    bot.sendMessage(chatId, `_Users_`, {
+      parse_mode: "Markdown",
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "Search user by id",
+              callback_data: "search_id",
+            },
+            { text: "Search user by name", callback_data: "search_name" },
+          ],
+          [
+            { text: "All users", callback_data: "search_all" },
+            { text: "Last winner", callback_data: "search_last_winner" },
+          ],
+          [{ text: "Leaderboard", callback_data: "search_leaderboard" }],
+        ],
+      },
+    });
   }
 });
