@@ -1239,7 +1239,14 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
     case "get_balance_today":
       // bot.sendMessage(chatId, "Today balacne");
       (async () => {
-        const balance = await getBalanceByDate("2025-05-24");
+        const balance = await getBalanceByDate(
+          `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}-${new Date()
+            .getDate()
+            .toString()
+            .padStart(2, "0")}`
+        );
         // console.log("Balance:", balance);
         bot.sendMessage(
           chatId,
