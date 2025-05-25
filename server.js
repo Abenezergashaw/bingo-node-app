@@ -428,6 +428,9 @@ wss.on("connection", (ws) => {
       console.log("Current users:", users);
     } else if (data.type === "cardSelected") {
       console.log(data.number, "||", data.username, "|| ", data.balance);
+      if (parseInt(data.balance) < 10) {
+        console.log("Low balacne");
+      }
       const { username, number } = data;
 
       const currentNumber = userToNumber.get(username);
