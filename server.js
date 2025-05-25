@@ -1385,3 +1385,16 @@ bot.onText(/\/rules/, (msg) => {
     { parse_mode: "Markdown" }
   );
 });
+
+bot.on("message", (msg) => {
+  const text = msg.text;
+  const chatId = msg.chat.id;
+
+  if (text === "📊 Get Balance") {
+    bot.sendMessage(chatId, "💰 Your balance is Br. 200");
+  } else if (text === "🎮 Games") {
+    bot.sendMessage(chatId, "Here are your recent games...");
+  } else if (text === "👥 Users") {
+    bot.sendMessage(chatId, "List of users...");
+  }
+});
