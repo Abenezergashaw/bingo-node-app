@@ -430,6 +430,9 @@ wss.on("connection", (ws) => {
       console.log(data.number, "||", data.username, "|| ", data.balance);
       if (parseInt(data.balance) < 10) {
         console.log("Low balacne");
+        broadcast({
+          type: "lowBalance",
+        });
       }
       const { username, number } = data;
 
