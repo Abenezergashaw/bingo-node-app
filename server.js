@@ -523,7 +523,7 @@ server.listen(3000, () => {
 });
 
 const adminUser = "353008986";
-
+const awaitingUserIdInput = {};
 // /start command
 bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   telegramId = msg.from.id.toString();
@@ -1327,7 +1327,10 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
       })();
       break;
     case "search_id":
-      bot.sendMessage(chatId, "Hey");
+      awaitingUserIdInput[chatId] = true;
+
+      bot.sendMessage(chatId, "Please send the user ID:");
+      bot.answerCallbackQuery(query.id);
       break;
     default:
       responseText = "❓ Unknown action.";
@@ -1405,7 +1408,7 @@ bot.onText(/\/rules/, (msg) => {
   );
 });
 
-bot.on("message", (msg) => {
+bot.on("message", async (msg) => {
   const text = msg.text;
   const chatId = msg.chat.id;
 
@@ -1465,4 +1468,36 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
       },
     });
   }
+  if (awaitingUserIdInput[chatId]) {
+    const userId = msg.text;
+
+    // Reset the state
+    delete awaitingUserIdInput[chatId];
+
+    // Query the DB and return result
+    try {
+      const user = await getUserByTelegramId(userId); // <- your DB function
+
+      if (user) {
+        bot.sendMessage(
+          chatId,
+          `👤 Found user:\n\nID: ${user.telegram_id}\nName: ${user.name}`
+        );
+      } else {
+        bot.sendMessage(chatId, `❌ No user found with ID: ${userId}`);
+      }
+    } catch (err) {
+      console.error(err);
+      bot.sendMessage(chatId, `⚠️ Error querying the database.`);
+    }
+  }
 });
+
+function getUserByTelegramId(id) {
+  return new Promise((resolve, reject) => {
+    db.get("SELECT * FROM users WHERE telegram_id = ?", [id], (err, row) => {
+      if (err) return reject(err);
+      resolve(row);
+    });
+  });
+}
