@@ -3269,11 +3269,21 @@
           "to-green-300"
         );
         // Add red bg
-        box.classList.add("bg-red-500", "shake");
+        box.classList.add(
+          "bg-gradient-to-r",
+          "bg-red-500",
+          "to-red-300",
+          "shake"
+        );
 
         // Restore original after shake
         setTimeout(() => {
-          box.classList.remove("bg-red-500", "shake");
+          box.classList.add(
+            "bg-gradient-to-r",
+            "bg-red-500",
+            "to-red-300",
+            "shake"
+          );
           box.classList.add(
             "bg-gradient-to-r",
             "from-green-500",
