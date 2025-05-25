@@ -11,7 +11,7 @@
     style="user-select: none"
     class="bg-gradient-to-br from-teal-600 via-gray-700 to-gray-800 text-gray-800 h-full flex items-center justify-center p-2"
   >
-    <button id="play" class="hidden">Play Audio</button>
+    <button id="play" class="" onclick="showToast('asd')">Play Audio</button>
     <div class="p-3 w-full text-center min-h-screen opacity-100">
       <div class="flex gap-3 justify-between">
         <div
@@ -60,6 +60,8 @@
         ></div> -->
       </div>
     </div>
+
+    <div id="toast-container" class="fixed top-5 right-5 space-y-2 z-50"></div>
 
     <div
       id="modal"
@@ -3189,6 +3191,32 @@
           .addEventListener("click", () => {
             document.querySelector(".card-preview").innerHTML = "";
           });
+      }
+
+      function showToast(message, type = "success", duration = 3000) {
+        const toast = document.createElement("div");
+
+        const baseClasses =
+          "text-white px-4 py-2 rounded shadow-md animate-fade-in-out";
+        const typeClasses = {
+          success: "bg-green-500",
+          error: "bg-red-500",
+          info: "bg-blue-500",
+          warning: "bg-yellow-500 text-black",
+        };
+
+        toast.className = `${baseClasses} ${
+          typeClasses[type] || typeClasses.success
+        }`;
+        toast.innerText = message;
+
+        const container = document.getElementById("toast-container");
+        container.appendChild(toast);
+
+        setTimeout(() => {
+          toast.classList.add("opacity-0", "translate-y-2");
+          toast.addEventListener("transitionend", () => toast.remove());
+        }, duration);
       }
     </script>
   </body>
