@@ -1479,10 +1479,9 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
       const user = await getUserByTelegramId(userId); // <- your DB function
 
       if (user) {
-        bot.sendMessage(
-          chatId,
-          `👤 Found user:\n\nID: ${user.telegram_id}\nName: ${user.name}`
-        );
+        bot.sendMessage(chatId, generateUserBoxTable(user), {
+          parse_mode: "Markdown",
+        });
       } else {
         bot.sendMessage(chatId, `❌ No user found with ID: ${userId}`);
       }
@@ -1501,4 +1500,40 @@ function getUserByTelegramId(id) {
       resolve(row);
     });
   });
+}
+
+function generateUserBoxTable(user) {
+  const entries = Object.entries(user).map(([key, value]) => [
+    key,
+    value.toString(),
+  ]);
+  const headers = ["Field", "Value"];
+
+  const columnWidths = headers.map((_, colIndex) =>
+    Math.max(
+      headers[colIndex].length,
+      ...entries.map((row) => row[colIndex].length)
+    )
+  );
+
+  const drawLine = (left, middle, right) =>
+    left + columnWidths.map((w) => "─".repeat(w + 2)).join(middle) + right;
+
+  const drawRow = (cells) =>
+    "│" +
+    cells
+      .map((cell, i) => ` ${cell.toString().padEnd(columnWidths[i])} `)
+      .join("│") +
+    "│";
+
+  const top = drawLine("┌", "┬", "┐");
+  const sep = drawLine("├", "┼", "┤");
+  const bottom = drawLine("└", "┴", "┘");
+
+  const body = entries.map(drawRow).join("\n");
+
+  const table =
+    top + "\n" + drawRow(headers) + "\n" + sep + "\n" + body + "\n" + bottom;
+
+  return "```\n" + table + "\n```"; // Telegram code block
 }
