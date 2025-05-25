@@ -11,7 +11,7 @@
     style="user-select: none"
     class="bg-gradient-to-br from-teal-600 via-gray-700 to-gray-800 text-gray-800 h-full flex items-center justify-center p-2"
   >
-    <button id="" class="" onclick="showToast('asd')">Play Audio</button>
+    <button id="play" class="" onclick="showToast('asd')">Play Audio</button>
     <div class="p-3 w-full text-center min-h-screen opacity-100">
       <div class="flex gap-3 justify-between">
         <div
@@ -94,10 +94,10 @@
       //     });
       // }
       document.getElementById("play").addEventListener("click", () => {
-        const audio = new Audio(
-          "https://santimbingo.duckdns.org/assets/start.m4a"
-        );
-        audio.play();
+        // const audio = new Audio(
+        //   "https://santimbingo.duckdns.org/assets/start.m4a"
+        // );
+        // audio.play();
       });
       const tg = window.Telegram.WebApp;
 
