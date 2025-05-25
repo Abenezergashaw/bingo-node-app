@@ -461,15 +461,16 @@ wss.on("connection", (ws) => {
 
         return;
       }
-
-      // Case 3: Assign new number
-      userToNumber.set(username, number);
-      broadcast({
-        type: "numberSelected",
-        username,
-        number,
-        currentNumber,
-      });
+      if (data.balance > 10) {
+        // Case 3: Assign new number
+        userToNumber.set(username, number);
+        broadcast({
+          type: "numberSelected",
+          username,
+          number,
+          currentNumber,
+        });
+      }
       console.log(userToNumber);
     } else if (data.type === "bingo") {
       console.log(data.c);
