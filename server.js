@@ -1497,6 +1497,7 @@ function getUserByTelegramId(id) {
   return new Promise((resolve, reject) => {
     db.get("SELECT * FROM users WHERE telegram_id = ?", [id], (err, row) => {
       if (err) return reject(err);
+      console.log(row);
       resolve(row);
     });
   });
