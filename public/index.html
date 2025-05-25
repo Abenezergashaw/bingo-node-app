@@ -27,6 +27,17 @@
       .animate-fade-in-out {
         animation: fade-in-out 3s ease-in-out forwards;
       }
+
+      @keyframes fade-slide-out {
+        to {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+      }
+
+      .fade-out {
+        animation: fade-slide-out 0.3s forwards;
+      }
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
@@ -3224,30 +3235,57 @@
           });
       }
 
+      // function showToast(message, type = "success", duration = 3000) {
+      //   const toast = document.createElement("div");
+
+      //   const baseClasses =
+      //     "text-white px-4 py-2 rounded shadow-md animate-fade-in-out opacity-90";
+      //   const typeClasses = {
+      //     success: "bg-green-500",
+      //     error: "bg-red-400",
+      //     info: "bg-blue-500",
+      //     warning: "bg-yellow-500 text-black",
+      //   };
+
+      //   toast.className = `${baseClasses} ${
+      //     typeClasses[type] || typeClasses.success
+      //   }`;
+      //   toast.innerText = message;
+
+      //   const container = document.getElementById("toast-container");
+      //   container.appendChild(toast);
+
+      //   setTimeout(() => {
+      //     toast.classList.add("opacity-0", "translate-y-2");
+      //     toast.addEventListener("transitionend", () => toast.remove());
+      //     container.innerHTML = "";
+      //   }, duration);
+      // }
+
       function showToast(message, type = "success", duration = 3000) {
         const toast = document.createElement("div");
 
         const baseClasses =
-          "text-white px-4 py-2 rounded shadow-md animate-fade-in-out opacity-90";
+          "text-white px-4 py-2 rounded shadow-lg transition-all duration-300";
         const typeClasses = {
-          success: "bg-green-500",
-          error: "bg-red-400",
-          info: "bg-blue-500",
-          warning: "bg-yellow-500 text-black",
+          success: "bg-green-600",
+          error: "bg-red-600",
+          info: "bg-blue-600",
+          warning: "bg-yellow-400 text-black",
         };
 
         toast.className = `${baseClasses} ${
           typeClasses[type] || typeClasses.success
         }`;
-        toast.innerText = message;
+        toast.textContent = message;
 
         const container = document.getElementById("toast-container");
-        container.appendChild(toast);
+        container.prepend(toast); // Add new toast to the top
 
+        // Auto remove
         setTimeout(() => {
-          toast.classList.add("opacity-0", "translate-y-2");
-          toast.addEventListener("transitionend", () => toast.remove());
-          container.innerHTML = "";
+          toast.classList.add("fade-out");
+          toast.addEventListener("animationend", () => toast.remove());
         }, duration);
       }
     </script>
