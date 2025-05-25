@@ -427,7 +427,7 @@ wss.on("connection", (ws) => {
       console.log(`User joined: ${data.username}`);
       console.log("Current users:", users);
     } else if (data.type === "cardSelected") {
-      console.log(data.number, "||", data.username);
+      console.log(data.number, "||", data.username, "|| ", data.balance);
       const { username, number } = data;
 
       const currentNumber = userToNumber.get(username);
