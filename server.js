@@ -432,6 +432,7 @@ wss.on("connection", (ws) => {
         console.log("Low balacne");
         broadcast({
           type: "lowBalance",
+          u: data.username,
         });
       }
       const { username, number } = data;
