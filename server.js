@@ -1529,7 +1529,7 @@ function generateUserBoxTable(user) {
 
   const body = entries.map(drawRow).join("\n");
 
-  const table = top + "\n" + "\n" + sep + "\n" + body + "\n" + bottom;
+  const table = top + "\n" + body + "\n" + bottom;
 
   return "```\n" + table + "\n```"; // Telegram code block
 }
