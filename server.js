@@ -404,6 +404,7 @@ wss.on("connection", (ws) => {
   ws.on("message", (message) => {
     const data = JSON.parse(message);
     if (data.type === "userJoined") {
+      console.log("USer balance: ", data.balance);
       ws.username = data.username;
       users.push(data.username);
       if (gameState) {
