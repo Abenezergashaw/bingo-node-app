@@ -3280,7 +3280,7 @@
         toast.textContent = message;
 
         const container = document.getElementById("toast-container");
-        if (document.querySelector(".toast")) {
+        if (!document.querySelector(".toast")) {
           container.prepend(toast); // Add new toast to the top
         }
 
