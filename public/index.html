@@ -38,6 +38,24 @@
       .fade-out {
         animation: fade-slide-out 0.3s forwards;
       }
+      @keyframes shake {
+        0%,
+        100% {
+          transform: translateX(0);
+        }
+        20%,
+        60% {
+          transform: translateX(-6px);
+        }
+        40%,
+        80% {
+          transform: translateX(6px);
+        }
+      }
+
+      .shake {
+        animation: shake 0.4s;
+      }
     </style>
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
@@ -56,6 +74,7 @@
       <div class="flex gap-3 justify-between">
         <div
           class="w-28 h-10 bg-gradient-to-r from-green-500 to-green-300 text-black rounded-3xl shadow flex flex-col items-center justify-center text-[12px]"
+          id="balance-div"
         >
           <span class="font-extrabold leading-tight balance">Br. 0</span>
           <span class="text-[10px] font-semibold">Balance</span>
@@ -3289,6 +3308,15 @@
           toast.classList.add("fade-out");
           toast.addEventListener("animationend", () => toast.remove());
         }, duration);
+      }
+
+      function shakeBox() {
+        const box = document.getElementById("balance-div");
+
+        // Reset animation if it's already running
+        box.classList.remove("shake");
+        void box.offsetWidth; // Trigger reflow
+        box.classList.add("shake");
       }
     </script>
   </body>
