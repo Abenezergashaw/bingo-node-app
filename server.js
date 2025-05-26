@@ -1386,7 +1386,7 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
       const [userId, amount] = depositeData.split("_");
       console.log("User ID:", userId);
       console.log("amount:", amount);
-      updateUserBalanceByAdmin(userId, amount, (err, result) => {
+      updateUserBalanceByAdmin(userId, parseInt(amount), (err, result) => {
         if (err) {
           console.error("Error updating balance:", err.message);
         } else {
@@ -1420,7 +1420,7 @@ bot.onText(/\/balance/, (msg) => {
           "❌ Could not fetch balance. Please try again."
         );
       }
-      bot.sendMessage(chatId, "Balance: Br. " + row.balance);
+      bot.sendMessage(chatId, "Balance: Br. ");
       // console.log(row);
       return;
     }
