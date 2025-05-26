@@ -3201,8 +3201,8 @@
         let html = ` 
         <div class='relative' style='width:50%;'>
           <div class="text-white text-lg font-semibold rounded-full w-6 h-6 flex items-center justify-center bg-gray-700 hover:bg-gray-600 focus:outline-none shadow-md absolute top-0 right-0 clear-preview">
-              &times;
-            </div>
+  &times;
+</div>
         <div class='text-white font-semibold  w-100 flex justify-center items-center'>${n}</div>
         <div class='mt-2  grid grid-cols-5 gap-1'>
         <div class="text-xl font-bold bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded  rounded">B</div>
@@ -3247,12 +3247,7 @@
           <div class="bg-gradient-to-br from-orange-400 via-orange-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers">${c.n5}</div>
           <div class="bg-gradient-to-br from-orange-400 via-orange-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers">${c.g5}</div>
           <div class="bg-gradient-to-br from-orange-400 via-orange-600 to-gray-600 opacity-100 text-white h-6 shadow-[0_1px_2px_white] flex justify-center items-center  rounded card-numbers">${c.o5}</div></div></div>
-          <button
-          class="border-0 mt-2 px-10 py-1 text-white start-button rounded-3xl shadow-[0_1px_2px_white] bg-gradient-to-br from-teal-400 via-teal-600 to-gray-600 opacity-100 text-white"
-          style="width: 50%"
-        >
-          Start
-        </button>`;
+          `;
 
         document.querySelector(".card-preview").innerHTML = html;
 
@@ -3260,17 +3255,6 @@
           .querySelector(".clear-preview")
           .addEventListener("click", () => {
             document.querySelector(".card-preview").innerHTML = "";
-          });
-
-        document
-          .querySelector(".start-button")
-          .addEventListener("click", () => {
-            let d = {
-              type: "join-game",
-              username,
-              n: n,
-            };
-            socket.send(JSON.stringify(d));
           });
       }
 

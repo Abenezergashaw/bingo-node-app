@@ -30,7 +30,6 @@ let users = [];
 
 let gameState = false;
 const userToNumber = new Map();
-const userToNumber10 = new Map();
 let timer;
 let timeLeft = 60;
 let numbers = [];
@@ -153,7 +152,7 @@ app.get("/getWinneerDetails", (req, res) => {
 function startTimer() {
   clearInterval(timer); // clear existing timer if any
   // console.log(timer);
-  timeLeft = 60;
+  timeLeft = 15;
 
   timer = setInterval(() => {
     timeLeft--;
@@ -420,7 +419,7 @@ wss.on("connection", (ws) => {
           JSON.stringify({
             type: "status",
             message: "No active game. You can join a new game.",
-            cards: Array.from(userToNumber10.values()),
+            cards: Array.from(userToNumber.values()),
           })
         );
       }
@@ -438,12 +437,12 @@ wss.on("connection", (ws) => {
       }
       const { username, number } = data;
 
-      const currentNumber = userToNumber10.get(username);
+      const currentNumber = userToNumber.get(username);
 
       // Case 1: Toggle off if user re-selects their own number
       if (currentNumber === number) {
-        userToNumber10.delete(username);
-        console.log(userToNumber10);
+        userToNumber.delete(username);
+        console.log(userToNumber);
         broadcast({
           type: "selectionCleared",
           username,
@@ -454,7 +453,7 @@ wss.on("connection", (ws) => {
 
       // Case 2: Check if number is already taken by someone else
       let taken = false;
-      for (const [otherUser, otherNumber] of userToNumber10.entries()) {
+      for (const [otherUser, otherNumber] of userToNumber.entries()) {
         if (otherNumber === number && otherUser !== username) {
           taken = true;
           break;
@@ -462,13 +461,13 @@ wss.on("connection", (ws) => {
       }
 
       if (taken) {
-        console.log(userToNumber10);
+        console.log(userToNumber);
 
         return;
       }
       if (data.balance > 10) {
         // Case 3: Assign new number
-        userToNumber10.set(username, number);
+        userToNumber.set(username, number);
         broadcast({
           type: "numberSelected",
           username,
@@ -476,7 +475,7 @@ wss.on("connection", (ws) => {
           currentNumber,
         });
       }
-      console.log(userToNumber10);
+      console.log(userToNumber);
     } else if (data.type === "bingo") {
       console.log(data.c);
       console.log("Drawn numbers: ", drawnNumbers);
@@ -489,23 +488,20 @@ wss.on("connection", (ws) => {
         })
       );
       // console.log(drawnNumbers);
-    } else if (data.type === "join-game") {
-      userToNumber.set(data.username, data.n);
-      console.log(userToNumber, ":;On starting");
     }
   });
 
   ws.on("close", () => {
     if (ws.username) {
       users = users.filter((u) => u !== ws.username);
-      let n = userToNumber10.get(ws.username);
+      let n = userToNumber.get(ws.username);
       // console.log("Number:", n);
-      // broadcast({
-      //   type: "removeCardsOnLeave",
-      //   n,
-      // });
-      // userToNumber10.delete(ws.username);
-      console.log(userToNumber10);
+      broadcast({
+        type: "removeCardsOnLeave",
+        n,
+      });
+      userToNumber.delete(ws.username);
+      console.log(userToNumber);
       console.log("Left Users:", users);
     }
   });
