@@ -1096,94 +1096,110 @@ Bring your family and friends to play, win, and enjoy Bingo together!
     case "chapa_pay":
       // 🔍 Fetch user from DB
 
-      db.get(
-        "SELECT * FROM users WHERE telegram_id = ?",
-        [telegramId],
-        async (err, row) => {
-          if (err || !row) {
-            console.error("DB error:", err);
-            bot.sendMessage(
-              chatId,
-              "❌ Could not retrieve your info. Try /start again."
-            );
-            return;
-          }
+      // db.get(
+      //   "SELECT * FROM users WHERE telegram_id = ?",
+      //   [telegramId],
+      //   async (err, row) => {
+      //     if (err || !row) {
+      //       console.error("DB error:", err);
+      //       bot.sendMessage(
+      //         chatId,
+      //         "❌ Could not retrieve your info. Try /start again."
+      //       );
+      //       return;
+      //     }
 
-          const tx_ref = "tx-" + Date.now();
-          const sql = `
-            INSERT INTO transactions (tx_ref,userID, amount, status)
-            VALUES (?,?, ?, ?)
-          `;
+      //     const tx_ref = "tx-" + Date.now();
+      //     const sql = `
+      //       INSERT INTO transactions (tx_ref,userID, amount, status)
+      //       VALUES (?,?, ?, ?)
+      //     `;
 
-          db.run(sql, [tx_ref, row.telegram_id, 50, "pending"], async (err) => {
-            if (err) return console.error(err);
+      //     db.run(sql, [tx_ref, row.telegram_id, 50, "pending"], async (err) => {
+      //       if (err) return console.error(err);
 
-            // console.log("TElegram ifd", );
-            let id = row.telegram_id;
-            const payload = {
-              amount: "100",
-              currency: "ETB",
-              email: row.phone_number + "aben@gmail.com", // You can use a better format
-              first_name: row.username || "TelegramUser",
-              last_name: "User",
-              phone_number: "0900123456",
-              tx_ref,
-              callback_url: `http://192.168.1.10:3000/callback?tx_ref=${tx_ref}&asd=asd&mnn=asdsd`,
-              return_url: "http://192.168.1.10:3000/return.html",
-              customization: {
-                title: "Bot",
-                description: "Payment",
-              },
-            };
+      //       // console.log("TElegram ifd", );
+      //       let id = row.telegram_id;
+      //       const payload = {
+      //         amount: "100",
+      //         currency: "ETB",
+      //         email: row.phone_number + "aben@gmail.com", // You can use a better format
+      //         first_name: row.username || "TelegramUser",
+      //         last_name: "User",
+      //         phone_number: "0900123456",
+      //         tx_ref,
+      //         callback_url: `http://192.168.1.10:3000/callback?tx_ref=${tx_ref}&asd=asd&mnn=asdsd`,
+      //         return_url: "http://192.168.1.10:3000/return.html",
+      //         customization: {
+      //           title: "Bot",
+      //           description: "Payment",
+      //         },
+      //       };
 
-            console.log(payload);
-            try {
-              const response = await fetch(
-                "https://api.chapa.co/v1/transaction/initialize",
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization:
-                      "Bearer CHASECK_TEST-HHFEZC6dt1ieICA8AAg5PZyMHWbVNxZ9",
-                  },
-                  body: JSON.stringify(payload),
-                }
-              );
+      //       console.log(payload);
+      //       try {
+      //         const response = await fetch(
+      //           "https://api.chapa.co/v1/transaction/initialize",
+      //           {
+      //             method: "POST",
+      //             headers: {
+      //               "Content-Type": "application/json",
+      //               Authorization:
+      //                 "Bearer CHASECK_TEST-HHFEZC6dt1ieICA8AAg5PZyMHWbVNxZ9",
+      //             },
+      //             body: JSON.stringify(payload),
+      //           }
+      //         );
 
-              const data = await response.json();
+      //         const data = await response.json();
 
-              if (data.status === "success") {
-                bot.sendMessage(
-                  chatId,
-                  `✅ Click below to complete your payment:`,
-                  {
-                    reply_markup: {
-                      inline_keyboard: [
-                        [
-                          {
-                            text: "💳 Pay Now",
-                            web_app: { url: data.data.checkout_url },
-                          },
-                        ],
-                      ],
-                    },
-                  }
-                );
-              } else {
-                bot.sendMessage(chatId, "❌ Payment failed to initialize.");
-                console.error(data);
-              }
-            } catch (error) {
-              console.error("Chapa error:", error);
-              bot.sendMessage(
-                chatId,
-                "⚠️ An error occurred while contacting Chapa."
-              );
-            }
-          });
-        }
-      );
+      //         if (data.status === "success") {
+      //           bot.sendMessage(
+      //             chatId,
+      //             `✅ Click below to complete your payment:`,
+      //             {
+      //               reply_markup: {
+      //                 inline_keyboard: [
+      //                   [
+      //                     {
+      //                       text: "💳 Pay Now",
+      //                       web_app: { url: data.data.checkout_url },
+      //                     },
+      //                   ],
+      //                 ],
+      //               },
+      //             }
+      //           );
+      //         } else {
+      //           bot.sendMessage(chatId, "❌ Payment failed to initialize.");
+      //           console.error(data);
+      //         }
+      //       } catch (error) {
+      //         console.error("Chapa error:", error);
+      //         bot.sendMessage(
+      //           chatId,
+      //           "⚠️ An error occurred while contacting Chapa."
+      //         );
+      //       }
+      //     });
+      //   }
+      // );
+
+      bot.sendMessage(chatId, "Choose method: ", {
+        reply_markup: {
+          inline_keyboard: [
+            {
+              text: "Manual",
+              callback_data: "manual_method",
+            },
+            {
+              text: "Chapa pay",
+              callback_data: "chapa",
+            },
+          ],
+        },
+      });
+
       responseText = "Payment ongoing";
       break;
 
