@@ -30,6 +30,7 @@ let users = [];
 
 let gameState = false;
 const userToNumber = new Map();
+const userToNumber10 = new Map();
 let timer;
 let timeLeft = 60;
 let numbers = [];
@@ -437,12 +438,12 @@ wss.on("connection", (ws) => {
       }
       const { username, number } = data;
 
-      const currentNumber = userToNumber.get(username);
+      const currentNumber = userToNumber10.get(username);
 
       // Case 1: Toggle off if user re-selects their own number
       if (currentNumber === number) {
-        userToNumber.delete(username);
-        console.log(userToNumber);
+        userToNumber10.delete(username);
+        console.log(userToNumber10);
         broadcast({
           type: "selectionCleared",
           username,
@@ -453,7 +454,7 @@ wss.on("connection", (ws) => {
 
       // Case 2: Check if number is already taken by someone else
       let taken = false;
-      for (const [otherUser, otherNumber] of userToNumber.entries()) {
+      for (const [otherUser, otherNumber] of userToNumber10.entries()) {
         if (otherNumber === number && otherUser !== username) {
           taken = true;
           break;
@@ -461,13 +462,13 @@ wss.on("connection", (ws) => {
       }
 
       if (taken) {
-        console.log(userToNumber);
+        console.log(userToNumber10);
 
         return;
       }
       if (data.balance > 10) {
         // Case 3: Assign new number
-        userToNumber.set(username, number);
+        userToNumber10.set(username, number);
         broadcast({
           type: "numberSelected",
           username,
@@ -475,7 +476,7 @@ wss.on("connection", (ws) => {
           currentNumber,
         });
       }
-      console.log(userToNumber);
+      console.log(userToNumber10);
     } else if (data.type === "bingo") {
       console.log(data.c);
       console.log("Drawn numbers: ", drawnNumbers);
@@ -494,14 +495,14 @@ wss.on("connection", (ws) => {
   ws.on("close", () => {
     if (ws.username) {
       users = users.filter((u) => u !== ws.username);
-      let n = userToNumber.get(ws.username);
+      let n = userToNumber10.get(ws.username);
       // console.log("Number:", n);
       broadcast({
         type: "removeCardsOnLeave",
         n,
       });
-      userToNumber.delete(ws.username);
-      console.log(userToNumber);
+      userToNumber10.delete(ws.username);
+      console.log(userToNumber10);
       console.log("Left Users:", users);
     }
   });
