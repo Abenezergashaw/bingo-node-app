@@ -1386,9 +1386,17 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
       const [userId, amount] = depositeData.split("_");
       console.log("User ID:", userId);
       console.log("amount:", amount);
-      bot.sendMessage(adminUser, "got it").then(() => {
-        bot.deleteMessage(adminUser, messageId);
+      updateUserBalanceByAdmin(userId, amount, (err, result) => {
+        if (err) {
+          console.error("Error updating balance:", err.message);
+        } else {
+          console.log(`Balance updated:`, result);
+          bot.sendMessage(adminUser, "got it").then(() => {
+            bot.deleteMessage(adminUser, messageId);
+          });
+        }
       });
+
       // Query DB or perform action with userId
       break;
     default:
@@ -1651,20 +1659,33 @@ function generateUserBoxTable(user) {
   return "```\n" + table + "\n```"; // Telegram code block
 }
 
-function a() {
-  const query = `
-        INSERT INTO transactions (tx_ref, userID, amount, status, method)
-        VALUES (?, ?, ?, ?, ?)
-      `;
+function updateUserBalanceByAdmin(telegramId, amountToAdd, callback) {
+  // Step 1: Get current balance
+  const selectQuery = `SELECT balance FROM users WHERE telegram_id = ?`;
 
-  db.run(query, [tx_ref, telegramId, amount, status, method], function (err) {
+  db.get(selectQuery, [telegramId], (err, row) => {
     if (err) {
-      return console.error("Error inserting transaction:", err.message);
+      return callback(err);
     }
-    console.log(`Transaction inserted with ID ${this.lastID}`);
+
+    if (!row) {
+      return callback(new Error("User not found."));
+    }
+
+    const newBalance = row.balance + amountToAdd;
+
+    // Step 2: Update balance
+    const updateQuery = `UPDATE users SET balance = ? WHERE telegram_id = ?`;
+    db.run(updateQuery, [newBalance, telegramId], function (updateErr) {
+      if (updateErr) {
+        return callback(updateErr);
+      }
+
+      callback(null, {
+        telegram_id: telegramId,
+        new_balance: newBalance,
+        rowsAffected: this.changes,
+      });
+    });
   });
-  bot.sendMessage(
-    chatId,
-    "🏦 Deposit Instructions 🏦 \n 🔹 Bank Name: TELEBIRR \n 🔢 Phone Number: +251934596919\n 🔢  Name: ABENZER GASHAW MEKONNEN \n\n ** Please only use the number you registered with. If use another number enter below. \n\n After payment click the button below and provide your payment reference, or text message from 127."
-  );
 }
