@@ -1022,6 +1022,7 @@ bot.on("contact", (msg) => {
 bot.on("callback_query", (query) => {
   const chatId = query.message.chat.id;
   const data = query.data;
+  const messageId = query.message.message_id;
   telegramId = query.from.id.toString();
   let responseText = "";
   switch (true) {
@@ -1385,7 +1386,9 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
       const [userId, amount] = depositeData.split("_");
       console.log("User ID:", userId);
       console.log("amount:", amount);
-      bot.sendMessage(adminUser, "got it");
+      bot.sendMessage(adminUser, "got it").then(() => {
+        bot.deleteMessage(adminUser, messageId);
+      });
       // Query DB or perform action with userId
       break;
     default:
