@@ -3265,7 +3265,12 @@
         document
           .querySelector(".start-button")
           .addEventListener("click", () => {
-            alert(username);
+            let d = {
+              type: "join-game",
+              username,
+              n: n,
+            };
+            socket.send(JSON.stringify(d));
           });
       }
 

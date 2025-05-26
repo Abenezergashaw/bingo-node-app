@@ -466,16 +466,16 @@ wss.on("connection", (ws) => {
 
         return;
       }
-      if (data.balance > 10) {
-        // Case 3: Assign new number
-        userToNumber10.set(username, number);
-        broadcast({
-          type: "numberSelected",
-          username,
-          number,
-          currentNumber,
-        });
-      }
+      // if (data.balance > 10) {
+      //   // Case 3: Assign new number
+      //   userToNumber10.set(username, number);
+      //   broadcast({
+      //     type: "numberSelected",
+      //     username,
+      //     number,
+      //     currentNumber,
+      //   });
+      // }
       console.log(userToNumber10);
     } else if (data.type === "bingo") {
       console.log(data.c);
@@ -489,6 +489,9 @@ wss.on("connection", (ws) => {
         })
       );
       // console.log(drawnNumbers);
+    } else if (data.type === "join-game") {
+      userToNumber.set(data.username, data.n);
+      console.log(userToNumber, ":;On starting");
     }
   });
 
