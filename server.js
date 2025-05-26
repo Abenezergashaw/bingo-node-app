@@ -4,7 +4,7 @@ const express = require("express");
 const db = require("./db");
 const cors = require("cors");
 const Table = require("cli-table3");
-
+const { v4: uuidv4 } = require("uuid");
 const TelegramBot = require("node-telegram-bot-api");
 const path = require("path"); // Replace with your bot token
 const token = "7783379214:AAGI85k-k53pc58hmn8cahLjz2TcKLCBCCc";
@@ -524,6 +524,7 @@ server.listen(3000, () => {
 
 const adminUser = "353008986";
 const awaitingUserIdInput = {};
+const awaitingUserDepositAmount = {};
 
 // /start command
 bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
@@ -1373,6 +1374,9 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
       bot.sendMessage(chatId, "NA");
       break;
     case "telebirr":
+      awaitingUserDepositAmount[chatId] = true;
+      bot.sendMessage(chatId, "How much?");
+
       break;
     default:
       responseText = "❓ Unknown action.";
@@ -1531,6 +1535,27 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
       console.error(err);
       bot.sendMessage(chatId, `⚠️ Error querying the database.`);
     }
+  }
+  if (awaitingUserIdInput[chatId] && /^\d+$/.test(msg.text.trim())) {
+    const query = `
+        INSERT INTO transactions (tx_ref, userID, amount, status, method)
+        VALUES (?, ?, ?, ?, ?)
+      `;
+    let tx_ref = uuid4();
+    db.run(
+      query,
+      [tx_ref, telegramId, parseInt(text), "pending", "telebirr"],
+      function (err) {
+        if (err) {
+          return console.error("Error inserting transaction:", err.message);
+        }
+        console.log(`Transaction inserted with ID ${this.lastID}`);
+      }
+    );
+    bot.sendMessage(
+      chatId,
+      "🏦 Deposit Instructions 🏦 \n 🔹 Bank Name: TELEBIRR \n 🔢 Phone Number: +251934596919\n 🔢  Name: ABENZER GASHAW MEKONNEN \n\n ** Please only use the number you registered with. If use another number enter below. \n\n After payment click the button below and provide your payment reference, or text message from 127."
+    );
   }
 });
 
