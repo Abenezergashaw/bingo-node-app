@@ -1387,7 +1387,7 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
       console.log("Dposite user 1382", data);
 
       const depositeData = data.replace("deposit_user_", "");
-      const [userId, amount] = depositeData.split("_");
+      const [userId, amount, id] = depositeData.split("_");
       console.log("User ID:", userId);
       console.log("amount:", amount);
       updateUserBalanceByAdmin(userId, parseInt(amount), (err, result) => {
@@ -1401,14 +1401,24 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
             bot.deleteMessage(adminUser, messageId);
           });
         } else {
-          console.log(`Balance updated:`, result);
-          bot.sendMessage(adminUser, "Success!").then(() => {
-            bot.sendMessage(
-              userId,
-              "Balance deposited successfully. Check your balance."
-            );
-            bot.deleteMessage(adminUser, messageId);
-          });
+          db.run(
+            `UPDATE transactions SET status = ? WHERE id = ?`,
+            ["success", id],
+            function (err) {
+              if (err) {
+                return console.error("Error updating status:", err.message);
+              } else {
+                console.log(`Balance and status updated:`, result);
+                bot.sendMessage(adminUser, "Success!").then(() => {
+                  bot.sendMessage(
+                    userId,
+                    "Balance deposited successfully. Check your balance."
+                  );
+                  bot.deleteMessage(adminUser, messageId);
+                });
+              }
+            }
+          );
         }
       });
 
@@ -1622,7 +1632,7 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
                     [
                       {
                         text: "Approve",
-                        callback_data: `deposit_user_${chatId}_${text}`,
+                        callback_data: `deposit_user_${chatId}_${text}_${this.lastID}`,
                       },
                     ],
                   ],
@@ -1682,7 +1692,7 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
                     [
                       {
                         text: "Approve",
-                        callback_data: `deposit_user_${chatId}_${text}`,
+                        callback_data: `deposit_user_${chatId}_${text}_${this.lastID}`,
                       },
                     ],
                   ],
