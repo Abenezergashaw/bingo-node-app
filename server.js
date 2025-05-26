@@ -1351,7 +1351,22 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
       bot.answerCallbackQuery(query.id);
       break;
     case "manual_method":
-      bot.sendMessage(chatId, "Sadsad");
+      bot.sendMessage(chatId, "Choose bank:", {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "CBE",
+                callback_data: "cbe",
+              },
+              {
+                text: "Telebirr",
+                callback_data: "telebirr",
+              },
+            ],
+          ],
+        },
+      });
       break;
 
     default:
