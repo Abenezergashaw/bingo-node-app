@@ -152,7 +152,7 @@ app.get("/getWinneerDetails", (req, res) => {
 function startTimer() {
   clearInterval(timer); // clear existing timer if any
   // console.log(timer);
-  timeLeft = 15;
+  timeLeft = 30;
 
   timer = setInterval(() => {
     timeLeft--;
@@ -197,7 +197,7 @@ function startTimer() {
           players: userToNumber.size,
         });
         setTimeout(() => {
-          callInterval = setInterval(broadcastShuffledNumbers, 3000);
+          callInterval = setInterval(broadcastShuffledNumbers, 4500);
         }, 1000);
         clearInterval(timer);
       } else {
