@@ -1378,6 +1378,15 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
       bot.sendMessage(chatId, "How much?");
 
       break;
+    case data.startsWith("pay_user_"):
+      // Handle user viewing
+      const depositeData = data.replace("pay_user_", "");
+      const [userId, amount] = userData.split("_");
+      console.log("User ID:", userId);
+      console.log("amount:", otherId);
+      bot.sendMessage(adminUser, "userid" + userId + "amount " + amount);
+      // Query DB or perform action with userId
+      break;
     default:
       responseText = "❓ Unknown action.";
   }
@@ -1576,7 +1585,19 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
           .then(() => {
             bot.sendMessage(
               adminUser,
-              `New deposit order from: ${chatId} \n Amount: ${text} \n Method: Telebirr`
+              `New deposit order from: ${chatId} \n Amount: ${text} \n Method: Telebirr`,
+              {
+                reply_markup: {
+                  inline_keyboard: [
+                    [
+                      {
+                        text: "Approve",
+                        callback_data: `deposite_user_${chatId}_${text}`,
+                      },
+                    ],
+                  ],
+                },
+              }
             );
           });
       }
