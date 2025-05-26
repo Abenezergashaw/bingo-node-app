@@ -1378,9 +1378,9 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
       bot.sendMessage(chatId, "How much?");
 
       break;
-    case data.startsWith("pay_user_"):
+    case data.startsWith("deposit_user_"):
       // Handle user viewing
-      const depositeData = data.replace("pay_user_", "");
+      const depositeData = data.replace("deposit_user_", "");
       const [userId, amount] = depositeData.split("_");
       console.log("User ID:", userId);
       console.log("amount:", otherId);
@@ -1592,7 +1592,7 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
                     [
                       {
                         text: "Approve",
-                        callback_data: `deposite_user_${chatId}_${text}`,
+                        callback_data: `deposit_user_${chatId}_${text}`,
                       },
                     ],
                   ],
