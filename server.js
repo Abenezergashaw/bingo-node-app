@@ -1412,7 +1412,8 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
                 bot.sendMessage(adminUser, "Success!").then(() => {
                   bot.sendMessage(
                     userId,
-                    "Balance deposited successfully. Check your balance."
+                    "Balance deposited successfully. New balance: Br. " +
+                      result.new_balance
                   );
                   bot.deleteMessage(adminUser, messageId);
                 });
