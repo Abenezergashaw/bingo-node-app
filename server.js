@@ -7,7 +7,7 @@ const Table = require("cli-table3");
 const { v4: uuidv4 } = require("uuid");
 const TelegramBot = require("node-telegram-bot-api");
 const path = require("path"); // Replace with your bot token
-const token = "7783379214:AAGI85k-k53pc58hmn8cahLjz2TcKLCBCCc";
+const token = "7546356592:AAGxsnx1F2ECNscClLsheTodNko8wGzXkyc";
 
 // Create bot instance
 const bot = new TelegramBot(token, { polling: true });
