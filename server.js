@@ -1024,7 +1024,6 @@ bot.on("callback_query", (query) => {
   const data = query.data;
   telegramId = query.from.id.toString();
   let responseText = "";
-  console.log("Dposite user", data);
   switch (data) {
     case "view_balance":
       console.log("Telegram id: ", telegramId);
@@ -1380,6 +1379,8 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
       break;
     case data.startsWith("deposit_user_"):
       // Handle user viewing
+      console.log("Dposite user 1382", data);
+
       const depositeData = data.replace("deposit_user_", "");
       const [userId, amount] = depositeData.split("_");
       console.log("User ID:", userId);
