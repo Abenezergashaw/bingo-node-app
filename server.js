@@ -1188,14 +1188,8 @@ Bring your family and friends to play, win, and enjoy Bingo together!
       bot.sendMessage(chatId, "Choose method: ", {
         reply_markup: {
           inline_keyboard: [
-            {
-              text: "Manual",
-              callback_data: "manual_method",
-            },
-            {
-              text: "Chapa pay",
-              callback_data: "chapa",
-            },
+            [(text: "Manual"), (callback_data: "manual_method")],
+            [(text: "Chapa pay"), (callback_data: "chapa")],
           ],
         },
       });
