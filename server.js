@@ -524,6 +524,7 @@ server.listen(3000, () => {
 
 const adminUser = "353008986";
 const awaitingUserIdInput = {};
+
 // /start command
 bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   telegramId = msg.from.id.toString();
@@ -1372,10 +1373,6 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
       bot.sendMessage(chatId, "NA");
       break;
     case "telebirr":
-      bot.sendMessage(
-        chatId,
-        "🏦 Deposit Instructions 🏦 \n 🔹 Bank Name: TELEBIRR \n 🔢 Account Number: +251934596919\n 🔢 Account Name: ABENZER GASHAW MEKONNEN \n\n ** Please only use the number you registered with. If use another number enter below. \n\n After payment click the button below and provide your payment reference, or text message from 127."
-      );
       break;
     default:
       responseText = "❓ Unknown action.";
@@ -1513,7 +1510,7 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
       },
     });
   }
-  if (awaitingUserIdInput[chatId]) {
+  if (awaitingUserIdInput[chatId] && /^\d+$/.test(msg.text.trim())) {
     const userId = msg.text;
 
     // Reset the state
@@ -1577,4 +1574,22 @@ function generateUserBoxTable(user) {
   const table = top + "\n" + body + "\n" + bottom;
 
   return "```\n" + table + "\n```"; // Telegram code block
+}
+
+function a() {
+  const query = `
+        INSERT INTO transactions (tx_ref, userID, amount, status, method)
+        VALUES (?, ?, ?, ?, ?)
+      `;
+
+  db.run(query, [tx_ref, telegramId, amount, status, method], function (err) {
+    if (err) {
+      return console.error("Error inserting transaction:", err.message);
+    }
+    console.log(`Transaction inserted with ID ${this.lastID}`);
+  });
+  bot.sendMessage(
+    chatId,
+    "🏦 Deposit Instructions 🏦 \n 🔹 Bank Name: TELEBIRR \n 🔢 Phone Number: +251934596919\n 🔢  Name: ABENZER GASHAW MEKONNEN \n\n ** Please only use the number you registered with. If use another number enter below. \n\n After payment click the button below and provide your payment reference, or text message from 127."
+  );
 }
