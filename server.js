@@ -1024,7 +1024,7 @@ bot.on("callback_query", (query) => {
   const data = query.data;
   telegramId = query.from.id.toString();
   let responseText = "";
-
+  console.log("Dposite user", data);
   switch (data) {
     case "view_balance":
       console.log("Telegram id: ", telegramId);
