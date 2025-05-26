@@ -1541,7 +1541,7 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
         INSERT INTO transactions (tx_ref, userID, amount, status, method)
         VALUES (?, ?, ?, ?, ?)
       `;
-    let tx_ref = uuid4();
+    let tx_ref = uuidv4();
     db.run(
       query,
       [tx_ref, telegramId, parseInt(text), "pending", "telebirr"],
