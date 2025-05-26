@@ -1408,16 +1408,23 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
 
 bot.onText(/\/balance/, (msg) => {
   const chatId = msg.chat.id;
-  const telegramIdd = msg.from.id;
-  db.get("SELECT balance FROM users", [], async (err, row) => {
-    if (err || !row) {
-      console.error("DB error:", err);
-      bot.sendMessage(chatId, "❌ Could not fetch balance. Please try again.");
+  const telegramIdd = msg.from.id.toString();
+  db.get(
+    "SELECT balance FROM users WHERE telegram_id = ?",
+    [telegramIdd],
+    async (err, row) => {
+      if (err || !row) {
+        console.error("DB error:", err);
+        bot.sendMessage(
+          chatId,
+          "❌ Could not fetch balance. Please try again."
+        );
+      }
+      bot.sendMessage(chatId, "Balance: Br. ");
+      // console.log(row);
+      return;
     }
-    bot.sendMessage(chatId, "Balance: Br. ");
-    // console.log(row);
-    return;
-  });
+  );
 });
 
 bot.onText(/\/invite/, (msg) => {
