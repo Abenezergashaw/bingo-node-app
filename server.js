@@ -1385,7 +1385,7 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
       const [userId, amount] = depositeData.split("_");
       console.log("User ID:", userId);
       console.log("amount:", otherId);
-      bot.sendMessage(adminUser, "userid" + userId + "amount " + amount);
+      bot.sendMessage(adminUser, "got it");
       // Query DB or perform action with userId
       break;
     default:
