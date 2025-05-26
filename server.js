@@ -1536,7 +1536,7 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
       bot.sendMessage(chatId, `⚠️ Error querying the database.`);
     }
   }
-  if (awaitingUserIdInput[chatId] && /^\d+$/.test(msg.text.trim())) {
+  if (awaitingUserDepositAmount[chatId] && /^\d+$/.test(msg.text.trim())) {
     const query = `
         INSERT INTO transactions (tx_ref, userID, amount, status, method)
         VALUES (?, ?, ?, ?, ?)
