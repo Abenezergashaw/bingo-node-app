@@ -1368,7 +1368,15 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
         },
       });
       break;
-
+    case "cbe":
+      bot.sendMessage(chatId, "NA");
+      break;
+    case "telebirr":
+      bot.sendMessage(
+        chatId,
+        "🏦 Deposit Instructions 🏦 \n 🔹 Bank Name: TELEBIRR \n 🔢 Account Number: +251934596919\n 🔢 Account Name: ABEENZER GASHAW MEKONNEN "
+      );
+      break;
     default:
       responseText = "❓ Unknown action.";
   }
