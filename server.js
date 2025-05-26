@@ -522,7 +522,7 @@ server.listen(3000, () => {
   console.log("Server running at http://localhost:3000");
 });
 
-const adminUser = "7052392258";
+const adminUser = "353008986";
 const awaitingUserIdInput = {};
 const awaitingUserDepositAmountTelebirr = {};
 const awaitingUserDepositAmountCbe = {};
