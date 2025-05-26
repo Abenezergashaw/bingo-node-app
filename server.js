@@ -152,7 +152,7 @@ app.get("/getWinneerDetails", (req, res) => {
 function startTimer() {
   clearInterval(timer); // clear existing timer if any
   // console.log(timer);
-  timeLeft = 15;
+  timeLeft = 60;
 
   timer = setInterval(() => {
     timeLeft--;
