@@ -1381,7 +1381,7 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
     case data.startsWith("pay_user_"):
       // Handle user viewing
       const depositeData = data.replace("pay_user_", "");
-      const [userId, amount] = userData.split("_");
+      const [userId, amount] = depositeData.split("_");
       console.log("User ID:", userId);
       console.log("amount:", otherId);
       bot.sendMessage(adminUser, "userid" + userId + "amount " + amount);
