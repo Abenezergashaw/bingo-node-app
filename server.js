@@ -420,7 +420,7 @@ wss.on("connection", (ws) => {
           JSON.stringify({
             type: "status",
             message: "No active game. You can join a new game.",
-            cards: Array.from(userToNumber.values()),
+            cards: Array.from(userToNumber10.values()),
           })
         );
       }
@@ -497,11 +497,11 @@ wss.on("connection", (ws) => {
       users = users.filter((u) => u !== ws.username);
       let n = userToNumber10.get(ws.username);
       // console.log("Number:", n);
-      broadcast({
-        type: "removeCardsOnLeave",
-        n,
-      });
-      userToNumber10.delete(ws.username);
+      // broadcast({
+      //   type: "removeCardsOnLeave",
+      //   n,
+      // });
+      // userToNumber10.delete(ws.username);
       console.log(userToNumber10);
       console.log("Left Users:", users);
     }
