@@ -1392,6 +1392,10 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
         } else {
           console.log(`Balance updated:`, result);
           bot.sendMessage(adminUser, "got it").then(() => {
+            bot.sendMessage(
+              userId,
+              "Balance deposited successfullt. Check your balance."
+            );
             bot.deleteMessage(adminUser, messageId);
           });
         }
