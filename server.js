@@ -1550,28 +1550,35 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
           return console.error("Error inserting transaction:", err.message);
         }
         console.log(`Transaction inserted with ID ${this.lastID}`);
-        bot.sendMessage(
-          chatId,
-          "🏦 Deposit Instructions 🏦 \n 🔹 Bank Name: TELEBIRR \n 🔢 Phone Number: +251934596919\n 🔢  Name: ABENZER GASHAW MEKONNEN \n\n ** Please only use the number you registered with. If use another number enter below. \n\n After payment click the button below and provide your payment reference, or text message from 127.",
-          {
-            reply_markup: {
-              inline_keyboard: [
-                [
-                  {
-                    text: "Send message from 127",
-                    callback_data: "verify_telebirr",
-                  },
+        bot
+          .sendMessage(
+            chatId,
+            "🏦 Deposit Instructions 🏦 \n 🔹 Bank Name: TELEBIRR \n 🔢 Phone Number: +251934596919\n 🔢  Name: ABENZER GASHAW MEKONNEN \n\n ** Please only use the number you registered with. If use another number enter below. \n\n After payment click the button below and provide your payment reference, or text message from 127.",
+            {
+              reply_markup: {
+                inline_keyboard: [
+                  [
+                    {
+                      text: "Send message from 127",
+                      callback_data: "verify_telebirr",
+                    },
+                  ],
+                  [
+                    {
+                      text: "Use another number",
+                      callback_data: "use_another_number",
+                    },
+                  ],
                 ],
-                [
-                  {
-                    text: "Use another number",
-                    callback_data: "use_another_number",
-                  },
-                ],
-              ],
-            },
-          }
-        );
+              },
+            }
+          )
+          .then(() => {
+            bot.sendMessage(
+              adminUser,
+              `New deposit order from: ${chatId} \n Amount: ${text} \n Method: Telebirr`
+            );
+          });
       }
     );
   }
