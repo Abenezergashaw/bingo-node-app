@@ -1024,8 +1024,8 @@ bot.on("callback_query", (query) => {
   const data = query.data;
   telegramId = query.from.id.toString();
   let responseText = "";
-  switch (data) {
-    case "view_balance":
+  switch (true) {
+    case data === "view_balance":
       console.log("Telegram id: ", telegramId);
 
       db.get(
@@ -1046,10 +1046,10 @@ bot.on("callback_query", (query) => {
       );
       responseText = "💰 Your current balance is 50 coins.";
       break;
-    case "join_game":
+    case data === "join_game":
       responseText = "🎮 You've joined the game!";
       break;
-    case "game_rules":
+    case data === "game_rules":
       // - 🟧 *Two Lines*
       // - 🟥 *Full House* (all numbers)
       bot.sendMessage(
@@ -1079,7 +1079,7 @@ bot.on("callback_query", (query) => {
       );
 
       break;
-    case "invite_friends":
+    case data === "invite_friends":
       bot.sendMessage(
         chatId,
         `
@@ -1094,7 +1094,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         `
       );
       break;
-    case "chapa_pay":
+    case data === "chapa_pay":
       // 🔍 Fetch user from DB
 
       // db.get(
@@ -1206,7 +1206,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
       responseText = "Payment ongoing";
       break;
 
-    case "get_balance":
+    case data === "get_balance":
       bot.sendMessage(chatId, `\`\`\`📅 Select date margin\`\`\``, {
         parse_mode: "Markdown",
         reply_markup: {
@@ -1226,7 +1226,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         },
       });
       break;
-    case "get_games":
+    case data === "get_games":
       (async () => {
         try {
           const counts = await getGameNumberCounts();
@@ -1243,7 +1243,7 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
         }
       })();
       break;
-    case "get_users":
+    case data === "get_users":
       bot.sendMessage(chatId, `_Users_`, {
         parse_mode: "Markdown",
         reply_markup: {
@@ -1264,7 +1264,7 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
         },
       });
       break;
-    case "get_balance_today":
+    case data === "get_balance_today":
       // bot.sendMessage(chatId, "Today balacne");
       (async () => {
         const balance = await getBalanceByDate(
@@ -1289,7 +1289,7 @@ Balance for today ${new Date().getFullYear()}-${(new Date().getMonth() + 1)
         );
       })();
       break;
-    case "get_balance_week":
+    case data === "get_balance_week":
       // bot.sendMessage(chatId, "Week balacne");
       (async () => {
         const { monday, today } = getMondayToToday();
@@ -1312,7 +1312,7 @@ Balance for today ${new Date().getFullYear()}-${(new Date().getMonth() + 1)
       })();
 
       break;
-    case "get_balance_month":
+    case data === "get_balance_month":
       (async () => {
         const { monthStart, today } = getMonthStartToToday();
         const start = "2025-05-20";
@@ -1332,7 +1332,7 @@ Balance for today ${new Date().getFullYear()}-${(new Date().getMonth() + 1)
         });
       })();
       break;
-    case "get_balance_all":
+    case data === "get_balance_all":
       // bot.sendMessage(chatId, "Today balacne");
       (async () => {
         const balance = await getBalanceAlltime();
@@ -1345,13 +1345,13 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
         );
       })();
       break;
-    case "search_id":
+    case data === "search_id":
       awaitingUserIdInput[chatId] = true;
 
       bot.sendMessage(chatId, "Please send the user ID:");
       bot.answerCallbackQuery(query.id);
       break;
-    case "manual_method":
+    case data === "manual_method":
       bot.sendMessage(chatId, "Choose bank:", {
         reply_markup: {
           inline_keyboard: [
@@ -1369,10 +1369,10 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
         },
       });
       break;
-    case "cbe":
+    case data === "cbe":
       bot.sendMessage(chatId, "NA");
       break;
-    case "telebirr":
+    case data === "telebirr":
       awaitingUserDepositAmount[chatId] = true;
       bot.sendMessage(chatId, "How much?");
 
