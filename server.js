@@ -1350,6 +1350,10 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
       bot.sendMessage(chatId, "Please send the user ID:");
       bot.answerCallbackQuery(query.id);
       break;
+    case "manual_method":
+      bot.sendMessage(chatId, "Sadsad");
+      break;
+
     default:
       responseText = "❓ Unknown action.";
   }
