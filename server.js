@@ -1640,6 +1640,7 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
         VALUES (?, ?, ?, ?, ?)
       `;
     let tx_ref = uuidv4();
+    console.log(tx_ref);
     db.run(
       query,
       [tx_ref, telegramId, parseInt(text), "pending", "cbe"],
