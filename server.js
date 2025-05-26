@@ -1420,7 +1420,7 @@ bot.onText(/\/balance/, (msg) => {
           "❌ Could not fetch balance. Please try again."
         );
       }
-      bot.sendMessage(chatId, "Balance: Br. ");
+      bot.sendMessage(chatId, "Balance: Br. " + row.balance);
       // console.log(row);
       return;
     }
