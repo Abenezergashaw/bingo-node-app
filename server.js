@@ -1374,7 +1374,7 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
     case "telebirr":
       bot.sendMessage(
         chatId,
-        "🏦 Deposit Instructions 🏦 \n 🔹 Bank Name: TELEBIRR \n 🔢 Account Number: +251934596919\n 🔢 Account Name: ABEENZER GASHAW MEKONNEN "
+        "🏦 Deposit Instructions 🏦 \n 🔹 Bank Name: TELEBIRR \n 🔢 Account Number: +251934596919\n 🔢 Account Name: ABENZER GASHAW MEKONNEN \n\n ** Please only use the number you registered with. If use another number enter below."
       );
       break;
     default:
