@@ -524,7 +524,8 @@ server.listen(3000, () => {
 
 const adminUser = "353008986";
 const awaitingUserIdInput = {};
-const awaitingUserDepositAmount = {};
+const awaitingUserDepositAmountTelebirr = {};
+const awaitingUserDepositAmountCbe = {};
 
 // /start command
 bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
@@ -1371,10 +1372,13 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
       });
       break;
     case data === "cbe":
-      bot.sendMessage(chatId, "NA");
+      awaitingUserDepositAmountTelebirr[chatId] = false;
+      awaitingUserDepositAmountCbe[chatId] = true;
+      bot.sendMessage(chatId, "How much?");
       break;
     case data === "telebirr":
-      awaitingUserDepositAmount[chatId] = true;
+      awaitingUserDepositAmountCbe[chatId] = false;
+      awaitingUserDepositAmountTelebirr[chatId] = true;
       bot.sendMessage(chatId, "How much?");
 
       break;
@@ -1389,12 +1393,19 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
       updateUserBalanceByAdmin(userId, parseInt(amount), (err, result) => {
         if (err) {
           console.error("Error updating balance:", err.message);
-        } else {
-          console.log(`Balance updated:`, result);
-          bot.sendMessage(adminUser, "got it").then(() => {
+          bot.sendMessage(adminUser, "Error updating balance!").then(() => {
             bot.sendMessage(
               userId,
-              "Balance deposited successfullt. Check your balance."
+              "Error processing transaction. Please contact admin."
+            );
+            bot.deleteMessage(adminUser, messageId);
+          });
+        } else {
+          console.log(`Balance updated:`, result);
+          bot.sendMessage(adminUser, "Success!").then(() => {
+            bot.sendMessage(
+              userId,
+              "Balance deposited successfully. Check your balance."
             );
             bot.deleteMessage(adminUser, messageId);
           });
@@ -1561,7 +1572,10 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
       bot.sendMessage(chatId, `⚠️ Error querying the database.`);
     }
   }
-  if (awaitingUserDepositAmount[chatId] && /^\d+$/.test(msg.text.trim())) {
+  if (
+    awaitingUserDepositAmountTelebirr[chatId] &&
+    /^\d+$/.test(msg.text.trim())
+  ) {
     const query = `
         INSERT INTO transactions (tx_ref, userID, amount, status, method)
         VALUES (?, ?, ?, ?, ?)
@@ -1602,6 +1616,65 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
             bot.sendMessage(
               adminUser,
               `New deposit order from: ${chatId} \n Amount: ${text} \n Method: Telebirr`,
+              {
+                reply_markup: {
+                  inline_keyboard: [
+                    [
+                      {
+                        text: "Approve",
+                        callback_data: `deposit_user_${chatId}_${text}`,
+                      },
+                    ],
+                  ],
+                },
+              }
+            );
+          });
+      }
+    );
+  }
+
+  if (awaitingUserDepositAmountCbe[chatId] && /^\d+$/.test(msg.text.trim())) {
+    const query = `
+        INSERT INTO transactions (tx_ref, userID, amount, status, method)
+        VALUES (?, ?, ?, ?, ?)
+      `;
+    let tx_ref = uuidv4();
+    db.run(
+      query,
+      [tx_ref, telegramId, parseInt(text), "pending", "cbe"],
+      function (err) {
+        if (err) {
+          return console.error("Error inserting transaction:", err.message);
+        }
+        console.log(`Transaction inserted with ID ${this.lastID}`);
+        bot
+          .sendMessage(
+            chatId,
+            "🏦 Deposit Instructions 🏦 \n 🔹 Bank Name: CBE \n 🔢 Phone Number: 1000185229207\n 🔢  Name: ABENZER GASHAW MEKONNEN \n\n ** Please only use the number you registered with. If use another number enter below. \n\n After payment click the button below and provide your payment reference, or text message from CBE.",
+            {
+              reply_markup: {
+                inline_keyboard: [
+                  [
+                    {
+                      text: "Send message from CBE",
+                      callback_data: "verify_cbe",
+                    },
+                  ],
+                  [
+                    {
+                      text: "Use another account",
+                      callback_data: "use_another_account",
+                    },
+                  ],
+                ],
+              },
+            }
+          )
+          .then(() => {
+            bot.sendMessage(
+              adminUser,
+              `New deposit order from: ${chatId} \n Amount: ${text} \n Method: CBE`,
               {
                 reply_markup: {
                   inline_keyboard: [
