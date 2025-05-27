@@ -238,17 +238,21 @@
       });
 
       function playAudio(n) {
-        const audio = audioCache[n];
+        // const audio = audioCache[n];
 
-        if (!audio) {
-          console.warn(`Audio ${data.index} not cached`);
-          return;
-        }
+        // if (!audio) {
+        //   console.warn(`Audio ${data.index} not cached`);
+        //   return;
+        // }
 
-        audio.currentTime = 0; // reset to start
-        audio.play().catch((err) => {
-          console.error(`Error playing audio ${data.index}:`, err);
-        });
+        // audio.currentTime = 0; // reset to start
+        // audio.play().catch((err) => {
+        //   console.error(`Error playing audio ${data.index}:`, err);
+        // });
+        const audio = new Audio(
+          `https://santimbingo.duckdns.org/assets/${n}.m4a`
+        );
+        audio.play();
       }
 
       function toggleModal(show) {
