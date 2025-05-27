@@ -467,6 +467,7 @@ wss.on("connection", (ws) => {
       }
       if (data.balance > 10) {
         // Case 3: Assign new number
+        bot.sendMessage(adminUser, "New player");
         userToNumber.set(username, number);
         broadcast({
           type: "numberSelected",
@@ -935,6 +936,10 @@ bot.on("contact", (msg) => {
         },
       })
       .then(() => {
+        bot.sendMessage(
+          adminUser,
+          `New Registration: \n ID: ${telegramId} \n Name: ${username} \n Phone number: ${phoneNumber}`
+        );
         db.get(
           "SELECT * FROM referrals WHERE user_id = ?",
           [telegramId],
