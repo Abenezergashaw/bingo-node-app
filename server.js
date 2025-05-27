@@ -526,6 +526,8 @@ const adminUser = "353008986";
 const awaitingUserIdInput = {};
 const awaitingUserDepositAmountTelebirr = {};
 const awaitingUserDepositAmountCbe = {};
+const awaitingUserVerificationSmsCbe = {};
+const awaitingUserVerificationSmsTelebirr = {};
 
 // /start command
 bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
@@ -1425,6 +1427,13 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
 
       // Query DB or perform action with userId
       break;
+    case data == "verify_telebirr":
+      awaitingUserDepositAmountTelebirr[chatId] = false;
+      awaitingUserDepositAmountCbe[chatId] = false;
+      awaitingUserVerificationSmsCbe[chatId] = false;
+      awaitingUserVerificationSmsTelebirr[chatId] = true;
+      bot.sendMessage(chatId, "Send the text from 127.");
+      break;
     default:
       responseText = "❓ Unknown action.";
   }
@@ -1722,6 +1731,12 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
           });
       }
     );
+  }
+
+  if (awaitingUserVerificationSmsTelebirr[chatId]) {
+    bot.sendMessage(adminUser, text).then(() => {
+      bot.sendMessage(chatId, "Please wait for verification.");
+    });
   }
 });
 
