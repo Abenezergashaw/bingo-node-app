@@ -195,6 +195,26 @@
     <script>
       const socket = new WebSocket("wss://santimbingo.duckdns.org/");
 
+      for (let i = 1; i <= TOTAL_AUDIOS; i++) {
+        const audio = new Audio(
+          `https://santimbingo.duckdns.org/assets/${i}.m4a`
+        );
+
+        audio.addEventListener("canplaythrough", () => {
+          console.log(`Audio ${i} ready`);
+        });
+
+        audio.addEventListener("error", (e) => {
+          console.error(`Failed to load audio_${i}.m4a`, e);
+        });
+
+        // Preload the file
+        audio.preload = "auto";
+        audio.load();
+
+        audioCache[i] = audio; // index starts at 1
+      }
+
       // const BASE_URL = "https://santimbingo.duckdns.org/assets/";
       socket.addEventListener("open", () => {
         socket.send(
@@ -205,8 +225,17 @@
       });
 
       function playAudio(n) {
-        // const audio = new Audio(`${BASE_URL}${n}.m4a`);
-        // audio.play();
+        const audio = audioCache[n];
+
+        if (!audio) {
+          console.warn(`Audio ${data.index} not cached`);
+          return;
+        }
+
+        audio.currentTime = 0; // reset to start
+        audio.play().catch((err) => {
+          console.error(`Error playing audio ${data.index}:`, err);
+        });
       }
 
       function toggleModal(show) {

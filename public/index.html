@@ -139,26 +139,6 @@
       const audioCache = [];
       const TOTAL_AUDIOS = 75;
 
-      for (let i = 1; i <= TOTAL_AUDIOS; i++) {
-        const audio = new Audio(
-          `https://santimbingo.duckdns.org/assets/${i}.m4a`
-        );
-
-        audio.addEventListener("canplaythrough", () => {
-          console.log(`Audio ${i} ready`);
-        });
-
-        audio.addEventListener("error", (e) => {
-          console.error(`Failed to load audio_${i}.m4a`, e);
-        });
-
-        // Preload the file
-        audio.preload = "auto";
-        audio.load();
-
-        audioCache[i] = audio; // index starts at 1
-      }
-
       console.log("Heyy");
       console.log(audioCache);
 
