@@ -923,7 +923,7 @@ bot.on("contact", (msg) => {
 
   const sql = `
     INSERT OR IGNORE INTO users (telegram_id, username, phone_number, balance, played_games,won_games)
-    VALUES (?, ?, ?, 50,0,0)
+    VALUES (?, ?, ?, 30,0,0)
   `;
 
   db.run(sql, [telegramId, username, phoneNumber], (err) => {
@@ -994,7 +994,7 @@ bot.on("contact", (msg) => {
           msg.chat.id,
           "https://santimbingo.duckdns.org/assets/bot_logo_1.webp",
           {
-            caption: "You have received Br. 50 as bonus from us. Enjoy!",
+            caption: "You have received Br. 30 as bonus from us. Enjoy!",
             reply_markup: {
               inline_keyboard: [
                 [
