@@ -206,25 +206,25 @@
       const audioCache = [];
       const TOTAL_AUDIOS = 75;
 
-      for (let i = 1; i <= TOTAL_AUDIOS; i++) {
-        const audio = new Audio(
-          `https://santimbingo.duckdns.org/assets/${i}.m4a`
-        );
+      // for (let i = 1; i <= TOTAL_AUDIOS; i++) {
+      //   const audio = new Audio(
+      //     `https://santimbingo.duckdns.org/assets/${i}.m4a`
+      //   );
 
-        audio.addEventListener("canplaythrough", () => {
-          console.log(`Audio ${i} ready`);
-        });
+      //   audio.addEventListener("canplaythrough", () => {
+      //     console.log(`Audio ${i} ready`);
+      //   });
 
-        audio.addEventListener("error", (e) => {
-          console.error(`Failed to load audio_${i}.m4a`, e);
-        });
+      //   audio.addEventListener("error", (e) => {
+      //     console.error(`Failed to load audio_${i}.m4a`, e);
+      //   });
 
-        // Preload the file
-        audio.preload = "auto";
-        audio.load();
+      //   // Preload the file
+      //   audio.preload = "auto";
+      //   audio.load();
 
-        audioCache[i] = audio; // index starts at 1
-      }
+      //   audioCache[i] = audio; // index starts at 1
+      // }
       if (audioCache.length >= 75) {
         document.querySelector(".audio-control").classList.remove("hidden");
       }
@@ -239,20 +239,18 @@
 
       function playAudio(n) {
         // const audio = audioCache[n];
-
         // if (!audio) {
         //   console.warn(`Audio ${data.index} not cached`);
         //   return;
         // }
-
         // audio.currentTime = 0; // reset to start
         // audio.play().catch((err) => {
         //   console.error(`Error playing audio ${data.index}:`, err);
         // });
-        const audio = new Audio(
-          `https://santimbingo.duckdns.org/assets/${n}.m4a`
-        );
-        audio.play();
+        // const audio = new Audio(
+        //   `https://santimbingo.duckdns.org/assets/${n}.m4a`
+        // );
+        // audio.play();
       }
 
       function toggleModal(show) {
@@ -3224,7 +3222,7 @@
         if (data.type === "numbersCalling") {
           let current = data.current;
           let count = data.count;
-          playAudio(current);
+          // playAudio(current);
           document
             .querySelector(`.number-${current}`)
             .classList.add(...drawnNumberBG.split(" "));
