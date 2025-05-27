@@ -195,6 +195,9 @@
     <script>
       const socket = new WebSocket("wss://santimbingo.duckdns.org/");
 
+      const audioCache = [];
+      const TOTAL_AUDIOS = 75;
+
       for (let i = 1; i <= TOTAL_AUDIOS; i++) {
         const audio = new Audio(
           `https://santimbingo.duckdns.org/assets/${i}.m4a`
