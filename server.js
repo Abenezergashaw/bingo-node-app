@@ -90,8 +90,19 @@ app.get("/decreasePlayerBalance", (req, res) => {
 
   console.log("USer ID:", userID);
   db.all(
-    `UPDATE users SET balance = balance - ?, played_games = played_games + ? WHERE telegram_id = ${userID}`,
-    [10, 1],
+    `UPDATE users
+   SET
+     bonus = CASE
+       WHEN bonus >= 10 THEN bonus - 10
+       ELSE 0
+     END,
+     balance = CASE
+       WHEN bonus >= 10 THEN balance
+       ELSE balance - (10 - bonus)
+     END,
+     played_games = played_games + ?
+   WHERE telegram_id =  ${userID}`,
+    [1],
     (err, rows) => {
       if (err) {
         console.error("❌ Select error:", err.message);
