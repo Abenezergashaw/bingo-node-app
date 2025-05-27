@@ -200,7 +200,7 @@ function startTimer() {
           type: "gameStarted",
           message: "Game has started!",
           users: Object.fromEntries(userToNumber),
-          players: userToNumber.size,
+          players: 68,
         });
         setTimeout(() => {
           callInterval = setInterval(broadcastShuffledNumbers, 4500);
