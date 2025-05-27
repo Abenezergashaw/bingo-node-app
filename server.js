@@ -1068,7 +1068,7 @@ bot.on("callback_query", (query) => {
       // - 🟥 *Full House* (all numbers)
       bot.sendMessage(
         chatId,
-        `🎉 Welcome to Santi Bingo! 🎉
+        `🎉 Welcome to Piasa Bingo! 🎉
 
 📋 *Game Rules:*
 
@@ -1102,7 +1102,7 @@ bot.on("callback_query", (query) => {
 Share the fun and earn Br.10 for every friend who starts the bot using your link!
 
 Your personal invite link:
-https://t.me/santim_bingo_bot?start=${telegramId}
+https://t.me/piasa_bingo_bot?start=${telegramId}
 
 Bring your family and friends to play, win, and enjoy Bingo together! 
         `
