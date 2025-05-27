@@ -191,7 +191,7 @@
           const data = await response.json();
 
           // username = userID.id;
-          balance = data[0].balance;
+          balance = data[0].balance + data[0].bonus;
           document.querySelector(".balance").textContent = "Br. " + balance;
           socket.addEventListener("open", () => {
             socket.send(
