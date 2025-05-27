@@ -389,7 +389,7 @@ function allNumbersThatMakeLine(card, d, u, nn) {
         lineMakingArray = [];
         someoneBingo = false;
         gameState = false;
-      }, 4000);
+      }, 5000);
     } else {
       broadcast({
         type: "blockUser",
@@ -1085,7 +1085,7 @@ bot.on("callback_query", (query) => {
       bot.sendMessage(
         chatId,
         `
-        🎉 Invite & Earn with Santim Bingo!
+        🎉 Invite & Earn with Piasa Bingo!
 
 Share the fun and earn Br.10 for every friend who starts the bot using your link!
 
@@ -1459,7 +1459,7 @@ bot.onText(/\/invite/, (msg) => {
   bot.sendMessage(
     chatId,
     `
-        🎉 Invite & Earn with Santim Bingo!
+        🎉 Invite & Earn with Piasa Bingo!
 
 Share the fun and earn Br.10 for every friend who starts the bot using your link!
 
@@ -1476,7 +1476,7 @@ bot.onText(/\/rules/, (msg) => {
   const telegramIdd = msg.from.id;
   bot.sendMessage(
     chatId,
-    `🎉 Welcome to Santim Bingo! 🎉
+    `🎉 Welcome to Paisa Bingo! 🎉
 
 📋 *Game Rules:*
 
@@ -1499,6 +1499,25 @@ bot.onText(/\/rules/, (msg) => {
 🤖 Good luck and have fun playing with friends!`,
     { parse_mode: "Markdown" }
   );
+});
+
+bot.onText(/\/play/, (msg) => {
+  const chatId = msg.chat.id;
+  const telegramIdd = msg.from.id;
+  bot.sendMessage(chatId, "Enjoy!!!", {
+    reply_markup: {
+      inline_keyboard: [
+        [
+          {
+            text: "Play",
+            web_app: {
+              url: `https://santimbingo.duckdns.org`,
+            },
+          },
+        ],
+      ],
+    },
+  });
 });
 
 bot.on("message", async (msg) => {
