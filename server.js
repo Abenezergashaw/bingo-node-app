@@ -928,8 +928,8 @@ bot.on("contact", (msg) => {
   const phoneNumber = msg.contact.phone_number;
 
   const sql = `
-    INSERT OR IGNORE INTO users (telegram_id, username, phone_number, balance, played_games,won_games)
-    VALUES (?, ?, ?, 30,0,0)
+    INSERT OR IGNORE INTO users (telegram_id, username, phone_number, balance, played_games,won_games, bonus)
+    VALUES (?, ?, ?, 0,0,0,30)
   `;
 
   db.run(sql, [telegramId, username, phoneNumber], (err) => {
@@ -954,7 +954,7 @@ bot.on("contact", (msg) => {
             if (row) {
               console.log("Referrer and referred", row);
               db.run(
-                `UPDATE users SET balance = balance + ? WHERE telegram_id = ?`,
+                `UPDATE users SET bonus = bonus + ? WHERE telegram_id = ?`,
                 [10, row.referrer_id],
                 function (err) {
                   if (err) {
@@ -1043,7 +1043,7 @@ bot.on("callback_query", (query) => {
       console.log("Telegram id: ", telegramId);
 
       db.get(
-        "SELECT balance FROM users WHERE telegram_id = ?",
+        "SELECT balance,bonus FROM users WHERE telegram_id = ?",
         [telegramId],
         async (err, row) => {
           if (err || !row) {
@@ -1053,7 +1053,14 @@ bot.on("callback_query", (query) => {
               "❌ Could not fetch balance. Please try again."
             );
           }
-          bot.sendMessage(chatId, "Balance: Br. " + row.balance);
+          bot.sendMessage(
+            chatId,
+            "Withdrawable balance: Br. " +
+              row.balance +
+              "\n" +
+              "Non withdrawable balance: Br. " +
+              row.bonus
+          );
           // console.log(row);
           return;
         }
