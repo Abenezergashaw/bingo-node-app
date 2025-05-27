@@ -3210,7 +3210,7 @@
         if (data.type === "numbersCalling") {
           let current = data.current;
           let count = data.count;
-          // playAudio(current);
+          playAudio(current);
           document
             .querySelector(`.number-${current}`)
             .classList.add(...drawnNumberBG.split(" "));
