@@ -126,7 +126,7 @@
         class="w-100 flex flex-col items-center justify-center pt-5 relative"
       >
         <div
-          class="w-20 h-10 bg-gradient-to-r from-green-500 to-green-300 text-black rounded-3xl shadow flex flex-col items-center justify-center text-[12px]"
+          class="w-20 h-10 bg-gradient-to-r from-green-500 to-green-300 text-black rounded-3xl shadow flex flex-col items-center justify-center text-[12px] hidden audio-control"
           style="position: absolute; top: 5px; right: 2px"
         >
           Audio: ON
@@ -225,7 +225,9 @@
 
         audioCache[i] = audio; // index starts at 1
       }
-
+      if (audioCache.length > 75) {
+        document.querySelector(".audio-control").classList.remove("hidden");
+      }
       // const BASE_URL = "https://santimbingo.duckdns.org/assets/";
       socket.addEventListener("open", () => {
         socket.send(
@@ -3218,7 +3220,7 @@
         if (data.type === "numbersCalling") {
           let current = data.current;
           let count = data.count;
-          playAudio(current);
+          // playAudio(current);
           document
             .querySelector(`.number-${current}`)
             .classList.add(...drawnNumberBG.split(" "));
