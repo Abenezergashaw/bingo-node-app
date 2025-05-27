@@ -178,6 +178,12 @@ function startTimer() {
           winning,
           profit
         );
+        bot.sendMessage(
+          adminUser,
+          `New game: \n
+          Players: ${players}\n Winning: ${winning} \n Profit: ${profit}`
+        );
+
         db.run(sql, [players, winning, profit, 0, ""], async function (err) {
           if (err) return console.error(err);
           console.log(
@@ -467,7 +473,6 @@ wss.on("connection", (ws) => {
       }
       if (data.balance > 10) {
         // Case 3: Assign new number
-        bot.sendMessage(adminUser, "New player");
         userToNumber.set(username, number);
         broadcast({
           type: "numberSelected",
