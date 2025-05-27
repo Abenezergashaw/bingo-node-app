@@ -1461,28 +1461,29 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
 bot.onText(/\/balance/, (msg) => {
   const chatId = msg.chat.id;
   const telegramIdd = msg.from.id.toString();
+
   db.get(
-    "SELECT balance,bonus FROM users WHERE telegram_id = ?",
+    "SELECT balance, bonus FROM users WHERE telegram_id = ?",
     [telegramIdd],
     async (err, row) => {
       if (err || !row) {
-        console.error("DB error:", err);
+        console.error("DB error:", err || "No user found");
         bot.sendMessage(
           chatId,
-          "❌ Could not fetch balance. Please try again."
+          "❌ Could not fetch balance. Please try again or register first."
         );
+        return; // ⛔ Prevent further execution
       }
+
       console.log("****", telegramIdd);
       bot.sendMessage(
         chatId,
         "Withdrawable balance: Br. " +
           row.balance +
           "\n" +
-          "Non withdrawable balance: Br. " +
+          "Non-withdrawable bonus: Br. " +
           row.bonus
       );
-      // console.log(row);
-      return;
     }
   );
 });
