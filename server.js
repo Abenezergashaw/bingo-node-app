@@ -545,118 +545,122 @@ const awaitingUserDepositAmountTelebirr = {};
 const awaitingUserDepositAmountCbe = {};
 const awaitingUserVerificationSmsCbe = {};
 const awaitingUserVerificationSmsTelebirr = {};
-
+let maintenanceMode = true;
 // /start command
 bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   telegramId = msg.from.id.toString();
-
-  if (telegramId == adminUser) {
-    // bot
-    //   .sendMessage(msg.chat.id, `\`\`\`👮‍♂️ Admin \`\`\``, {
-    //     parse_mode: "Markdown",
-    //   })
-    //   .then(() => {
-    bot.sendMessage(msg.chat.id, `\`\`\`👮‍♂️ Admin \`\`\``, {
-      parse_mode: "Markdown",
-      reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: "Get balance",
-              callback_data: "get_balance",
-            },
-            { text: "  Games ", callback_data: "get_games" },
-          ],
-          [{ text: "🤽🏻‍♂️ Users", callback_data: "get_users" }],
-        ],
-        keyboard: [["📊 Get Balance", "🎮 Games"], ["👥 Users"]],
-        resize_keyboard: true,
-        one_time_keyboard: false,
-      },
-    });
-    // });
+  if (maintenanceMode) {
+    bot.sendMessage(telegramId, "Bot is on maintenance. Please wait.");
   } else {
-    const referrerId = match[1];
-
-    console.log(referrerId);
-    console.log("Telegram ID: ", telegramId);
-    db.get(
-      "SELECT * FROM users WHERE telegram_id = ?",
-      [telegramId],
-      (err, row) => {
-        if (err) return console.error(err);
-
-        if (row) {
-          bot.sendMessage(msg.chat.id, "👋 Welcome back!").then(() => {
-            bot.sendMessage(msg.chat.id, "🤖 What do you want to do?", {
-              reply_markup: {
-                inline_keyboard: [
-                  [
-                    {
-                      text: "🎮 Join Game",
-                      web_app: {
-                        url: `https://santimbingo.duckdns.org`,
-                      },
-                    },
-                    { text: "💰  Balance", callback_data: "view_balance" },
-                  ],
-                  [
-                    { text: "📜 Game Rules", callback_data: "game_rules" },
-                    {
-                      text: "👥 Invite Friends",
-                      callback_data: "invite_friends",
-                    },
-                  ],
-                  [
-                    {
-                      text: "💳 Deposit",
-                      callback_data: "chapa_pay",
-                      // web_app: {
-                      //   url: "https://checkout.chapa.co/checkout/payment/vsm0pB26dZh5Blb9AFl6lkQkMSByl2QDvy1VAbxE9FdLM",
-                      // },
-                    },
-                  ],
-                ],
+    if (telegramId == adminUser) {
+      // bot
+      //   .sendMessage(msg.chat.id, `\`\`\`👮‍♂️ Admin \`\`\``, {
+      //     parse_mode: "Markdown",
+      //   })
+      //   .then(() => {
+      bot.sendMessage(msg.chat.id, `\`\`\`👮‍♂️ Admin \`\`\``, {
+        parse_mode: "Markdown",
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Get balance",
+                callback_data: "get_balance",
               },
-            });
-          });
-        } else {
-          if (referrerId && referrerId != telegramId.toString()) {
-            console.log(
-              `Inside not found ::: User ${telegramId} was referred by ${referrerId}`
-            );
+              { text: "  Games ", callback_data: "get_games" },
+            ],
+            [{ text: "🤽🏻‍♂️ Users", callback_data: "get_users" }],
+          ],
+          keyboard: [["📊 Get Balance", "🎮 Games"], ["👥 Users"]],
+          resize_keyboard: true,
+          one_time_keyboard: false,
+        },
+      });
+      // });
+    } else {
+      const referrerId = match[1];
 
-            const sql = `
+      console.log(referrerId);
+      console.log("Telegram ID: ", telegramId);
+      db.get(
+        "SELECT * FROM users WHERE telegram_id = ?",
+        [telegramId],
+        (err, row) => {
+          if (err) return console.error(err);
+
+          if (row) {
+            bot.sendMessage(msg.chat.id, "👋 Welcome back!").then(() => {
+              bot.sendMessage(msg.chat.id, "🤖 What do you want to do?", {
+                reply_markup: {
+                  inline_keyboard: [
+                    [
+                      {
+                        text: "🎮 Join Game",
+                        web_app: {
+                          url: `https://santimbingo.duckdns.org`,
+                        },
+                      },
+                      { text: "💰  Balance", callback_data: "view_balance" },
+                    ],
+                    [
+                      { text: "📜 Game Rules", callback_data: "game_rules" },
+                      {
+                        text: "👥 Invite Friends",
+                        callback_data: "invite_friends",
+                      },
+                    ],
+                    [
+                      {
+                        text: "💳 Deposit",
+                        callback_data: "chapa_pay",
+                      },
+                      {
+                        text: "💳 withdraw",
+                        callback_data: "withdraw",
+                      },
+                    ],
+                  ],
+                },
+              });
+            });
+          } else {
+            if (referrerId && referrerId != telegramId.toString()) {
+              console.log(
+                `Inside not found ::: User ${telegramId} was referred by ${referrerId}`
+              );
+
+              const sql = `
     INSERT OR IGNORE INTO referrals (user_id, referrer_id)
     VALUES (?, ?)
   `;
 
-            db.run(sql, [telegramId, referrerId], (err) => {
-              if (err) return console.error(err);
-            });
+              db.run(sql, [telegramId, referrerId], (err) => {
+                if (err) return console.error(err);
+              });
 
-            // bot.sendMessage(
-            //   referrerId,
-            //   `🎉 Your friend ${msg.from.first_name} joined using your link!`
-            // );
-          }
-          console.log("Not found");
-          bot.sendMessage(
-            msg.chat.id,
-            "To start the app, 📱 Please share your phone number first: ",
-            {
-              reply_markup: {
-                keyboard: [
-                  [{ text: "Send Phone Number", request_contact: true }],
-                ],
-                one_time_keyboard: true,
-                resize_keyboard: true,
-              },
+              // bot.sendMessage(
+              //   referrerId,
+              //   `🎉 Your friend ${msg.from.first_name} joined using your link!`
+              // );
             }
-          );
+            console.log("Not found");
+            bot.sendMessage(
+              msg.chat.id,
+              "To start the app, 📱 Please share your phone number first: ",
+              {
+                reply_markup: {
+                  keyboard: [
+                    [{ text: "Send Phone Number", request_contact: true }],
+                  ],
+                  one_time_keyboard: true,
+                  resize_keyboard: true,
+                },
+              }
+            );
+          }
         }
-      }
-    );
+      );
+    }
   }
 });
 
@@ -937,156 +941,180 @@ bot.on("contact", (msg) => {
   const telegramId = msg.from.id.toString();
   const username = msg.from.first_name || "no_username";
   const phoneNumber = msg.contact.phone_number;
-
-  const sql = `
+  if (maintenanceMode) {
+    bot.sendMessage(telegramId, "Bot is on maintenance. Please wait.");
+  } else {
+    const sql = `
     INSERT OR IGNORE INTO users (telegram_id, username, phone_number, balance, played_games,won_games, bonus)
     VALUES (?, ?, ?, 0,0,0,30)
   `;
 
-  db.run(sql, [telegramId, username, phoneNumber], (err) => {
-    if (err) return console.error(err);
-    bot
-      .sendMessage(msg.chat.id, "✅ Successfully registered. Thank you!", {
-        reply_markup: {
-          remove_keyboard: true,
-        },
-      })
-      .then(() => {
-        bot.sendMessage(
-          adminUser,
-          `New Registration: \n ID: ${telegramId} \n Name: ${username} \n Phone number: ${phoneNumber}`
-        );
-        db.get(
-          "SELECT * FROM referrals WHERE user_id = ?",
-          [telegramId],
-          (err, row) => {
-            if (err) return console.error(err);
+    db.run(sql, [telegramId, username, phoneNumber], (err) => {
+      if (err) return console.error(err);
+      bot
+        .sendMessage(msg.chat.id, "✅ Successfully registered. Thank you!", {
+          reply_markup: {
+            remove_keyboard: true,
+          },
+        })
+        .then(() => {
+          bot.sendMessage(
+            adminUser,
+            `New Registration: \n ID: ${telegramId} \n Name: ${username} \n Phone number: ${phoneNumber}`
+          );
+          db.get(
+            "SELECT * FROM referrals WHERE user_id = ?",
+            [telegramId],
+            (err, row) => {
+              if (err) return console.error(err);
 
-            if (row) {
-              console.log("Referrer and referred", row);
-              db.run(
-                `UPDATE users SET bonus = bonus + ? WHERE telegram_id = ?`,
-                [10, row.referrer_id],
-                function (err) {
-                  if (err) {
-                    return console.error("Error updating score:", err.message);
-                  }
-                  // console.log(`Rows updated: ${this.changes}`);
-                  bot.sendMessage(
-                    row.referrer_id,
-                    `${username} joined via your invite link. You have received Br. 10.`,
-                    {
-                      reply_markup: {
-                        inline_keyboard: [
-                          [
-                            {
-                              text: "🎮 Play",
-                              web_app: {
-                                url: `https://santimbingo.duckdns.org`,
-                              },
-                            },
-                            {
-                              text: "💰 Balance",
-                              callback_data: "view_balance",
-                            },
-                          ],
-                          [
-                            {
-                              text: "📜 Game Rules",
-                              callback_data: "game_rules",
-                            },
-                            {
-                              text: "👥 Invite Friends",
-                              callback_data: "invite_friends",
-                            },
-                          ],
-                          [{ text: "💳 Deposit", callback_data: "chapa_pay" }],
-                        ],
-                      },
+              if (row) {
+                console.log("Referrer and referred", row);
+                db.run(
+                  `UPDATE users SET bonus = bonus + ? WHERE telegram_id = ?`,
+                  [10, row.referrer_id],
+                  function (err) {
+                    if (err) {
+                      return console.error(
+                        "Error updating score:",
+                        err.message
+                      );
                     }
-                  );
-                }
-              );
+                    // console.log(`Rows updated: ${this.changes}`);
+                    bot.sendMessage(
+                      row.referrer_id,
+                      `${username} joined via your invite link. You have received Br. 10.`,
+                      {
+                        reply_markup: {
+                          inline_keyboard: [
+                            [
+                              {
+                                text: "🎮 Play",
+                                web_app: {
+                                  url: `https://santimbingo.duckdns.org`,
+                                },
+                              },
+                              {
+                                text: "💰 Balance",
+                                callback_data: "view_balance",
+                              },
+                            ],
+                            [
+                              {
+                                text: "📜 Game Rules",
+                                callback_data: "game_rules",
+                              },
+                              {
+                                text: "👥 Invite Friends",
+                                callback_data: "invite_friends",
+                              },
+                            ],
+                            [
+                              {
+                                text: "💳 Deposit",
+                                callback_data: "chapa_pay",
+                              },
+                              {
+                                text: "💳 withdraw",
+                                callback_data: "withdraw",
+                              },
+                            ],
+                          ],
+                        },
+                      }
+                    );
+                  }
+                );
+              }
             }
-          }
-        );
+          );
 
-        bot.sendPhoto(
-          msg.chat.id,
-          "https://santimbingo.duckdns.org/assets/bot_logo_1.webp",
-          {
-            caption: "You have received Br. 30 as bonus from us. Enjoy!",
-            reply_markup: {
-              inline_keyboard: [
-                [
-                  {
-                    text: "🎮 Play",
-                    web_app: {
-                      url: `https://santimbingo.duckdns.org`,
+          bot.sendPhoto(
+            msg.chat.id,
+            "https://santimbingo.duckdns.org/assets/bot_logo_1.webp",
+            {
+              caption: "You have received Br. 30 as bonus from us. Enjoy!",
+              reply_markup: {
+                inline_keyboard: [
+                  [
+                    {
+                      text: "🎮 Play",
+                      web_app: {
+                        url: `https://santimbingo.duckdns.org`,
+                      },
                     },
-                  },
-                  { text: "💰 Balance", callback_data: "view_balance" },
+                    { text: "💰 Balance", callback_data: "view_balance" },
+                  ],
+                  [
+                    { text: "📜 Game Rules", callback_data: "game_rules" },
+                    {
+                      text: "👥 Invite Friends",
+                      callback_data: "invite_friends",
+                    },
+                  ],
+                  [
+                    { text: "💳 Deposit", callback_data: "chapa_pay" },
+                    {
+                      text: "💳 withdraw",
+                      callback_data: "withdraw",
+                    },
+                  ],
                 ],
-                [
-                  { text: "📜 Game Rules", callback_data: "game_rules" },
-                  {
-                    text: "👥 Invite Friends",
-                    callback_data: "invite_friends",
-                  },
-                ],
-                [{ text: "💳 Deposit", callback_data: "chapa_pay" }],
-              ],
-            },
-          }
-        );
-      });
-  });
+              },
+            }
+          );
+        });
+    });
+  }
 });
 
 bot.on("callback_query", (query) => {
   const chatId = query.message.chat.id;
-  const data = query.data;
-  const messageId = query.message.message_id;
-  telegramId = query.from.id.toString();
-  let responseText = "";
-  switch (true) {
-    case data === "view_balance":
-      console.log("Telegram id: ", telegramId);
+  if (maintenanceMode) {
+    bot.sendMessage(telegramId, "Bot is on maintenance. Please wait.");
+  } else {
+    const data = query.data;
+    const messageId = query.message.message_id;
+    telegramId = query.from.id.toString();
+    let responseText = "";
+    switch (true) {
+      case data === "view_balance":
+        console.log("Telegram id: ", telegramId);
 
-      db.get(
-        "SELECT balance,bonus FROM users WHERE telegram_id = ?",
-        [telegramId],
-        async (err, row) => {
-          if (err || !row) {
-            console.error("DB error:", err);
+        db.get(
+          "SELECT balance,bonus FROM users WHERE telegram_id = ?",
+          [telegramId],
+          async (err, row) => {
+            if (err || !row) {
+              console.error("DB error:", err);
+              bot.sendMessage(
+                chatId,
+                "❌ Could not fetch balance. Please try again."
+              );
+            }
             bot.sendMessage(
               chatId,
-              "❌ Could not fetch balance. Please try again."
+              "Withdrawable balance: Br. " +
+                row.balance +
+                "\n" +
+                "Non withdrawable balance: Br. " +
+                row.bonus
             );
+            // console.log(row);
+            return;
           }
-          bot.sendMessage(
-            chatId,
-            "Withdrawable balance: Br. " +
-              row.balance +
-              "\n" +
-              "Non withdrawable balance: Br. " +
-              row.bonus
-          );
-          // console.log(row);
-          return;
-        }
-      );
-      responseText = "💰 Your current balance is 50 coins.";
-      break;
-    case data === "join_game":
-      responseText = "🎮 You've joined the game!";
-      break;
-    case data === "game_rules":
-      // - 🟧 *Two Lines*
-      // - 🟥 *Full House* (all numbers)
-      bot.sendMessage(
-        chatId,
-        `🎉 Welcome to Piasa Bingo! 🎉
+        );
+        responseText = "💰 Your current balance is 50 coins.";
+        break;
+      case data === "join_game":
+        responseText = "🎮 You've joined the game!";
+        break;
+      case data === "game_rules":
+        // - 🟧 *Two Lines*
+        // - 🟥 *Full House* (all numbers)
+        bot.sendMessage(
+          chatId,
+          `🎉 Welcome to Piasa Bingo! 🎉
 
 📋 *Game Rules:*
 
@@ -1107,14 +1135,14 @@ bot.on("callback_query", (query) => {
 🚫 No cheating — the game automatically checks winners.
 
 🤖 Good luck and have fun playing with friends!`,
-        { parse_mode: "Markdown" }
-      );
+          { parse_mode: "Markdown" }
+        );
 
-      break;
-    case data === "invite_friends":
-      bot.sendMessage(
-        chatId,
-        `
+        break;
+      case data === "invite_friends":
+        bot.sendMessage(
+          chatId,
+          `
         🎉 Invite & Earn with Piasa Bingo!
 
 Share the fun and earn Br.10 for every friend who starts the bot using your link!
@@ -1124,387 +1152,339 @@ https://t.me/piasa_bingo_bot?start=${telegramId}
 
 Bring your family and friends to play, win, and enjoy Bingo together! 
         `
-      );
-      break;
-    case data === "chapa_pay":
-      // 🔍 Fetch user from DB
+        );
+        break;
+      case data === "chapa_pay":
+        // 🔍 Fetch user from DB
 
-      // db.get(
-      //   "SELECT * FROM users WHERE telegram_id = ?",
-      //   [telegramId],
-      //   async (err, row) => {
-      //     if (err || !row) {
-      //       console.error("DB error:", err);
-      //       bot.sendMessage(
-      //         chatId,
-      //         "❌ Could not retrieve your info. Try /start again."
-      //       );
-      //       return;
-      //     }
-
-      //     const tx_ref = "tx-" + Date.now();
-      //     const sql = `
-      //       INSERT INTO transactions (tx_ref,userID, amount, status)
-      //       VALUES (?,?, ?, ?)
-      //     `;
-
-      //     db.run(sql, [tx_ref, row.telegram_id, 50, "pending"], async (err) => {
-      //       if (err) return console.error(err);
-
-      //       // console.log("TElegram ifd", );
-      //       let id = row.telegram_id;
-      //       const payload = {
-      //         amount: "100",
-      //         currency: "ETB",
-      //         email: row.phone_number + "aben@gmail.com", // You can use a better format
-      //         first_name: row.username || "TelegramUser",
-      //         last_name: "User",
-      //         phone_number: "0900123456",
-      //         tx_ref,
-      //         callback_url: `http://192.168.1.10:3000/callback?tx_ref=${tx_ref}&asd=asd&mnn=asdsd`,
-      //         return_url: "http://192.168.1.10:3000/return.html",
-      //         customization: {
-      //           title: "Bot",
-      //           description: "Payment",
-      //         },
-      //       };
-
-      //       console.log(payload);
-      //       try {
-      //         const response = await fetch(
-      //           "https://api.chapa.co/v1/transaction/initialize",
-      //           {
-      //             method: "POST",
-      //             headers: {
-      //               "Content-Type": "application/json",
-      //               Authorization:
-      //                 "Bearer CHASECK_TEST-HHFEZC6dt1ieICA8AAg5PZyMHWbVNxZ9",
-      //             },
-      //             body: JSON.stringify(payload),
-      //           }
-      //         );
-
-      //         const data = await response.json();
-
-      //         if (data.status === "success") {
-      //           bot.sendMessage(
-      //             chatId,
-      //             `✅ Click below to complete your payment:`,
-      //             {
-      //               reply_markup: {
-      //                 inline_keyboard: [
-      //                   [
-      //                     {
-      //                       text: "💳 Pay Now",
-      //                       web_app: { url: data.data.checkout_url },
-      //                     },
-      //                   ],
-      //                 ],
-      //               },
-      //             }
-      //           );
-      //         } else {
-      //           bot.sendMessage(chatId, "❌ Payment failed to initialize.");
-      //           console.error(data);
-      //         }
-      //       } catch (error) {
-      //         console.error("Chapa error:", error);
-      //         bot.sendMessage(
-      //           chatId,
-      //           "⚠️ An error occurred while contacting Chapa."
-      //         );
-      //       }
-      //     });
-      //   }
-      // );
-
-      bot.sendMessage(chatId, "Choose method: ", {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: "Manual",
-                callback_data: "manual_method",
-              },
-              {
-                text: "Chapa pay",
-                callback_data: "chapa",
-              },
+        bot.sendMessage(chatId, "Choose method: ", {
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "Manual",
+                  callback_data: "manual_method",
+                },
+                {
+                  text: "Chapa pay",
+                  callback_data: "chapa",
+                },
+              ],
             ],
-          ],
-        },
-      });
+          },
+        });
 
-      responseText = "Payment ongoing";
-      break;
-
-    case data === "get_balance":
-      bot.sendMessage(chatId, `\`\`\`📅 Select date margin\`\`\``, {
-        parse_mode: "Markdown",
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: "Today",
-                callback_data: "get_balance_today",
-              },
-              { text: "  This week ", callback_data: "get_balance_week" },
+        responseText = "Payment ongoing";
+        break;
+      case data === "withdraw":
+        bot.sendMessage(chatId, "Choose method: ", {
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "Manual",
+                  callback_data: "w_manual_method",
+                },
+                {
+                  text: "Chapa pay",
+                  callback_data: "w_chapa",
+                },
+              ],
             ],
-            [
-              { text: "This Month", callback_data: "get_balance_month" },
-              { text: "Total", callback_data: "get_balance_all" },
+          },
+        });
+        break;
+      case data === "get_balance":
+        bot.sendMessage(chatId, `\`\`\`📅 Select date margin\`\`\``, {
+          parse_mode: "Markdown",
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "Today",
+                  callback_data: "get_balance_today",
+                },
+                { text: "  This week ", callback_data: "get_balance_week" },
+              ],
+              [
+                { text: "This Month", callback_data: "get_balance_month" },
+                { text: "Total", callback_data: "get_balance_all" },
+              ],
             ],
-          ],
-        },
-      });
-      break;
-    case data === "get_games":
-      (async () => {
-        try {
-          const counts = await getGameNumberCounts();
-          // console.log("Rows today:", counts.todayCount);
-          // console.log("Total rows:", counts.totalCount);
+          },
+        });
+        break;
+      case data === "get_games":
+        (async () => {
+          try {
+            const counts = await getGameNumberCounts();
+            // console.log("Rows today:", counts.todayCount);
+            // console.log("Total rows:", counts.totalCount);
+            bot.sendMessage(
+              chatId,
+              `\`\`\`
+Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.totalCount}\`\`\``,
+              { parse_mode: "Markdown" }
+            );
+          } catch (err) {
+            console.error("Error fetching counts:", err);
+          }
+        })();
+        break;
+      case data === "get_users":
+        bot.sendMessage(chatId, `_Users_`, {
+          parse_mode: "Markdown",
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "Search user by id",
+                  callback_data: "search_id",
+                },
+                { text: "Search user by name", callback_data: "search_name" },
+              ],
+              [
+                { text: "All users", callback_data: "search_all" },
+                { text: "Last winner", callback_data: "search_last_winner" },
+              ],
+              [{ text: "Leaderboard", callback_data: "search_leaderboard" }],
+            ],
+          },
+        });
+        break;
+      case data === "get_balance_today":
+        // bot.sendMessage(chatId, "Today balacne");
+        (async () => {
+          const balance = await getBalanceByDate(
+            `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
+              .toString()
+              .padStart(2, "0")}-${new Date()
+              .getDate()
+              .toString()
+              .padStart(2, "0")}`
+          );
+          // console.log("Balance:", balance);
           bot.sendMessage(
             chatId,
-            `\`\`\`
-Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.totalCount}\`\`\``,
+            `\`\`\`\n
+Balance for today ${new Date().getFullYear()}-${(new Date().getMonth() + 1)
+              .toString()
+              .padStart(2, "0")}-${new Date()
+              .getDate()
+              .toString()
+              .padStart(2, "0")} : Br. ${balance}  \n  \`\`\``,
             { parse_mode: "Markdown" }
           );
-        } catch (err) {
-          console.error("Error fetching counts:", err);
-        }
-      })();
-      break;
-    case data === "get_users":
-      bot.sendMessage(chatId, `_Users_`, {
-        parse_mode: "Markdown",
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: "Search user by id",
-                callback_data: "search_id",
-              },
-              { text: "Search user by name", callback_data: "search_name" },
-            ],
-            [
-              { text: "All users", callback_data: "search_all" },
-              { text: "Last winner", callback_data: "search_last_winner" },
-            ],
-            [{ text: "Leaderboard", callback_data: "search_leaderboard" }],
-          ],
-        },
-      });
-      break;
-    case data === "get_balance_today":
-      // bot.sendMessage(chatId, "Today balacne");
-      (async () => {
-        const balance = await getBalanceByDate(
-          `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
-            .toString()
-            .padStart(2, "0")}-${new Date()
-            .getDate()
-            .toString()
-            .padStart(2, "0")}`
-        );
-        // console.log("Balance:", balance);
-        bot.sendMessage(
-          chatId,
-          `\`\`\`\n
-Balance for today ${new Date().getFullYear()}-${(new Date().getMonth() + 1)
-            .toString()
-            .padStart(2, "0")}-${new Date()
-            .getDate()
-            .toString()
-            .padStart(2, "0")} : Br. ${balance}  \n  \`\`\``,
-          { parse_mode: "Markdown" }
-        );
-      })();
-      break;
-    case data === "get_balance_week":
-      // bot.sendMessage(chatId, "Week balacne");
-      (async () => {
-        const { monday, today } = getMondayToToday();
-        const start = "2025-05-20";
-        const end = "2025-05-25";
+        })();
+        break;
+      case data === "get_balance_week":
+        // bot.sendMessage(chatId, "Week balacne");
+        (async () => {
+          const { monday, today } = getMondayToToday();
+          const start = "2025-05-20";
+          const end = "2025-05-25";
 
-        const profits = await getProfitGroupedByDate(monday, today);
-        console.log(profits);
-        // Example output:
-        // {
-        //   '2025-05-24': 200,
-        //   '2025-05-25': 150,
-        //   ...
-        // }
-        // const message = formatProfitTableWithDaysCli(profits);
-        const message = generateBoxTable(profits);
-        bot.sendMessage(chatId, "Weekly Profit Summary:\n" + message, {
-          parse_mode: "Markdown",
-        });
-      })();
-
-      break;
-    case data === "get_balance_month":
-      (async () => {
-        const { monthStart, today } = getMonthStartToToday();
-        const start = "2025-05-20";
-        const end = "2025-05-25";
-
-        const profits = await getProfitGroupedByDate(monthStart, today);
-        console.log(profits);
-        // Example output:
-        // {
-        //   '2025-05-24': 200,
-        //   '2025-05-25': 150,
-        //   ...
-        // }
-        const message = generateBoxTable(profits);
-        bot.sendMessage(chatId, "Monthly Profit Summary:\n" + message, {
-          parse_mode: "Markdown",
-        });
-      })();
-      break;
-    case data === "get_balance_all":
-      // bot.sendMessage(chatId, "Today balacne");
-      (async () => {
-        const balance = await getBalanceAlltime();
-        // console.log("Balance:", balance);
-        bot.sendMessage(
-          chatId,
-          `\`\`\`\n
-Alltime balance :  Br. ${balance}  \n  \`\`\``,
-          { parse_mode: "Markdown" }
-        );
-      })();
-      break;
-    case data === "search_id":
-      awaitingUserIdInput[chatId] = true;
-
-      bot.sendMessage(chatId, "Please send the user ID:");
-      bot.answerCallbackQuery(query.id);
-      break;
-    case data === "manual_method":
-      bot.sendMessage(chatId, "Choose bank:", {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: "CBE",
-                callback_data: "cbe",
-              },
-              {
-                text: "Telebirr",
-                callback_data: "telebirr",
-              },
-            ],
-          ],
-        },
-      });
-      break;
-    case data === "cbe":
-      awaitingUserDepositAmountTelebirr[chatId] = false;
-      awaitingUserDepositAmountCbe[chatId] = true;
-      bot.sendMessage(chatId, "How much?");
-      break;
-    case data === "telebirr":
-      awaitingUserDepositAmountCbe[chatId] = false;
-      awaitingUserDepositAmountTelebirr[chatId] = true;
-      bot.sendMessage(chatId, "How much?");
-
-      break;
-    case data.startsWith("deposit_user_"):
-      // Handle user viewing
-      console.log("Dposite user 1382", data);
-
-      const depositeData = data.replace("deposit_user_", "");
-      const [userId, amount, id] = depositeData.split("_");
-      console.log("User ID:", userId);
-      console.log("amount:", amount);
-      updateUserBalanceByAdmin(userId, parseInt(amount), (err, result) => {
-        if (err) {
-          console.error("Error updating balance:", err.message);
-          bot.sendMessage(adminUser, "Error updating balance!").then(() => {
-            bot.sendMessage(
-              userId,
-              "Error processing transaction. Please contact admin."
-            );
-            bot.deleteMessage(adminUser, messageId);
+          const profits = await getProfitGroupedByDate(monday, today);
+          console.log(profits);
+          // Example output:
+          // {
+          //   '2025-05-24': 200,
+          //   '2025-05-25': 150,
+          //   ...
+          // }
+          // const message = formatProfitTableWithDaysCli(profits);
+          const message = generateBoxTable(profits);
+          bot.sendMessage(chatId, "Weekly Profit Summary:\n" + message, {
+            parse_mode: "Markdown",
           });
-        } else {
-          db.run(
-            `UPDATE transactions SET status = ? WHERE id = ?`,
-            ["success", id],
-            function (err) {
-              if (err) {
-                return console.error("Error updating status:", err.message);
-              } else {
-                console.log(`Balance and status updated:`, result);
-                bot.sendMessage(adminUser, "Success!").then(() => {
-                  bot.sendMessage(
-                    userId,
-                    "Balance deposited successfully. New balance: Br. " +
-                      result.new_balance
-                  );
-                  bot.deleteMessage(adminUser, messageId);
-                });
-              }
-            }
+        })();
+
+        break;
+      case data === "get_balance_month":
+        (async () => {
+          const { monthStart, today } = getMonthStartToToday();
+          const start = "2025-05-20";
+          const end = "2025-05-25";
+
+          const profits = await getProfitGroupedByDate(monthStart, today);
+          console.log(profits);
+          // Example output:
+          // {
+          //   '2025-05-24': 200,
+          //   '2025-05-25': 150,
+          //   ...
+          // }
+          const message = generateBoxTable(profits);
+          bot.sendMessage(chatId, "Monthly Profit Summary:\n" + message, {
+            parse_mode: "Markdown",
+          });
+        })();
+        break;
+      case data === "get_balance_all":
+        // bot.sendMessage(chatId, "Today balacne");
+        (async () => {
+          const balance = await getBalanceAlltime();
+          // console.log("Balance:", balance);
+          bot.sendMessage(
+            chatId,
+            `\`\`\`\n
+Alltime balance :  Br. ${balance}  \n  \`\`\``,
+            { parse_mode: "Markdown" }
           );
-        }
-      });
+        })();
+        break;
+      case data === "search_id":
+        awaitingUserIdInput[chatId] = true;
 
-      // Query DB or perform action with userId
-      break;
-    case data == "verify_telebirr":
-      awaitingUserDepositAmountTelebirr[chatId] = false;
-      awaitingUserDepositAmountCbe[chatId] = false;
-      awaitingUserVerificationSmsCbe[chatId] = false;
-      awaitingUserVerificationSmsTelebirr[chatId] = true;
-      bot.sendMessage(chatId, "Send the text from 127.");
-      break;
-    default:
-      responseText = "❓ Unknown action.";
+        bot.sendMessage(chatId, "Please send the user ID:");
+        bot.answerCallbackQuery(query.id);
+        break;
+      case data === "manual_method":
+        bot.sendMessage(chatId, "Choose bank:", {
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "CBE",
+                  callback_data: "cbe",
+                },
+                {
+                  text: "Telebirr",
+                  callback_data: "telebirr",
+                },
+              ],
+            ],
+          },
+        });
+        break;
+      case data === "w_manual_method":
+        bot.sendMessage(chatId, "Choose bank:", {
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "CBE",
+                  callback_data: "w_cbe",
+                },
+                {
+                  text: "Telebirr",
+                  callback_data: "w_telebirr",
+                },
+              ],
+            ],
+          },
+        });
+        break;
+      case data === "cbe":
+        awaitingUserDepositAmountTelebirr[chatId] = false;
+        awaitingUserDepositAmountCbe[chatId] = true;
+        bot.sendMessage(chatId, "How much?");
+        break;
+      case data === "telebirr":
+        awaitingUserDepositAmountCbe[chatId] = false;
+        awaitingUserDepositAmountTelebirr[chatId] = true;
+        bot.sendMessage(chatId, "How much?");
+
+        break;
+      case data.startsWith("deposit_user_"):
+        // Handle user viewing
+        console.log("Dposite user 1382", data);
+
+        const depositeData = data.replace("deposit_user_", "");
+        const [userId, amount, id] = depositeData.split("_");
+        console.log("User ID:", userId);
+        console.log("amount:", amount);
+        updateUserBalanceByAdmin(userId, parseInt(amount), (err, result) => {
+          if (err) {
+            console.error("Error updating balance:", err.message);
+            bot.sendMessage(adminUser, "Error updating balance!").then(() => {
+              bot.sendMessage(
+                userId,
+                "Error processing transaction. Please contact admin."
+              );
+              bot.deleteMessage(adminUser, messageId);
+            });
+          } else {
+            db.run(
+              `UPDATE transactions SET status = ? WHERE id = ?`,
+              ["success", id],
+              function (err) {
+                if (err) {
+                  return console.error("Error updating status:", err.message);
+                } else {
+                  console.log(`Balance and status updated:`, result);
+                  bot.sendMessage(adminUser, "Success!").then(() => {
+                    bot.sendMessage(
+                      userId,
+                      "Balance deposited successfully. New balance: Br. " +
+                        result.new_balance
+                    );
+                    bot.deleteMessage(adminUser, messageId);
+                  });
+                }
+              }
+            );
+          }
+        });
+
+        // Query DB or perform action with userId
+        break;
+      case data == "verify_telebirr":
+        awaitingUserDepositAmountTelebirr[chatId] = false;
+        awaitingUserDepositAmountCbe[chatId] = false;
+        awaitingUserVerificationSmsCbe[chatId] = false;
+        awaitingUserVerificationSmsTelebirr[chatId] = true;
+        bot.sendMessage(chatId, "Send the text from 127.");
+        break;
+      default:
+        responseText = "❓ Unknown action.";
+    }
   }
-
   // bot.sendMessage(chatId, responseText);
 });
 
 bot.onText(/\/balance/, (msg) => {
   const chatId = msg.chat.id;
   const telegramIdd = msg.from.id.toString();
+  if (maintenanceMode) {
+    bot.sendMessage(chatId, "Bot is on maintenance. Please wait.");
+  } else {
+    db.get(
+      "SELECT balance, bonus FROM users WHERE telegram_id = ?",
+      [telegramIdd],
+      async (err, row) => {
+        if (err || !row) {
+          console.error("DB error:", err || "No user found");
+          bot.sendMessage(
+            chatId,
+            "❌ Could not fetch balance. Please try again or register first."
+          );
+          return; // ⛔ Prevent further execution
+        }
 
-  db.get(
-    "SELECT balance, bonus FROM users WHERE telegram_id = ?",
-    [telegramIdd],
-    async (err, row) => {
-      if (err || !row) {
-        console.error("DB error:", err || "No user found");
+        console.log("****", telegramIdd);
         bot.sendMessage(
           chatId,
-          "❌ Could not fetch balance. Please try again or register first."
+          "Withdrawable balance: Br. " +
+            row.balance +
+            "\n" +
+            "Non-withdrawable bonus: Br. " +
+            row.bonus
         );
-        return; // ⛔ Prevent further execution
       }
-
-      console.log("****", telegramIdd);
-      bot.sendMessage(
-        chatId,
-        "Withdrawable balance: Br. " +
-          row.balance +
-          "\n" +
-          "Non-withdrawable bonus: Br. " +
-          row.bonus
-      );
-    }
-  );
+    );
+  }
 });
 
 bot.onText(/\/invite/, (msg) => {
   const chatId = msg.chat.id;
   const telegramIdd = msg.from.id;
-  bot.sendMessage(
-    chatId,
-    `
+  if (maintenanceMode) {
+    bot.sendMessage(chatId, "Bot is on maintenance. Please wait.");
+  } else {
+    bot.sendMessage(
+      chatId,
+      `
         🎉 Invite & Earn with Piasa Bingo!
 
 Share the fun and earn Br.10 for every friend who starts the bot using your link!
@@ -1514,7 +1494,8 @@ https://t.me/santim_bingo_bot?start=${telegramIdd}
 
 Bring your family and friends to play, win, and enjoy Bingo together! 
         `
-  );
+    );
+  }
 });
 
 bot.onText(/\/rules/, (msg) => {
@@ -1550,230 +1531,237 @@ bot.onText(/\/rules/, (msg) => {
 bot.onText(/\/play/, (msg) => {
   const chatId = msg.chat.id;
   const telegramIdd = msg.from.id;
-  bot.sendMessage(chatId, "Enjoy!!!", {
-    reply_markup: {
-      inline_keyboard: [
-        [
-          {
-            text: "Play",
-            web_app: {
-              url: `https://santimbingo.duckdns.org`,
+  if (maintenanceMode) {
+    bot.sendMessage(chatId, "Bot is on maintenance. Please wait.");
+  } else {
+    bot.sendMessage(chatId, "Enjoy!!!", {
+      reply_markup: {
+        inline_keyboard: [
+          [
+            {
+              text: "Play",
+              web_app: {
+                url: `https://santimbingo.duckdns.org`,
+              },
             },
-          },
+          ],
         ],
-      ],
-    },
-  });
+      },
+    });
+  }
 });
 
 bot.on("message", async (msg) => {
   const text = msg.text;
   const chatId = msg.chat.id;
-
-  if (text === "📊 Get Balance") {
-    bot.sendMessage(chatId, `\`\`\`📅 Select date margin\`\`\``, {
-      parse_mode: "Markdown",
-      reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: "Today",
-              callback_data: "get_balance_today",
-            },
-            { text: "  This week ", callback_data: "get_balance_week" },
+  if (maintenanceMode) {
+    bot.sendMessage(chatId, "Bot is on maintenance. Please wait.");
+  } else {
+    if (text === "📊 Get Balance") {
+      bot.sendMessage(chatId, `\`\`\`📅 Select date margin\`\`\``, {
+        parse_mode: "Markdown",
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Today",
+                callback_data: "get_balance_today",
+              },
+              { text: "  This week ", callback_data: "get_balance_week" },
+            ],
+            [
+              { text: "This Month", callback_data: "get_balance_month" },
+              { text: "Total", callback_data: "get_balance_all" },
+            ],
           ],
-          [
-            { text: "This Month", callback_data: "get_balance_month" },
-            { text: "Total", callback_data: "get_balance_all" },
-          ],
-        ],
-      },
-    });
-  } else if (text === "🎮 Games") {
-    (async () => {
-      try {
-        const counts = await getGameNumberCounts();
-        // console.log("Rows today:", counts.todayCount);
-        // console.log("Total rows:", counts.totalCount);
-        bot.sendMessage(
-          chatId,
-          `\`\`\`
+        },
+      });
+    } else if (text === "🎮 Games") {
+      (async () => {
+        try {
+          const counts = await getGameNumberCounts();
+          // console.log("Rows today:", counts.todayCount);
+          // console.log("Total rows:", counts.totalCount);
+          bot.sendMessage(
+            chatId,
+            `\`\`\`
 Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.totalCount}\`\`\``,
-          { parse_mode: "Markdown" }
-        );
-      } catch (err) {
-        console.error("Error fetching counts:", err);
-      }
-    })();
-  } else if (text === "👥 Users") {
-    bot.sendMessage(chatId, `_Users_`, {
-      parse_mode: "Markdown",
-      reply_markup: {
-        inline_keyboard: [
-          [
-            {
-              text: "Search user by id",
-              callback_data: "search_id",
-            },
-            { text: "Search user by name", callback_data: "search_name" },
+            { parse_mode: "Markdown" }
+          );
+        } catch (err) {
+          console.error("Error fetching counts:", err);
+        }
+      })();
+    } else if (text === "👥 Users") {
+      bot.sendMessage(chatId, `_Users_`, {
+        parse_mode: "Markdown",
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Search user by id",
+                callback_data: "search_id",
+              },
+              { text: "Search user by name", callback_data: "search_name" },
+            ],
+            [
+              { text: "All users", callback_data: "search_all" },
+              { text: "Last winner", callback_data: "search_last_winner" },
+            ],
+            [{ text: "Leaderboard", callback_data: "search_leaderboard" }],
           ],
-          [
-            { text: "All users", callback_data: "search_all" },
-            { text: "Last winner", callback_data: "search_last_winner" },
-          ],
-          [{ text: "Leaderboard", callback_data: "search_leaderboard" }],
-        ],
-      },
-    });
-  }
-  if (awaitingUserIdInput[chatId] && /^\d+$/.test(msg.text.trim())) {
-    const userId = msg.text;
-
-    // Reset the state
-    delete awaitingUserIdInput[chatId];
-
-    // Query the DB and return result
-    try {
-      const user = await getUserByTelegramId(userId); // <- your DB function
-
-      if (user) {
-        bot.sendMessage(chatId, generateUserBoxTable(user), {
-          parse_mode: "Markdown",
-        });
-      } else {
-        bot.sendMessage(chatId, `❌ No user found with ID: ${userId}`);
-      }
-    } catch (err) {
-      console.error(err);
-      bot.sendMessage(chatId, `⚠️ Error querying the database.`);
+        },
+      });
     }
-  }
-  if (
-    awaitingUserDepositAmountTelebirr[chatId] &&
-    /^\d+$/.test(msg.text.trim())
-  ) {
-    const query = `
+    if (awaitingUserIdInput[chatId] && /^\d+$/.test(msg.text.trim())) {
+      const userId = msg.text;
+
+      // Reset the state
+      delete awaitingUserIdInput[chatId];
+
+      // Query the DB and return result
+      try {
+        const user = await getUserByTelegramId(userId); // <- your DB function
+
+        if (user) {
+          bot.sendMessage(chatId, generateUserBoxTable(user), {
+            parse_mode: "Markdown",
+          });
+        } else {
+          bot.sendMessage(chatId, `❌ No user found with ID: ${userId}`);
+        }
+      } catch (err) {
+        console.error(err);
+        bot.sendMessage(chatId, `⚠️ Error querying the database.`);
+      }
+    }
+    if (
+      awaitingUserDepositAmountTelebirr[chatId] &&
+      /^\d+$/.test(msg.text.trim())
+    ) {
+      const query = `
         INSERT INTO transactions (tx_ref, userID, amount, status, method)
         VALUES (?, ?, ?, ?, ?)
       `;
-    let tx_ref = uuidv4();
-    db.run(
-      query,
-      [tx_ref, telegramId, parseInt(text), "pending", "telebirr"],
-      function (err) {
-        if (err) {
-          return console.error("Error inserting transaction:", err.message);
-        }
-        console.log(`Transaction inserted with ID ${this.lastID}`);
-        bot
-          .sendMessage(
-            chatId,
-            "🏦 Deposit Instructions 🏦 \n 🔹 Bank Name: TELEBIRR \n 🔢 Phone Number: +251934596919\n 🔢  Name: ABENZER GASHAW MEKONNEN \n\n ** Please only use the number you registered with. If use another number enter below. \n\n After payment click the button below and provide your payment reference, or text message from 127.",
-            {
-              reply_markup: {
-                inline_keyboard: [
-                  [
-                    {
-                      text: "Send message from 127",
-                      callback_data: "verify_telebirr",
-                    },
-                  ],
-                  [
-                    {
-                      text: "Use another number",
-                      callback_data: "use_another_number",
-                    },
-                  ],
-                ],
-              },
-            }
-          )
-          .then(() => {
-            bot.sendMessage(
-              adminUser,
-              `New deposit order from: ${chatId} \n Amount: ${text} \n Method: Telebirr`,
+      let tx_ref = uuidv4();
+      db.run(
+        query,
+        [tx_ref, telegramId, parseInt(text), "pending", "telebirr"],
+        function (err) {
+          if (err) {
+            return console.error("Error inserting transaction:", err.message);
+          }
+          console.log(`Transaction inserted with ID ${this.lastID}`);
+          bot
+            .sendMessage(
+              chatId,
+              "🏦 Deposit Instructions 🏦 \n 🔹 Bank Name: TELEBIRR \n 🔢 Phone Number: +251934596919\n 🔢  Name: ABENZER GASHAW MEKONNEN \n\n ** Please only use the number you registered with. If use another number enter below. \n\n After payment click the button below and provide your payment reference, or text message from 127.",
               {
                 reply_markup: {
                   inline_keyboard: [
                     [
                       {
-                        text: "Approve",
-                        callback_data: `deposit_user_${chatId}_${text}_${this.lastID}`,
+                        text: "Send message from 127",
+                        callback_data: "verify_telebirr",
+                      },
+                    ],
+                    [
+                      {
+                        text: "Use another number",
+                        callback_data: "use_another_number",
                       },
                     ],
                   ],
                 },
               }
-            );
-          });
-      }
-    );
-  }
+            )
+            .then(() => {
+              bot.sendMessage(
+                adminUser,
+                `New deposit order from: ${chatId} \n Amount: ${text} \n Method: Telebirr`,
+                {
+                  reply_markup: {
+                    inline_keyboard: [
+                      [
+                        {
+                          text: "Approve",
+                          callback_data: `deposit_user_${chatId}_${text}_${this.lastID}`,
+                        },
+                      ],
+                    ],
+                  },
+                }
+              );
+            });
+        }
+      );
+    }
 
-  if (awaitingUserDepositAmountCbe[chatId] && /^\d+$/.test(msg.text.trim())) {
-    const query = `
+    if (awaitingUserDepositAmountCbe[chatId] && /^\d+$/.test(msg.text.trim())) {
+      const query = `
         INSERT INTO transactions (tx_ref, userID, amount, status, method)
         VALUES (?, ?, ?, ?, ?)
       `;
-    let tx_ref = uuidv4();
-    console.log(tx_ref);
-    db.run(
-      query,
-      [tx_ref, telegramId, parseInt(text), "pending", "cbe"],
-      function (err) {
-        if (err) {
-          return console.error("Error inserting transaction:", err.message);
-        }
-        console.log(`Transaction inserted with ID ${this.lastID}`);
-        bot
-          .sendMessage(
-            chatId,
-            "🏦 Deposit Instructions 🏦 \n 🔹 Bank Name: CBE \n 🔢 Phone Number: 1000185229207\n 🔢  Name: ABENZER GASHAW MEKONNEN \n\n ** Please only use the number you registered with. If use another number enter below. \n\n After payment click the button below and provide your payment reference, or text message from CBE.",
-            {
-              reply_markup: {
-                inline_keyboard: [
-                  [
-                    {
-                      text: "Send message from CBE",
-                      callback_data: "verify_cbe",
-                    },
-                  ],
-                  [
-                    {
-                      text: "Use another account",
-                      callback_data: "use_another_account",
-                    },
-                  ],
-                ],
-              },
-            }
-          )
-          .then(() => {
-            bot.sendMessage(
-              adminUser,
-              `New deposit order from: ${chatId} \n Amount: ${text} \n Method: CBE`,
+      let tx_ref = uuidv4();
+      console.log(tx_ref);
+      db.run(
+        query,
+        [tx_ref, telegramId, parseInt(text), "pending", "cbe"],
+        function (err) {
+          if (err) {
+            return console.error("Error inserting transaction:", err.message);
+          }
+          console.log(`Transaction inserted with ID ${this.lastID}`);
+          bot
+            .sendMessage(
+              chatId,
+              "🏦 Deposit Instructions 🏦 \n 🔹 Bank Name: CBE \n 🔢 Phone Number: 1000185229207\n 🔢  Name: ABENZER GASHAW MEKONNEN \n\n ** Please only use the number you registered with. If use another number enter below. \n\n After payment click the button below and provide your payment reference, or text message from CBE.",
               {
                 reply_markup: {
                   inline_keyboard: [
                     [
                       {
-                        text: "Approve",
-                        callback_data: `deposit_user_${chatId}_${text}_${this.lastID}`,
+                        text: "Send message from CBE",
+                        callback_data: "verify_cbe",
+                      },
+                    ],
+                    [
+                      {
+                        text: "Use another account",
+                        callback_data: "use_another_account",
                       },
                     ],
                   ],
                 },
               }
-            );
-          });
-      }
-    );
-  }
+            )
+            .then(() => {
+              bot.sendMessage(
+                adminUser,
+                `New deposit order from: ${chatId} \n Amount: ${text} \n Method: CBE`,
+                {
+                  reply_markup: {
+                    inline_keyboard: [
+                      [
+                        {
+                          text: "Approve",
+                          callback_data: `deposit_user_${chatId}_${text}_${this.lastID}`,
+                        },
+                      ],
+                    ],
+                  },
+                }
+              );
+            });
+        }
+      );
+    }
 
-  if (awaitingUserVerificationSmsTelebirr[chatId]) {
-    bot.sendMessage(adminUser, text).then(() => {
-      bot.sendMessage(chatId, "Please wait for verification.");
-    });
+    if (awaitingUserVerificationSmsTelebirr[chatId]) {
+      bot.sendMessage(adminUser, text).then(() => {
+        bot.sendMessage(chatId, "Please wait for verification.");
+      });
+    }
   }
 });
 
