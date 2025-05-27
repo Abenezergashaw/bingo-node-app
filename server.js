@@ -1462,7 +1462,7 @@ bot.onText(/\/balance/, (msg) => {
   const chatId = msg.chat.id;
   const telegramIdd = msg.from.id.toString();
   db.get(
-    "SELECT balance FROM users WHERE telegram_id = ?",
+    "SELECT balance,bonus FROM users WHERE telegram_id = ?",
     [telegramIdd],
     async (err, row) => {
       if (err || !row) {
@@ -1472,7 +1472,15 @@ bot.onText(/\/balance/, (msg) => {
           "❌ Could not fetch balance. Please try again."
         );
       }
-      bot.sendMessage(chatId, "Balance: Br. " + row.balance);
+      console.log("****", row);
+      bot.sendMessage(
+        chatId,
+        "Withdrawable balance: Br. " +
+          row.balance +
+          "\n" +
+          "Non withdrawable balance: Br. " +
+          row.bonus
+      );
       // console.log(row);
       return;
     }
