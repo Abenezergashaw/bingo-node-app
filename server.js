@@ -162,7 +162,7 @@ function startTimer() {
       timeLeft,
     });
     if (timeLeft <= 0) {
-      if (userToNumber.size >= 1) {
+      if (userToNumber.size > 1) {
         numbers = getShuffledBingoNumbers();
         gameState = true;
         players = userToNumber.size;
