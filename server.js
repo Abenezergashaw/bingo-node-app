@@ -1472,7 +1472,7 @@ bot.onText(/\/balance/, (msg) => {
           "❌ Could not fetch balance. Please try again."
         );
       }
-      console.log("****", row);
+      console.log("****", telegramIdd);
       bot.sendMessage(
         chatId,
         "Withdrawable balance: Br. " +
