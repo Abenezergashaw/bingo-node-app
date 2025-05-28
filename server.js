@@ -1772,7 +1772,7 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
     }
 
     if (awaitingCbeAccountForWithdrawal[chatId]) {
-      if (/^\d{14}$/.test(msg.text.trim())) {
+      if (/^\d{13}$/.test(msg.text.trim())) {
       } else {
         bot.sendMessage(chatId, "Invalid account number. Please retry.");
       }
