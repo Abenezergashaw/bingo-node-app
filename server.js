@@ -545,6 +545,9 @@ const awaitingUserDepositAmountTelebirr = {};
 const awaitingUserDepositAmountCbe = {};
 const awaitingUserVerificationSmsCbe = {};
 const awaitingUserVerificationSmsTelebirr = {};
+const awaitingCbeAccountForWithdrawal = {};
+const awaitingCbeNameForWithdrawal = {};
+const awaitingCbeAmountForWithdrawal = {};
 let maintenanceMode = false;
 // /start command
 bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
@@ -615,7 +618,7 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
                         callback_data: "chapa_pay",
                       },
                       {
-                        text: "💳 withdraw",
+                        text: "Withdraw",
                         callback_data: "withdraw",
                       },
                     ],
@@ -1015,7 +1018,7 @@ bot.on("contact", (msg) => {
                                 callback_data: "chapa_pay",
                               },
                               {
-                                text: "💳 withdraw",
+                                text: "Withdraw",
                                 callback_data: "withdraw",
                               },
                             ],
@@ -1055,7 +1058,7 @@ bot.on("contact", (msg) => {
                   [
                     { text: "💳 Deposit", callback_data: "chapa_pay" },
                     {
-                      text: "💳 withdraw",
+                      text: "Withdraw",
                       callback_data: "withdraw",
                     },
                   ],
@@ -1177,7 +1180,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         responseText = "Payment ongoing";
         break;
       case data === "withdraw":
-        bot.sendMessage(chatId, "Choose method: ", {
+        bot.sendMessage(chatId, "Choose withdrawal method: ", {
           reply_markup: {
             inline_keyboard: [
               [
@@ -1386,6 +1389,11 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
         bot.sendMessage(chatId, "How much?");
 
         break;
+      case data === "w_cbe":
+        awaitingCbeAccountForWithdrawal[chatId] = true;
+        bot.sendMessage(chatId, "Please send your CBE account number: ");
+        break;
+
       case data.startsWith("deposit_user_"):
         // Handle user viewing
         console.log("Dposite user 1382", data);
@@ -1761,6 +1769,13 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
       bot.sendMessage(adminUser, text).then(() => {
         bot.sendMessage(chatId, "Please wait for verification.");
       });
+    }
+
+    if (awaitingCbeAccountForWithdrawal[chatId]) {
+      if (/^\d{14}$/.test(msg.text.trim())) {
+      } else {
+        bot.sendMessage(chatId, "Invalid account number. Please retry.");
+      }
     }
   }
 });
