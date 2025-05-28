@@ -44,20 +44,36 @@ let current = 0;
 let usersFromDB = [];
 let gameNumber = null;
 
-// db.all(`SELECT * FROM users`, [], (err, rows) => {
-//   if (err) {
-//     console.error("❌ Select error:", err.message);
-//   } else {
-//     console.log("\n📦 Fetched Data:");
-//     usersFromDB = rows;
-//     console.log(usersFromDB);
-//   }
+let users20 = [];
+let gameState20 = false;
+const userToNumber20 = new Map();
+let timer20;
+let timeLeft20 = 60;
+let numbers20 = [];
+let drawnNumbers20 = [];
+let count20 = 0;
+let callInterval20;
+let lineMakingArray20 = [];
+let winner20 = null;
+let players20 = 0;
+let someoneBingo20 = false;
+let current20 = 0;
+let usersFromDB20 = [];
+let gameNumber20 = null;
 
-// });
+db.all(`SELECT * FROM users`, [], (err, rows) => {
+  if (err) {
+    console.error("❌ Select error:", err.message);
+  } else {
+    console.log("\n📦 Fetched Data:");
+    usersFromDB = rows;
+    console.log(usersFromDB);
+  }
+});
 
-// app.get("/service-worker.js", (req, res) => {
-//   res.sendFile(path.join(__dirname, "service-worker.js"));
-// });
+app.get("/service-worker.js", (req, res) => {
+  res.sendFile(path.join(__dirname, "service-worker.js"));
+});
 
 app.get("/getuserdetails", (req, res) => {
   const { userID } = req.query;
@@ -443,6 +459,26 @@ wss.on("connection", (ws) => {
 
       console.log(`User joined: ${data.username}`);
       console.log("Current users:", users);
+    } else if (data.type === "userJoined20") {
+      console.log("USer balance: ", data.balance);
+      ws.username = data.username;
+      users20.push(data.username);
+      if (gameState) {
+        ws.send(
+          JSON.stringify({
+            type: "activeGame20",
+            message: "Game in progress. Please wait until it ends.",
+          })
+        );
+      } else {
+        ws.send(
+          JSON.stringify({
+            type: "status20",
+            message: "No active game. You can join a new game.",
+            cards: Array.from(userToNumber20.values()),
+          })
+        );
+      }
     } else if (data.type === "cardSelected") {
       console.log(data.number, "||", data.username, "|| ", data.balance);
       if (parseInt(data.balance) < 10) {
@@ -493,6 +529,56 @@ wss.on("connection", (ws) => {
         });
       }
       console.log(userToNumber);
+    } else if (data.type === "cardSelected20") {
+      console.log(data.number, "||", data.username, "|| ", data.balance);
+      if (parseInt(data.balance) < 20) {
+        console.log("Low balacne");
+        broadcast({
+          type: "lowBalance20",
+          u: data.username,
+        });
+      }
+      const { username, number } = data;
+
+      const currentNumber = userToNumber20.get(username);
+
+      // Case 1: Toggle off if user re-selects their own number
+      if (currentNumber === number) {
+        userToNumber20.delete(username);
+        console.log("user20 br:  ", userToNumber20);
+        broadcast({
+          type: "selectionCleared20",
+          username,
+          number,
+        });
+        return;
+      }
+
+      // Case 2: Check if number is already taken by someone else
+      let taken = false;
+      for (const [otherUser, otherNumber] of userToNumber20.entries()) {
+        if (otherNumber === number && otherUser !== username) {
+          taken = true;
+          break;
+        }
+      }
+
+      if (taken) {
+        console.log(userToNumber20);
+
+        return;
+      }
+      if (data.balance > 20) {
+        // Case 3: Assign new number
+        userToNumber20.set(username, number);
+        broadcast({
+          type: "numberSelected20",
+          username,
+          number,
+          currentNumber,
+        });
+      }
+      console.log(userToNumber20);
     } else if (data.type === "bingo") {
       console.log(data.c);
       console.log("Drawn numbers: ", drawnNumbers);
@@ -511,15 +597,21 @@ wss.on("connection", (ws) => {
   ws.on("close", () => {
     if (ws.username) {
       users = users.filter((u) => u !== ws.username);
+      users20 = users20.filter((u) => u !== ws.username);
       let n = userToNumber.get(ws.username);
       // console.log("Number:", n);
       broadcast({
         type: "removeCardsOnLeave",
         n,
       });
+      broadcast({
+        type: "removeCardsOnLeave20",
+        n,
+      });
       userToNumber.delete(ws.username);
+      userToNumber20.delete(ws.username);
       console.log(userToNumber);
-      console.log("Left Users:", users);
+      console.log("Left Users:", users, users20);
     }
   });
 });
