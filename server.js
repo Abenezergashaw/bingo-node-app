@@ -1776,6 +1776,8 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
       awaitingCbeAccountForWithdrawal[chatId] = false;
       if (/^\d{13}$/.test(msg.text.trim())) {
         awaitingCbeNameForWithdrawal[chatId] = true;
+        awaitingCbeAmountForWithdrawal[chatId] = false;
+
         withdrawCbeDetails.chatId = [];
         withdrawCbeDetails.chatId.push(text);
         bot.sendMessage(
@@ -1788,8 +1790,8 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
     }
 
     if (awaitingCbeNameForWithdrawal[chatId]) {
-      awaitingCbeNameForWithdrawal[chatId] = false;
-      awaitingCbeAmountForWithdrawal[chatId] = true;
+      awaitingCbeAccountForWithdrawal[chatId] = false;
+      awaitingCbeNameForWithdrawal[chatId] = true;
       withdrawCbeDetails.chatId.push(text);
 
       bot.sendMessage(chatId, "Enter amount:");
