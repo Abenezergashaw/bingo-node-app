@@ -1269,6 +1269,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
                 );
               } else {
                 bot.sendMessage(
+                  chatId,
                   "Not enough balance to withdraw. Minimum Br. 100."
                 );
               }
