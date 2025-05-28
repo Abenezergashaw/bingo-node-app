@@ -1790,8 +1790,8 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
     }
 
     if (awaitingCbeNameForWithdrawal[chatId]) {
-      awaitingCbeAccountForWithdrawal[chatId] = false;
-      awaitingCbeNameForWithdrawal[chatId] = true;
+      awaitingCbeNameForWithdrawal[chatId] = false;
+      awaitingCbeAmountForWithdrawal[chatId] = true;
       withdrawCbeDetails.chatId.push(text);
 
       bot.sendMessage(chatId, "Enter amount:");
