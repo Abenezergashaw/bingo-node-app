@@ -549,6 +549,7 @@ const awaitingCbeAccountForWithdrawal = {};
 const awaitingCbeNameForWithdrawal = {};
 const awaitingCbeAmountForWithdrawal = {};
 const withdrawCbeDetails = {};
+const broadcastMessageText = {};
 let maintenanceMode = false;
 // /start command
 bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
@@ -574,6 +575,7 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
               { text: "  Games ", callback_data: "get_games" },
             ],
             [{ text: "🤽🏻‍♂️ Users", callback_data: "get_users" }],
+            [{ text: "Broadcast Message", callback_data: "broadcast_message" }],
           ],
           keyboard: [["📊 Get Balance", "🎮 Games"], ["👥 Users"]],
           resize_keyboard: true,
@@ -1553,6 +1555,10 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
         awaitingUserVerificationSmsTelebirr[chatId] = true;
         bot.sendMessage(chatId, "Send the text from 127.");
         break;
+      case data === "broadcast_message":
+        broadcastMessageText[chatId] = true;
+        bot.sendMessage(adminUser, "Enter text to broadcast");
+        break;
       default:
         responseText = "❓ Unknown action.";
     }
@@ -1968,6 +1974,11 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
         withdrawCbeDetails.chatId = [];
       }
     }
+
+    if (broadcastMessageText[adminUser]) {
+      broadcastMessageText[adminUser] = false;
+      broadcastMessage(text);
+    }
   }
 });
 
@@ -2039,6 +2050,21 @@ function updateUserBalanceByAdmin(telegramId, amountToAdd, callback) {
         telegram_id: telegramId,
         new_balance: newBalance,
         rowsAffected: this.changes,
+      });
+    });
+  });
+}
+
+function broadcastMessage(messageText) {
+  db.all("SELECT telegram_id FROM users", [], (err, rows) => {
+    if (err) {
+      console.error("DB error:", err);
+      return;
+    }
+
+    rows.forEach((user) => {
+      bot.sendMessage(user.telegram_id, messageText).catch((e) => {
+        console.error(`Failed to send to ${user.telegram_id}:`, e.message);
       });
     });
   });
