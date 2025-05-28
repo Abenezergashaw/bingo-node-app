@@ -1804,6 +1804,7 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
         });
       } else {
         bot.sendMessage(chatId, "Invalid account number. Please retry.");
+        withdrawCbeDetails.chatId = [];
       }
     }
 
@@ -1830,11 +1831,24 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
         if (parseInt(text) <= 1000 && parseInt(text) > 100) {
           withdrawCbeDetails.chatId.push(text);
           console.log("Withdraw details", withdrawCbeDetails.chatId);
+          bot
+            .sendMessage(
+              chatId,
+              "Please wait while your transaction is verfied. Thank you."
+            )
+            .then(() => {
+              bot.sendMessage(
+                adminUser,
+                `Withdraw request, \nMethod : CBE \n Name: ${withdrawCbeDetails.chatId[1]} \n Account: ${withdrawCbeDetails.chatId[0]} \n ${withdrawCbeDetails.chatId[2]}`
+              );
+            });
         } else {
           bot.sendMessage(chatId, "Amount should be between 100 and 1000");
+          withdrawCbeDetails.chatId = [];
         }
       } else {
         bot.sendMessage(chatId, "Invalid amount. Please restart.");
+        withdrawCbeDetails.chatId = [];
       }
     }
   }
