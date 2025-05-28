@@ -1394,7 +1394,17 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
         awaitingCbeAccountForWithdrawal[chatId] = true;
         bot.sendMessage(chatId, "Please send your CBE account number: ");
         break;
-
+      case data === "w_cbe_name":
+        awaitingCbeAccountForWithdrawal[chatId] = false;
+        awaitingCbeNameForWithdrawal[chatId] = true;
+        awaitingCbeAmountForWithdrawal[chatId] = false;
+        bot.sendMessage(chatId, "Enter full name: ");
+        break;
+      case data === "w_cbe_amount":
+        awaitingCbeAccountForWithdrawal[chatId] = false;
+        awaitingCbeNameForWithdrawal[chatId] = false;
+        awaitingCbeAmountForWithdrawal[chatId] = true;
+        break;
       case data.startsWith("deposit_user_"):
         // Handle user viewing
         console.log("Dposite user 1382", data);
@@ -1775,15 +1785,22 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
     if (awaitingCbeAccountForWithdrawal[chatId]) {
       awaitingCbeAccountForWithdrawal[chatId] = false;
       if (/^\d{13}$/.test(msg.text.trim())) {
-        awaitingCbeNameForWithdrawal[chatId] = true;
         awaitingCbeAmountForWithdrawal[chatId] = false;
 
         withdrawCbeDetails.chatId = [];
         withdrawCbeDetails.chatId.push(text);
-        bot.sendMessage(
-          chatId,
-          "Account received. Enter full name of account holder:"
-        );
+        bot.sendMessage(chatId, "Account received. Continue:", {
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "Continue",
+                  callback_data: "w_cbe_name",
+                },
+              ],
+            ],
+          },
+        });
       } else {
         bot.sendMessage(chatId, "Invalid account number. Please retry.");
       }
@@ -1791,10 +1808,19 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
 
     if (awaitingCbeNameForWithdrawal[chatId]) {
       awaitingCbeNameForWithdrawal[chatId] = false;
-      awaitingCbeAmountForWithdrawal[chatId] = true;
       withdrawCbeDetails.chatId.push(text);
-
-      bot.sendMessage(chatId, "Enter amount:");
+      bot.sendMessage(chatId, "Full name saved. Continue.", {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: "Continue",
+                callback_data: "w_cbe_amount",
+              },
+            ],
+          ],
+        },
+      });
     }
 
     if (awaitingCbeAmountForWithdrawal[chatId]) {
