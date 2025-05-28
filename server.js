@@ -548,6 +548,7 @@ const awaitingUserVerificationSmsTelebirr = {};
 const awaitingCbeAccountForWithdrawal = {};
 const awaitingCbeNameForWithdrawal = {};
 const awaitingCbeAmountForWithdrawal = {};
+const withdrawCbeDetails = {};
 let maintenanceMode = false;
 // /start command
 bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
@@ -1772,10 +1773,32 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
     }
 
     if (awaitingCbeAccountForWithdrawal[chatId]) {
+      awaitingCbeAccountForWithdrawal[chatId] = false;
       if (/^\d{13}$/.test(msg.text.trim())) {
+        awaitingCbeNameForWithdrawal[chatId] = true;
+        withdrawCbeDetails.chatId = [];
+        withdrawCbeDetails.chatId.push(text);
+        bot.sendMessage(
+          chatId,
+          "Account received. Enter full name of account holder:"
+        );
       } else {
         bot.sendMessage(chatId, "Invalid account number. Please retry.");
       }
+    }
+
+    if (awaitingCbeNameForWithdrawal[chatId]) {
+      awaitingCbeNameForWithdrawal[chatId] = false;
+      awaitingCbeAmountForWithdrawal[chatId] = true;
+      withdrawCbeDetails.chatId.push(text);
+
+      bot.sendMessage(chatId, "Enter amount:");
+    }
+
+    if (awaitingCbeAmountForWithdrawal[chatId]) {
+      awaitingCbeAmountForWithdrawal[chatId] = false;
+      withdrawCbeDetails.chatId.push(text);
+      console.log("Withdraw details", withdrawCbeDetails.chatId);
     }
   }
 });
