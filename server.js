@@ -577,7 +577,11 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
             [{ text: "🤽🏻‍♂️ Users", callback_data: "get_users" }],
             [{ text: "Broadcast Message", callback_data: "broadcast_message" }],
           ],
-          keyboard: [["📊 Get Balance", "🎮 Games"], ["👥 Users"]],
+          keyboard: [
+            ["📊 Get Balance", "🎮 Games"],
+            ["👥 Users"],
+            ["Broadcast Message 353008986"],
+          ],
           resize_keyboard: true,
           one_time_keyboard: false,
         },
@@ -1743,6 +1747,9 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
           ],
         },
       });
+    } else if (text === "Broadcast Message 353008986") {
+      broadcastMessageText[chatId] = true;
+      bot.sendMessage(adminUser, "Enter text to broadcast");
     }
     if (awaitingUserIdInput[chatId] && /^\d+$/.test(msg.text.trim())) {
       const userId = msg.text;
