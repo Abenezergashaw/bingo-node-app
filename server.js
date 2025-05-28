@@ -950,7 +950,7 @@ bot.on("contact", (msg) => {
   } else {
     const sql = `
     INSERT OR IGNORE INTO users (telegram_id, username, phone_number, balance, played_games,won_games, bonus)
-    VALUES (?, ?, ?, 0,0,0,30)
+    VALUES (?, ?, ?, 0,0,0,10)
   `;
 
     db.run(sql, [telegramId, username, phoneNumber], (err) => {
@@ -976,7 +976,7 @@ bot.on("contact", (msg) => {
                 console.log("Referrer and referred", row);
                 db.run(
                   `UPDATE users SET bonus = bonus + ? WHERE telegram_id = ?`,
-                  [10, row.referrer_id],
+                  [3, row.referrer_id],
                   function (err) {
                     if (err) {
                       return console.error(
@@ -1149,7 +1149,7 @@ bot.on("callback_query", (query) => {
           `
         🎉 Invite & Earn with Piasa Bingo!
 
-Share the fun and earn Br.10 for every friend who starts the bot using your link!
+Share the fun and earn Br.3 for every friend who starts the bot using your link!
 
 Your personal invite link:
 https://t.me/piasa_bingo_bot?start=${telegramId}
@@ -1460,27 +1460,44 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
         });
         break;
       case data === "cbe":
+        awaitingCbeAccountForWithdrawal[chatId] = false;
+        awaitingCbeNameForWithdrawal[chatId] = false;
+        awaitingCbeAmountForWithdrawal[chatId] = false;
         awaitingUserDepositAmountTelebirr[chatId] = false;
         awaitingUserDepositAmountCbe[chatId] = true;
         bot.sendMessage(chatId, "How much?");
         break;
       case data === "telebirr":
+        awaitingCbeAccountForWithdrawal[chatId] = false;
+        awaitingCbeNameForWithdrawal[chatId] = false;
+        awaitingCbeAmountForWithdrawal[chatId] = false;
+        awaitingUserDepositAmountTelebirr[chatId] = false;
+        awaitingUserDepositAmountCbe[chatId] = false;
         awaitingUserDepositAmountCbe[chatId] = false;
         awaitingUserDepositAmountTelebirr[chatId] = true;
         bot.sendMessage(chatId, "How much?");
 
         break;
       case data === "w_cbe":
+        awaitingUserDepositAmountTelebirr[chatId] = false;
+        awaitingUserDepositAmountCbe[chatId] = false;
         awaitingCbeAccountForWithdrawal[chatId] = true;
         bot.sendMessage(chatId, "Please send your CBE account number: ");
         break;
+      case data === "w_telebirr":
+        bot.sendMessage(chatId, "Please use CBE until furthur notice from us.");
+        break;
       case data === "w_cbe_name":
+        awaitingUserDepositAmountTelebirr[chatId] = false;
+        awaitingUserDepositAmountCbe[chatId] = false;
         awaitingCbeAccountForWithdrawal[chatId] = false;
         awaitingCbeNameForWithdrawal[chatId] = true;
         awaitingCbeAmountForWithdrawal[chatId] = false;
         bot.sendMessage(chatId, "Enter full name: ");
         break;
       case data === "w_cbe_amount":
+        awaitingUserDepositAmountTelebirr[chatId] = false;
+        awaitingUserDepositAmountCbe[chatId] = false;
         awaitingCbeAccountForWithdrawal[chatId] = false;
         awaitingCbeNameForWithdrawal[chatId] = false;
         awaitingCbeAmountForWithdrawal[chatId] = true;
@@ -1587,7 +1604,7 @@ bot.onText(/\/invite/, (msg) => {
       `
         🎉 Invite & Earn with Piasa Bingo!
 
-Share the fun and earn Br.10 for every friend who starts the bot using your link!
+Share the fun and earn Br.3 for every friend who starts the bot using your link!
 
 Your personal invite link:
 https://t.me/santim_bingo_bot?start=${telegramIdd}
