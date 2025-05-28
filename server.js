@@ -1192,7 +1192,7 @@ Bring your family and friends to play, win, and enjoy Bingo together!
                 "❌ Could not fetch balance. Please try again."
               );
             } else {
-              if (parseInt(row.balance) < 100) {
+              if (parseInt(row.balance) > 100) {
                 db.get(
                   "SELECT count(*) AS count FROM transactions WHERE userID = ? AND status = 'success' ",
                   [telegramId],
