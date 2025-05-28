@@ -1404,6 +1404,7 @@ Alltime balance :  Br. ${balance}  \n  \`\`\``,
         awaitingCbeAccountForWithdrawal[chatId] = false;
         awaitingCbeNameForWithdrawal[chatId] = false;
         awaitingCbeAmountForWithdrawal[chatId] = true;
+        bot.sendMessage(chatId, "Enter amount: ");
         break;
       case data.startsWith("deposit_user_"):
         // Handle user viewing
@@ -1825,8 +1826,19 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
 
     if (awaitingCbeAmountForWithdrawal[chatId]) {
       awaitingCbeAmountForWithdrawal[chatId] = false;
-      withdrawCbeDetails.chatId.push(text);
-      console.log("Withdraw details", withdrawCbeDetails.chatId);
+      if (/^\d+$/.test(msg.text.trim())) {
+        if (
+          /^\d+$/.test(msg.text.trim()) <= 1000 &&
+          /^\d+$/.test(msg.text.trim()) > 100
+        ) {
+          withdrawCbeDetails.chatId.push(text);
+          console.log("Withdraw details", withdrawCbeDetails.chatId);
+        } else {
+          bot.sendMessage(chatId, "Amount should be between 100 and 1000");
+        }
+      } else {
+        bot.sendMessage(chatId, "Invalid amount. Please restart.");
+      }
     }
   }
 });
