@@ -540,6 +540,7 @@ server.listen(3000, () => {
 });
 
 const adminUser = "353008986";
+const adminUser2 = "1809925521";
 const awaitingUserIdInput = {};
 const awaitingUserDepositAmountTelebirr = {};
 const awaitingUserDepositAmountCbe = {};
@@ -557,7 +558,7 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   if (maintenanceMode) {
     bot.sendMessage(telegramId, "Bot is on maintenance. Please wait.");
   } else {
-    if (telegramId == adminUser) {
+    if (telegramId == adminUser || telegramId == adminUser2) {
       // bot
       //   .sendMessage(msg.chat.id, `\`\`\`👮‍♂️ Admin \`\`\``, {
       //     parse_mode: "Markdown",
@@ -969,7 +970,7 @@ bot.on("contact", (msg) => {
         })
         .then(() => {
           bot.sendMessage(
-            adminUser,
+            adminUser2,
             `New Registration: \n ID: ${telegramId} \n Name: ${username} \n Phone number: ${phoneNumber}`
           );
           db.get(
