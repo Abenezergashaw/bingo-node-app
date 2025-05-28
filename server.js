@@ -545,7 +545,7 @@ const awaitingUserDepositAmountTelebirr = {};
 const awaitingUserDepositAmountCbe = {};
 const awaitingUserVerificationSmsCbe = {};
 const awaitingUserVerificationSmsTelebirr = {};
-let maintenanceMode = true;
+let maintenanceMode = false;
 // /start command
 bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
   telegramId = msg.from.id.toString();
@@ -630,9 +630,9 @@ bot.onText(/\/start(?:\s+(.+))?/, async (msg, match) => {
               );
 
               const sql = `
-    INSERT OR IGNORE INTO referrals (user_id, referrer_id)
-    VALUES (?, ?)
-  `;
+        INSERT OR IGNORE INTO referrals (user_id, referrer_id)
+        VALUES (?, ?)
+      `;
 
               db.run(sql, [telegramId, referrerId], (err) => {
                 if (err) return console.error(err);
