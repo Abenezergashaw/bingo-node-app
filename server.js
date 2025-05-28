@@ -1640,7 +1640,15 @@ bot.onText(/\/rules/, (msg) => {
 
 🚫 No cheating — the game automatically checks winners.
 
-🤖 Good luck and have fun playing with friends!`,
+🤖 Good luck and have fun playing with friends!
+\n\n
+
+Withdrawal rules on bonus winnings:
+1. Minimum amount Br. 200.
+2. Should play at least 20 games before withdrawal or make a deposit of > Br. 50.
+
+
+`,
     { parse_mode: "Markdown" }
   );
 });
