@@ -1828,8 +1828,8 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
       awaitingCbeAmountForWithdrawal[chatId] = false;
       if (/^\d+$/.test(msg.text.trim())) {
         if (
-          /^\d+$/.test(msg.text.trim()) <= 1000 &&
-          /^\d+$/.test(msg.text.trim()) > 100
+          parseInt(/^\d+$/.test(msg.text.trim())) <= 1000 &&
+          parseInt(/^\d+$/.test(msg.text.trim())) > 100
         ) {
           withdrawCbeDetails.chatId.push(text);
           console.log("Withdraw details", withdrawCbeDetails.chatId);
