@@ -1181,22 +1181,101 @@ Bring your family and friends to play, win, and enjoy Bingo together!
         responseText = "Payment ongoing";
         break;
       case data === "withdraw":
-        bot.sendMessage(chatId, "Choose withdrawal method: ", {
-          reply_markup: {
-            inline_keyboard: [
-              [
-                {
-                  text: "Manual",
-                  callback_data: "w_manual_method",
-                },
-                {
-                  text: "Chapa pay",
-                  callback_data: "w_chapa",
-                },
-              ],
-            ],
-          },
-        });
+        db.get(
+          "SELECT balance FROM users WHERE telegram_id = ?",
+          [telegramId],
+          async (err, row) => {
+            if (err || !row) {
+              console.error("DB error:", err);
+              bot.sendMessage(
+                chatId,
+                "❌ Could not fetch balance. Please try again."
+              );
+            } else {
+              if (parseInt(row.balance) < 100) {
+                db.get(
+                  "SELECT count(*) AS count FROM transactions WHERE userID = ? AND status = 'success' ",
+                  [telegramId],
+                  async (err, row) => {
+                    if (err || !row) {
+                      console.error("DB error:", err);
+                      bot.sendMessage(
+                        chatId,
+                        "❌ Could not fetch balance. Please try again."
+                      );
+                      return;
+                    }
+                    if (row.count > 1) {
+                      bot.sendMessage(chatId, "Choose withdrawal method: ", {
+                        reply_markup: {
+                          inline_keyboard: [
+                            [
+                              {
+                                text: "Manual",
+                                callback_data: "w_manual_method",
+                              },
+                              {
+                                text: "Chapa pay",
+                                callback_data: "w_chapa",
+                              },
+                            ],
+                          ],
+                        },
+                      });
+                    } else {
+                      db.get(
+                        "SELECT played_games FROM users WHERE userID = ? ",
+                        [telegramId],
+                        async (err, row) => {
+                          if (err || !row) {
+                            console.error("DB error:", err);
+                            bot.sendMessage(
+                              chatId,
+                              "❌ Could not fetch balance. Please try again."
+                            );
+                          } else {
+                            if (parseInt(row.played_games) > 20) {
+                              bot.sendMessage(
+                                chatId,
+                                "Choose withdrawal method: ",
+                                {
+                                  reply_markup: {
+                                    inline_keyboard: [
+                                      [
+                                        {
+                                          text: "Manual",
+                                          callback_data: "w_manual_method",
+                                        },
+                                        {
+                                          text: "Chapa pay",
+                                          callback_data: "w_chapa",
+                                        },
+                                      ],
+                                    ],
+                                  },
+                                }
+                              );
+                            } else {
+                              bot.sendMessage(
+                                chatId,
+                                "To withdraw winnings from bonus amount you have to play 20 games."
+                              );
+                            }
+                          }
+                        }
+                      );
+                    }
+                  }
+                );
+              } else {
+                bot.sendMessage(
+                  "Not enough balance to withdraw. Minimum Br. 100."
+                );
+              }
+            }
+          }
+        );
+
         break;
       case data === "get_balance":
         bot.sendMessage(chatId, `\`\`\`📅 Select date margin\`\`\``, {
@@ -1839,7 +1918,19 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
             .then(() => {
               bot.sendMessage(
                 adminUser,
-                `Withdraw request, \nMethod : CBE \n Name: ${withdrawCbeDetails.chatId[1]} \n Account: ${withdrawCbeDetails.chatId[0]} \n ${withdrawCbeDetails.chatId[2]}`
+                `Withdraw request, \nMethod : CBE \n Name: ${withdrawCbeDetails.chatId[1]} \n Account: ${withdrawCbeDetails.chatId[0]} \n Amount: ${withdrawCbeDetails.chatId[2]}`,
+                {
+                  reply_markup: {
+                    inline_keyboard: [
+                      [
+                        {
+                          text: "Approve",
+                          callback_data: "w_cbe_approve",
+                        },
+                      ],
+                    ],
+                  },
+                }
               );
             });
         } else {
