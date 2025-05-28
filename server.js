@@ -1748,8 +1748,14 @@ Number of games Today: ${counts.todayCount} \nNumber of games alltime: ${counts.
         },
       });
     } else if (text === "Broadcast Message 353008986") {
-      broadcastMessageText[chatId] = true;
-      bot.sendMessage(adminUser, "Enter text to broadcast");
+      // broadcastMessageText[chatId] = true;
+      bot.sendMessage(adminUser, "Proceed", {
+        reply_markup: {
+          inline_keyboard: [
+            [{ text: "Broadcast Message", callback_data: "broadcast_message" }],
+          ],
+        },
+      });
     }
     if (awaitingUserIdInput[chatId] && /^\d+$/.test(msg.text.trim())) {
       const userId = msg.text;
