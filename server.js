@@ -1607,7 +1607,7 @@ bot.onText(/\/invite/, (msg) => {
 Share the fun and earn Br.3 for every friend who starts the bot using your link!
 
 Your personal invite link:
-https://t.me/santim_bingo_bot?start=${telegramIdd}
+https://t.me/piasa_bingo_bot?start=${telegramIdd}
 
 Bring your family and friends to play, win, and enjoy Bingo together! 
         `
